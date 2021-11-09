@@ -1,0 +1,6 @@
+commonLabels:
+  # app: kyc-management
+
+resources:
+- 01-kyc-management.yaml
+- 02-ingress.yaml

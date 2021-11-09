@@ -3,7 +3,7 @@ package db
 import (
 	"context"
 
-	"github.com/NpoolPlatform/go-service-app-template/pkg/db/ent"
+	"github.com/NpoolPlatform/kyc-management/pkg/db/ent"
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/app"
 )

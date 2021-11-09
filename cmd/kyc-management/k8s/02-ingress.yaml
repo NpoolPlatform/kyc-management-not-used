@@ -1,20 +1,20 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: service-example-npool-top-ingress
+  name: kyc-management-npool-top-ingress
   namespace: kube-system
   annotations:
-    k8s.kuboard.cn/displayName: service-example
-    k8s.kuboard.cn/workload: service-example
+    k8s.kuboard.cn/displayName: kyc-management
+    k8s.kuboard.cn/workload: kyc-management
     kubernetes.io/ingress.class: "traefik-internet"
 spec:
   rules:
   - host: api.npool.top
     http:
       paths:
-      - path: /service-example
+      - path: /kyc-management
         backend:
-          serviceName: service-example
+          serviceName: kyc-management
           servicePort: http
 
 ---
@@ -22,18 +22,18 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: service-example-xpool-top-ingress
+  name: kyc-management-xpool-top-ingress
   namespace: kube-system
   annotations:
-    k8s.kuboard.cn/displayName: service-example
-    k8s.kuboard.cn/workload: service-example
+    k8s.kuboard.cn/displayName: kyc-management
+    k8s.kuboard.cn/workload: kyc-management
     kubernetes.io/ingress.class: "traefik-internet"
 spec:
   rules:
   - host: api.xpool.top
     http:
       paths:
-      - path: /service-example
+      - path: /kyc-management
         backend:
-          serviceName: service-example
+          serviceName: kyc-management
           servicePort: http

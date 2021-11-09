@@ -9,7 +9,7 @@ import (
 	cli "github.com/urfave/cli/v2"
 )
 
-const serviceName = "Service Sample"
+const serviceName = "Kyc Management"
 
 func main() {
 	commands := cli.Commands{
