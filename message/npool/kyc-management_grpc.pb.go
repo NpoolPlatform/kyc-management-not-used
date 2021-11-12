@@ -21,6 +21,9 @@ const _ = grpc.SupportPackageIsVersion7
 type KycManagementClient interface {
 	// Method Version
 	Version(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*VersionResponse, error)
+	CreateKycRecord(ctx context.Context, in *CreateKycRecordRequest, opts ...grpc.CallOption) (*CreateKycRecordResponse, error)
+	GetKycInfo(ctx context.Context, in *GetKycInfoRequest, opts ...grpc.CallOption) (*GetKycInfoResponse, error)
+	UpdateKycStatus(ctx context.Context, in *UpdateKycStatusRequest, opts ...grpc.CallOption) (*UpdateKycStatusResponse, error)
 }
 
 type kycManagementClient struct {
@@ -40,12 +43,42 @@ func (c *kycManagementClient) Version(ctx context.Context, in *emptypb.Empty, op
 	return out, nil
 }
 
+func (c *kycManagementClient) CreateKycRecord(ctx context.Context, in *CreateKycRecordRequest, opts ...grpc.CallOption) (*CreateKycRecordResponse, error) {
+	out := new(CreateKycRecordResponse)
+	err := c.cc.Invoke(ctx, "/kyc.management.v1.KycManagement/CreateKycRecord", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *kycManagementClient) GetKycInfo(ctx context.Context, in *GetKycInfoRequest, opts ...grpc.CallOption) (*GetKycInfoResponse, error) {
+	out := new(GetKycInfoResponse)
+	err := c.cc.Invoke(ctx, "/kyc.management.v1.KycManagement/GetKycInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *kycManagementClient) UpdateKycStatus(ctx context.Context, in *UpdateKycStatusRequest, opts ...grpc.CallOption) (*UpdateKycStatusResponse, error) {
+	out := new(UpdateKycStatusResponse)
+	err := c.cc.Invoke(ctx, "/kyc.management.v1.KycManagement/UpdateKycStatus", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // KycManagementServer is the server API for KycManagement service.
 // All implementations must embed UnimplementedKycManagementServer
 // for forward compatibility
 type KycManagementServer interface {
 	// Method Version
 	Version(context.Context, *emptypb.Empty) (*VersionResponse, error)
+	CreateKycRecord(context.Context, *CreateKycRecordRequest) (*CreateKycRecordResponse, error)
+	GetKycInfo(context.Context, *GetKycInfoRequest) (*GetKycInfoResponse, error)
+	UpdateKycStatus(context.Context, *UpdateKycStatusRequest) (*UpdateKycStatusResponse, error)
 	mustEmbedUnimplementedKycManagementServer()
 }
 
@@ -55,6 +88,15 @@ type UnimplementedKycManagementServer struct {
 
 func (UnimplementedKycManagementServer) Version(context.Context, *emptypb.Empty) (*VersionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Version not implemented")
+}
+func (UnimplementedKycManagementServer) CreateKycRecord(context.Context, *CreateKycRecordRequest) (*CreateKycRecordResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateKycRecord not implemented")
+}
+func (UnimplementedKycManagementServer) GetKycInfo(context.Context, *GetKycInfoRequest) (*GetKycInfoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetKycInfo not implemented")
+}
+func (UnimplementedKycManagementServer) UpdateKycStatus(context.Context, *UpdateKycStatusRequest) (*UpdateKycStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateKycStatus not implemented")
 }
 func (UnimplementedKycManagementServer) mustEmbedUnimplementedKycManagementServer() {}
 
@@ -87,6 +129,60 @@ func _KycManagement_Version_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _KycManagement_CreateKycRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateKycRecordRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KycManagementServer).CreateKycRecord(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kyc.management.v1.KycManagement/CreateKycRecord",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KycManagementServer).CreateKycRecord(ctx, req.(*CreateKycRecordRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KycManagement_GetKycInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetKycInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KycManagementServer).GetKycInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kyc.management.v1.KycManagement/GetKycInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KycManagementServer).GetKycInfo(ctx, req.(*GetKycInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KycManagement_UpdateKycStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateKycStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KycManagementServer).UpdateKycStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kyc.management.v1.KycManagement/UpdateKycStatus",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KycManagementServer).UpdateKycStatus(ctx, req.(*UpdateKycStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // KycManagement_ServiceDesc is the grpc.ServiceDesc for KycManagement service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -97,6 +193,18 @@ var KycManagement_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Version",
 			Handler:    _KycManagement_Version_Handler,
+		},
+		{
+			MethodName: "CreateKycRecord",
+			Handler:    _KycManagement_CreateKycRecord_Handler,
+		},
+		{
+			MethodName: "GetKycInfo",
+			Handler:    _KycManagement_GetKycInfo_Handler,
+		},
+		{
+			MethodName: "UpdateKycStatus",
+			Handler:    _KycManagement_UpdateKycStatus_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

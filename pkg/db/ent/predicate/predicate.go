@@ -6,5 +6,5 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// Empty is the predicate function for empty builders.
-type Empty func(*sql.Selector)
+// Kyc is the predicate function for kyc builders.
+type Kyc func(*sql.Selector)

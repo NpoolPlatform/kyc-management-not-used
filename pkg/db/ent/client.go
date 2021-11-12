@@ -8,8 +8,9 @@ import (
 	"log"
 
 	"github.com/NpoolPlatform/kyc-management/pkg/db/ent/migrate"
+	"github.com/google/uuid"
 
-	"github.com/NpoolPlatform/kyc-management/pkg/db/ent/empty"
+	"github.com/NpoolPlatform/kyc-management/pkg/db/ent/kyc"
 
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
@@ -20,8 +21,8 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
-	// Empty is the client for interacting with the Empty builders.
-	Empty *EmptyClient
+	// Kyc is the client for interacting with the Kyc builders.
+	Kyc *KycClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -35,7 +36,7 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
-	c.Empty = NewEmptyClient(c.config)
+	c.Kyc = NewKycClient(c.config)
 }
 
 // Open opens a database/sql.DB specified by the driver name and
@@ -69,7 +70,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	return &Tx{
 		ctx:    ctx,
 		config: cfg,
-		Empty:  NewEmptyClient(cfg),
+		Kyc:    NewKycClient(cfg),
 	}, nil
 }
 
@@ -88,14 +89,14 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
 		config: cfg,
-		Empty:  NewEmptyClient(cfg),
+		Kyc:    NewKycClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		Empty.
+//		Kyc.
 //		Query().
 //		Count(ctx)
 //
@@ -118,87 +119,87 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
-	c.Empty.Use(hooks...)
+	c.Kyc.Use(hooks...)
 }
 
-// EmptyClient is a client for the Empty schema.
-type EmptyClient struct {
+// KycClient is a client for the Kyc schema.
+type KycClient struct {
 	config
 }
 
-// NewEmptyClient returns a client for the Empty from the given config.
-func NewEmptyClient(c config) *EmptyClient {
-	return &EmptyClient{config: c}
+// NewKycClient returns a client for the Kyc from the given config.
+func NewKycClient(c config) *KycClient {
+	return &KycClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `empty.Hooks(f(g(h())))`.
-func (c *EmptyClient) Use(hooks ...Hook) {
-	c.hooks.Empty = append(c.hooks.Empty, hooks...)
+// A call to `Use(f, g, h)` equals to `kyc.Hooks(f(g(h())))`.
+func (c *KycClient) Use(hooks ...Hook) {
+	c.hooks.Kyc = append(c.hooks.Kyc, hooks...)
 }
 
-// Create returns a create builder for Empty.
-func (c *EmptyClient) Create() *EmptyCreate {
-	mutation := newEmptyMutation(c.config, OpCreate)
-	return &EmptyCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Create returns a create builder for Kyc.
+func (c *KycClient) Create() *KycCreate {
+	mutation := newKycMutation(c.config, OpCreate)
+	return &KycCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of Empty entities.
-func (c *EmptyClient) CreateBulk(builders ...*EmptyCreate) *EmptyCreateBulk {
-	return &EmptyCreateBulk{config: c.config, builders: builders}
+// CreateBulk returns a builder for creating a bulk of Kyc entities.
+func (c *KycClient) CreateBulk(builders ...*KycCreate) *KycCreateBulk {
+	return &KycCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for Empty.
-func (c *EmptyClient) Update() *EmptyUpdate {
-	mutation := newEmptyMutation(c.config, OpUpdate)
-	return &EmptyUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Update returns an update builder for Kyc.
+func (c *KycClient) Update() *KycUpdate {
+	mutation := newKycMutation(c.config, OpUpdate)
+	return &KycUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *EmptyClient) UpdateOne(e *Empty) *EmptyUpdateOne {
-	mutation := newEmptyMutation(c.config, OpUpdateOne, withEmpty(e))
-	return &EmptyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *KycClient) UpdateOne(k *Kyc) *KycUpdateOne {
+	mutation := newKycMutation(c.config, OpUpdateOne, withKyc(k))
+	return &KycUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *EmptyClient) UpdateOneID(id int) *EmptyUpdateOne {
-	mutation := newEmptyMutation(c.config, OpUpdateOne, withEmptyID(id))
-	return &EmptyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *KycClient) UpdateOneID(id uuid.UUID) *KycUpdateOne {
+	mutation := newKycMutation(c.config, OpUpdateOne, withKycID(id))
+	return &KycUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for Empty.
-func (c *EmptyClient) Delete() *EmptyDelete {
-	mutation := newEmptyMutation(c.config, OpDelete)
-	return &EmptyDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Delete returns a delete builder for Kyc.
+func (c *KycClient) Delete() *KycDelete {
+	mutation := newKycMutation(c.config, OpDelete)
+	return &KycDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a delete builder for the given entity.
-func (c *EmptyClient) DeleteOne(e *Empty) *EmptyDeleteOne {
-	return c.DeleteOneID(e.ID)
+func (c *KycClient) DeleteOne(k *Kyc) *KycDeleteOne {
+	return c.DeleteOneID(k.ID)
 }
 
 // DeleteOneID returns a delete builder for the given id.
-func (c *EmptyClient) DeleteOneID(id int) *EmptyDeleteOne {
-	builder := c.Delete().Where(empty.ID(id))
+func (c *KycClient) DeleteOneID(id uuid.UUID) *KycDeleteOne {
+	builder := c.Delete().Where(kyc.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
-	return &EmptyDeleteOne{builder}
+	return &KycDeleteOne{builder}
 }
 
-// Query returns a query builder for Empty.
-func (c *EmptyClient) Query() *EmptyQuery {
-	return &EmptyQuery{
+// Query returns a query builder for Kyc.
+func (c *KycClient) Query() *KycQuery {
+	return &KycQuery{
 		config: c.config,
 	}
 }
 
-// Get returns a Empty entity by its id.
-func (c *EmptyClient) Get(ctx context.Context, id int) (*Empty, error) {
-	return c.Query().Where(empty.ID(id)).Only(ctx)
+// Get returns a Kyc entity by its id.
+func (c *KycClient) Get(ctx context.Context, id uuid.UUID) (*Kyc, error) {
+	return c.Query().Where(kyc.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *EmptyClient) GetX(ctx context.Context, id int) *Empty {
+func (c *KycClient) GetX(ctx context.Context, id uuid.UUID) *Kyc {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -207,6 +208,6 @@ func (c *EmptyClient) GetX(ctx context.Context, id int) *Empty {
 }
 
 // Hooks returns the client hooks.
-func (c *EmptyClient) Hooks() []Hook {
-	return c.hooks.Empty
+func (c *KycClient) Hooks() []Hook {
+	return c.hooks.Kyc
 }

@@ -8,19 +8,38 @@ import (
 )
 
 var (
-	// EmptiesColumns holds the columns for the "empties" table.
-	EmptiesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+	// KycsColumns holds the columns for the "kycs" table.
+	KycsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID, Unique: true},
+		{Name: "user_id", Type: field.TypeUUID, Unique: true},
+		{Name: "first_name", Type: field.TypeString},
+		{Name: "last_name", Type: field.TypeString},
+		{Name: "region", Type: field.TypeString},
+		{Name: "card_type", Type: field.TypeString},
+		{Name: "card_id", Type: field.TypeString, Unique: true},
+		{Name: "front_card_img", Type: field.TypeString},
+		{Name: "back_card_img", Type: field.TypeString},
+		{Name: "user_handling_card_img", Type: field.TypeString},
+		{Name: "review_status", Type: field.TypeBool, Default: false},
+		{Name: "create_at", Type: field.TypeUint32},
+		{Name: "update_at", Type: field.TypeUint32},
 	}
-	// EmptiesTable holds the schema information for the "empties" table.
-	EmptiesTable = &schema.Table{
-		Name:       "empties",
-		Columns:    EmptiesColumns,
-		PrimaryKey: []*schema.Column{EmptiesColumns[0]},
+	// KycsTable holds the schema information for the "kycs" table.
+	KycsTable = &schema.Table{
+		Name:       "kycs",
+		Columns:    KycsColumns,
+		PrimaryKey: []*schema.Column{KycsColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "kyc_user_id",
+				Unique:  false,
+				Columns: []*schema.Column{KycsColumns[1]},
+			},
+		},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
-		EmptiesTable,
+		KycsTable,
 	}
 )
 

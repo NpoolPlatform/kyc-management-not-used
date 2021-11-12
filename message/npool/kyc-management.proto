@@ -16,9 +16,70 @@ service KycManagement {
             body: "*"
         };
     }
+    rpc CreateKycRecord (CreateKycRecordRequest) returns (CreateKycRecordResponse) {
+        option (google.api.http) = {
+            post: "/v1/create/kyc/record"
+            body: "*"
+        };
+    };
+    rpc GetKycInfo (GetKycInfoRequest) returns (GetKycInfoResponse) {
+        option (google.api.http) = {
+            post: "/v1/get/kyc/info"
+            body: "*"
+        };
+    };
+    rpc UpdateKycStatus (UpdateKycStatusRequest) returns (UpdateKycStatusResponse) {
+        option (google.api.http) = {
+            post: "/v1/update/kyc/status"
+            body: "*"
+        };
+    };
 }
 
 // request body and response
 message VersionResponse {
     string Info = 100;
+}
+
+message KycInfo {
+    string ID = 1;
+    string UserID = 2;
+    string FirstName = 3;
+    string LastName = 4;
+    string Region = 5;
+    string CardType = 6;
+    string CardID = 7;
+    string FrontCardImg = 8;
+    string BackCardImg = 9;
+    string UserHandlingCardImg = 10;
+    bool ReviewStatus = 11;
+    uint32 CreateAT = 12;
+    uint32 UpdateAT = 13;
+}
+
+message CreateKycRecordRequest {
+    KycInfo Info = 1;
+}
+
+message CreateKycRecordResponse {
+    KycInfo Info = 1;
+}
+
+message GetKycInfoRequest {
+    string UserID = 1;
+    string KycID = 2;
+}
+
+message GetKycInfoResponse {
+    KycInfo Info = 1;
+}
+
+message UpdateKycStatusRequest {
+    bool Status = 1;
+    string UserID = 2;
+    string KycID = 3;
+}
+
+message UpdateKycStatusResponse {
+    KycInfo Info = 1;
 }

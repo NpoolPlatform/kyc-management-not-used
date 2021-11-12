@@ -4,6 +4,13 @@
 ## Table of Contents
 
 - [npool/kyc-management.proto](#npool/kyc-management.proto)
+    - [CreateKycRecordRequest](#kyc.management.v1.CreateKycRecordRequest)
+    - [CreateKycRecordResponse](#kyc.management.v1.CreateKycRecordResponse)
+    - [GetKycInfoRequest](#kyc.management.v1.GetKycInfoRequest)
+    - [GetKycInfoResponse](#kyc.management.v1.GetKycInfoResponse)
+    - [KycInfo](#kyc.management.v1.KycInfo)
+    - [UpdateKycStatusRequest](#kyc.management.v1.UpdateKycStatusRequest)
+    - [UpdateKycStatusResponse](#kyc.management.v1.UpdateKycStatusResponse)
     - [VersionResponse](#kyc.management.v1.VersionResponse)
   
     - [KycManagement](#kyc.management.v1.KycManagement)
@@ -16,6 +23,126 @@
 <p align="right"><a href="#top">Top</a></p>
 
 ## npool/kyc-management.proto
+
+
+
+<a name="kyc.management.v1.CreateKycRecordRequest"></a>
+
+### CreateKycRecordRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [KycInfo](#kyc.management.v1.KycInfo) |  |  |
+
+
+
+
+
+
+<a name="kyc.management.v1.CreateKycRecordResponse"></a>
+
+### CreateKycRecordResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [KycInfo](#kyc.management.v1.KycInfo) |  |  |
+
+
+
+
+
+
+<a name="kyc.management.v1.GetKycInfoRequest"></a>
+
+### GetKycInfoRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| UserID | [string](#string) |  |  |
+| KycID | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="kyc.management.v1.GetKycInfoResponse"></a>
+
+### GetKycInfoResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [KycInfo](#kyc.management.v1.KycInfo) |  |  |
+
+
+
+
+
+
+<a name="kyc.management.v1.KycInfo"></a>
+
+### KycInfo
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ID | [string](#string) |  |  |
+| UserID | [string](#string) |  |  |
+| FirstName | [string](#string) |  |  |
+| LastName | [string](#string) |  |  |
+| Region | [string](#string) |  |  |
+| CardType | [string](#string) |  |  |
+| CardID | [string](#string) |  |  |
+| FrontCardImg | [string](#string) |  |  |
+| BackCardImg | [string](#string) |  |  |
+| UserHandlingCardImg | [string](#string) |  |  |
+| ReviewStatus | [bool](#bool) |  |  |
+| CreateAT | [uint32](#uint32) |  |  |
+| UpdateAT | [uint32](#uint32) |  |  |
+
+
+
+
+
+
+<a name="kyc.management.v1.UpdateKycStatusRequest"></a>
+
+### UpdateKycStatusRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Status | [bool](#bool) |  |  |
+| UserID | [string](#string) |  |  |
+| KycID | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="kyc.management.v1.UpdateKycStatusResponse"></a>
+
+### UpdateKycStatusResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [KycInfo](#kyc.management.v1.KycInfo) |  |  |
+
+
+
 
 
 
@@ -48,6 +175,9 @@ Service Name
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
 | Version | [.google.protobuf.Empty](#google.protobuf.Empty) | [VersionResponse](#kyc.management.v1.VersionResponse) | Method Version |
+| CreateKycRecord | [CreateKycRecordRequest](#kyc.management.v1.CreateKycRecordRequest) | [CreateKycRecordResponse](#kyc.management.v1.CreateKycRecordResponse) |  |
+| GetKycInfo | [GetKycInfoRequest](#kyc.management.v1.GetKycInfoRequest) | [GetKycInfoResponse](#kyc.management.v1.GetKycInfoResponse) |  |
+| UpdateKycStatus | [UpdateKycStatusRequest](#kyc.management.v1.UpdateKycStatusRequest) | [UpdateKycStatusResponse](#kyc.management.v1.UpdateKycStatusResponse) |  |
 
  
 
