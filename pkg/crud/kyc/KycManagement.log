@@ -1,0 +1,3 @@
+{"level":"info","ts":"2021-11-12T09:38:10.060Z","caller":"app/app.go:85","msg":"success to create mysql client"}
+{"level":"info","ts":"2021-11-12T09:38:10.062Z","caller":"app/app.go:91","msg":"success to create redis client"}
+{"level":"info","ts":"2021-11-12T09:38:10.341Z","caller":"app/app.go:98","msg":"success to create rabbitmq server"}
