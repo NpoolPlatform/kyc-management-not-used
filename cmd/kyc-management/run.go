@@ -9,16 +9,21 @@ import (
 	msglistener "github.com/NpoolPlatform/kyc-management/pkg/message/listener"
 	msg "github.com/NpoolPlatform/kyc-management/pkg/message/message"
 	msgsrv "github.com/NpoolPlatform/kyc-management/pkg/message/server"
+	"golang.org/x/xerrors"
 
 	grpc2 "github.com/NpoolPlatform/go-service-framework/pkg/grpc"
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
+	"github.com/NpoolPlatform/go-service-framework/pkg/oss"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 
 	cli "github.com/urfave/cli/v2"
 
+	ossconst "github.com/NpoolPlatform/go-service-framework/pkg/oss/const"
 	"google.golang.org/grpc"
 )
+
+const BukectKey = "kyc-bucket"
 
 var runCmd = &cli.Command{
 	Name:    "run",
@@ -27,6 +32,10 @@ var runCmd = &cli.Command{
 	Action: func(c *cli.Context) error {
 		if err := db.Init(); err != nil {
 			return err
+		}
+
+		if err := oss.Init(ossconst.SecretStoreKey, BukectKey); err != nil {
+			return xerrors.Errorf("fail to init s3: %v", err)
 		}
 
 		go func() {

@@ -1,39 +1,57 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: kyc-management-npool-top-ingress
   namespace: kube-system
   annotations:
-    k8s.kuboard.cn/displayName: kyc-management
-    k8s.kuboard.cn/workload: kyc-management
+    k8s.kuboard.cn/displayName: kyc-management-npool
+    k8s.kuboard.cn/workload: kyc-management-npool
     kubernetes.io/ingress.class: "traefik-internet"
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    traefik.ingress.kubernetes.io/router.middlewares: kube-system-strip-kyc-management-prefix@kubernetescrd
+
 spec:
   rules:
-  - host: api.npool.top
-    http:
-      paths:
-      - path: /kyc-management
-        backend:
-          serviceName: kyc-management
-          servicePort: http
+    - host: api.npool.top
+      http:
+        paths:
+          - path: /kyc-management
+            backend:
+              serviceName: kyc-management
+              servicePort: 50120
 
 ---
 
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: kyc-management-xpool-top-ingress
   namespace: kube-system
   annotations:
-    k8s.kuboard.cn/displayName: kyc-management
-    k8s.kuboard.cn/workload: kyc-management
+    k8s.kuboard.cn/displayName: kyc-management-xpool
+    k8s.kuboard.cn/workload: kyc-management-xpool
     kubernetes.io/ingress.class: "traefik-internet"
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    traefik.ingress.kubernetes.io/router.middlewares: kube-system-strip-kyc-management-prefix@kubernetescrd
+
 spec:
   rules:
-  - host: api.xpool.top
-    http:
-      paths:
-      - path: /kyc-management
-        backend:
-          serviceName: kyc-management
-          servicePort: http
+    - host: api.xpool.top
+      http:
+        paths:
+          - path: /kyc-management
+            backend:
+              serviceName: kyc-management
+              servicePort: 50120
+
+---
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: strip-kyc-management-prefix
+  namespace: kube-system
+spec:
+  stripPrefix:
+    prefixes:
+      - /kyc-management

@@ -57,80 +57,33 @@ func TestKycCRUD(t *testing.T) { // nolint
 	}
 
 	resp1, err := Get(context.Background(), &npool.GetKycInfoRequest{
+		KycIDs: []string{kycInfo.ID},
+	})
+	if assert.Nil(t, err) {
+		assert.NotNil(t, resp1)
+	}
+
+	resp4, err := UpdateReviewStatus(context.Background(), &npool.UpdateKycStatusRequest{
 		UserID: kycInfo.UserID,
+		Status: 1,
 	})
 	if assert.Nil(t, err) {
-		assert.Equal(t, resp1.Info.ID, kycInfo.ID)
-		assert.Equal(t, resp1.Info.UserID, kycInfo.UserID)
-		assert.Equal(t, resp1.Info.FirstName, kycInfo.FirstName)
-		assert.Equal(t, resp1.Info.LastName, kycInfo.LastName)
-		assert.Equal(t, resp1.Info.Region, kycInfo.Region)
-		assert.Equal(t, resp1.Info.CardType, kycInfo.CardType)
-		assert.Equal(t, resp1.Info.FrontCardImg, kycInfo.FrontCardImg)
-		assert.Equal(t, resp1.Info.BackCardImg, kycInfo.BackCardImg)
-		assert.Equal(t, resp1.Info.UserHandlingCardImg, kycInfo.UserHandlingCardImg)
+		assert.NotNil(t, resp4)
 	}
 
-	resp2, err := Get(context.Background(), &npool.GetKycInfoRequest{
-		KycID: kycInfo.ID,
-	})
-	if assert.Nil(t, err) {
-		assert.Equal(t, resp2.Info.ID, kycInfo.ID)
-		assert.Equal(t, resp2.Info.UserID, kycInfo.UserID)
-		assert.Equal(t, resp2.Info.FirstName, kycInfo.FirstName)
-		assert.Equal(t, resp2.Info.LastName, kycInfo.LastName)
-		assert.Equal(t, resp2.Info.Region, kycInfo.Region)
-		assert.Equal(t, resp2.Info.CardType, kycInfo.CardType)
-		assert.Equal(t, resp2.Info.FrontCardImg, kycInfo.FrontCardImg)
-		assert.Equal(t, resp2.Info.BackCardImg, kycInfo.BackCardImg)
-		assert.Equal(t, resp2.Info.UserHandlingCardImg, kycInfo.UserHandlingCardImg)
-	}
-
-	resp3, err := Get(context.Background(), &npool.GetKycInfoRequest{
+	resp5, err := UpdateReviewStatus(context.Background(), &npool.UpdateKycStatusRequest{
 		KycID:  kycInfo.ID,
-		UserID: kycInfo.UserID,
+		Status: 2,
 	})
 	if assert.Nil(t, err) {
-		assert.Equal(t, resp3.Info.ID, kycInfo.ID)
-		assert.Equal(t, resp3.Info.UserID, kycInfo.UserID)
-		assert.Equal(t, resp3.Info.FirstName, kycInfo.FirstName)
-		assert.Equal(t, resp3.Info.LastName, kycInfo.LastName)
-		assert.Equal(t, resp3.Info.Region, kycInfo.Region)
-		assert.Equal(t, resp3.Info.CardType, kycInfo.CardType)
-		assert.Equal(t, resp3.Info.FrontCardImg, kycInfo.FrontCardImg)
-		assert.Equal(t, resp3.Info.BackCardImg, kycInfo.BackCardImg)
-		assert.Equal(t, resp3.Info.UserHandlingCardImg, kycInfo.UserHandlingCardImg)
+		assert.NotNil(t, resp5)
 	}
 
-	resp4, err := Update(context.Background(), &npool.UpdateKycStatusRequest{
-		UserID: kycInfo.UserID,
-		Status: true,
+	resp6, err := Update(context.Background(), &npool.UpdateKycRequest{
+		Info: kycInfo,
 	})
-	if assert.Nil(t, err) {
-		assert.Equal(t, resp4.Info.ID, kycInfo.ID)
-		assert.Equal(t, resp4.Info.UserID, kycInfo.UserID)
-		assert.Equal(t, resp4.Info.FirstName, kycInfo.FirstName)
-		assert.Equal(t, resp4.Info.LastName, kycInfo.LastName)
-		assert.Equal(t, resp4.Info.Region, kycInfo.Region)
-		assert.Equal(t, resp4.Info.CardType, kycInfo.CardType)
-		assert.Equal(t, resp4.Info.FrontCardImg, kycInfo.FrontCardImg)
-		assert.Equal(t, resp4.Info.BackCardImg, kycInfo.BackCardImg)
-		assert.Equal(t, resp4.Info.UserHandlingCardImg, kycInfo.UserHandlingCardImg)
-	}
 
-	resp5, err := Update(context.Background(), &npool.UpdateKycStatusRequest{
-		KycID:  kycInfo.ID,
-		Status: true,
-	})
 	if assert.Nil(t, err) {
-		assert.Equal(t, resp5.Info.ID, kycInfo.ID)
-		assert.Equal(t, resp5.Info.UserID, kycInfo.UserID)
-		assert.Equal(t, resp5.Info.FirstName, kycInfo.FirstName)
-		assert.Equal(t, resp5.Info.LastName, kycInfo.LastName)
-		assert.Equal(t, resp5.Info.Region, kycInfo.Region)
-		assert.Equal(t, resp5.Info.CardType, kycInfo.CardType)
-		assert.Equal(t, resp5.Info.FrontCardImg, kycInfo.FrontCardImg)
-		assert.Equal(t, resp5.Info.BackCardImg, kycInfo.BackCardImg)
-		assert.Equal(t, resp5.Info.UserHandlingCardImg, kycInfo.UserHandlingCardImg)
+		assert.NotNil(t, resp6)
 	}
 }

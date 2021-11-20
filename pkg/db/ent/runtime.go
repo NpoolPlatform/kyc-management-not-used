@@ -14,10 +14,6 @@ import (
 func init() {
 	kycFields := schema.Kyc{}.Fields()
 	_ = kycFields
-	// kycDescReviewStatus is the schema descriptor for review_status field.
-	kycDescReviewStatus := kycFields[10].Descriptor()
-	// kyc.DefaultReviewStatus holds the default value on creation for the review_status field.
-	kyc.DefaultReviewStatus = kycDescReviewStatus.Default.(bool)
 	// kycDescCreateAt is the schema descriptor for create_at field.
 	kycDescCreateAt := kycFields[11].Descriptor()
 	// kyc.DefaultCreateAt holds the default value on creation for the create_at field.

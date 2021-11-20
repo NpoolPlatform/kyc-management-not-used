@@ -29,7 +29,7 @@ func (Kyc) Fields() []ent.Field {
 		field.String("front_card_img"),
 		field.String("back_card_img"),
 		field.String("user_handling_card_img"),
-		field.Bool("review_status").Default(false),
+		field.String("review_status"),
 		field.Uint32("create_at").
 			DefaultFunc(func() uint32 {
 				return uint32(time.Now().Unix())

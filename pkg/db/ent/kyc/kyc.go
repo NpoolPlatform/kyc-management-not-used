@@ -67,8 +67,6 @@ func ValidColumn(column string) bool {
 }
 
 var (
-	// DefaultReviewStatus holds the default value on creation for the "review_status" field.
-	DefaultReviewStatus bool
 	// DefaultCreateAt holds the default value on creation for the "create_at" field.
 	DefaultCreateAt func() uint32
 	// DefaultUpdateAt holds the default value on creation for the "update_at" field.

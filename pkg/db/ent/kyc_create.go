@@ -75,16 +75,8 @@ func (kc *KycCreate) SetUserHandlingCardImg(s string) *KycCreate {
 }
 
 // SetReviewStatus sets the "review_status" field.
-func (kc *KycCreate) SetReviewStatus(b bool) *KycCreate {
-	kc.mutation.SetReviewStatus(b)
-	return kc
-}
-
-// SetNillableReviewStatus sets the "review_status" field if the given value is not nil.
-func (kc *KycCreate) SetNillableReviewStatus(b *bool) *KycCreate {
-	if b != nil {
-		kc.SetReviewStatus(*b)
-	}
+func (kc *KycCreate) SetReviewStatus(s string) *KycCreate {
+	kc.mutation.SetReviewStatus(s)
 	return kc
 }
 
@@ -193,10 +185,6 @@ func (kc *KycCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (kc *KycCreate) defaults() {
-	if _, ok := kc.mutation.ReviewStatus(); !ok {
-		v := kyc.DefaultReviewStatus
-		kc.mutation.SetReviewStatus(v)
-	}
 	if _, ok := kc.mutation.CreateAt(); !ok {
 		v := kyc.DefaultCreateAt()
 		kc.mutation.SetCreateAt(v)
@@ -355,7 +343,7 @@ func (kc *KycCreate) createSpec() (*Kyc, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := kc.mutation.ReviewStatus(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeBool,
+			Type:   field.TypeString,
 			Value:  value,
 			Column: kyc.FieldReviewStatus,
 		})

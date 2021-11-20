@@ -29,6 +29,15 @@ func (s *Server) GetKycInfo(ctx context.Context, in *npool.GetKycInfoRequest) (*
 }
 
 func (s *Server) UpdateKycStatus(ctx context.Context, in *npool.UpdateKycStatusRequest) (*npool.UpdateKycStatusResponse, error) {
+	resp, err := kyc.UpdateReviewStatus(ctx, in)
+	if err != nil {
+		logger.Sugar().Errorf("fail to update kyc status: %v", err)
+		return nil, status.Errorf(codes.Internal, "internal server error: %v", err)
+	}
+	return resp, nil
+}
+
+func (s *Server) UpdateKyc(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycResponse, error) {
 	resp, err := kyc.Update(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("fail to update kyc record: %v", err)

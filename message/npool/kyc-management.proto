@@ -28,9 +28,28 @@ service KycManagement {
             body: "*"
         };
     };
+    // update kyc status
     rpc UpdateKycStatus (UpdateKycStatusRequest) returns (UpdateKycStatusResponse) {
         option (google.api.http) = {
             post: "/v1/update/kyc/status"
+            body: "*"
+        };
+    };
+    rpc UpdateKyc (UpdateKycRequest) returns (UpdateKycResponse) {
+        option (google.api.http) = {
+            post: "/v1/update/kyc"
+            body: "*"
+        };
+    };
+    rpc UploadKycImg (UploadKycImgRequest) returns (UploadKycImgResponse) {
+        option (google.api.http) = {
+            post: "/v1/upload/kyc/img"
+            body: "*"
+        };
+    };
+    rpc GetKycImg (GetKycImgRequest) returns (GetKycImgResponse) {
+        option (google.api.http) = {
+            post: "/v1/get/kyc/img"
             body: "*"
         };
     };
@@ -52,7 +71,7 @@ message KycInfo {
     string FrontCardImg = 8;
     string BackCardImg = 9;
     string UserHandlingCardImg = 10;
-    bool ReviewStatus = 11;
+    string ReviewStatus = 11;
     uint32 CreateAT = 12;
     uint32 UpdateAT = 13;
 }
@@ -66,20 +85,48 @@ message CreateKycRecordResponse {
 }
 
 message GetKycInfoRequest {
-    string UserID = 1;
-    string KycID = 2;
+    repeated string KycIDs = 2;
 }
 
 message GetKycInfoResponse {
-    KycInfo Info = 1;
+    repeated KycInfo Infos = 1;
 }
 
 message UpdateKycStatusRequest {
-    bool Status = 1;
+    // 1: pass audit 2: refuse audit other: wait audit
+    int32 Status = 1;
     string UserID = 2;
     string KycID = 3;
 }
 
 message UpdateKycStatusResponse {
+    string Info = 1;
+}
+
+message UpdateKycRequest {
     KycInfo Info = 1;
+}
+
+message UpdateKycResponse {
+    KycInfo Info = 1;
+}
+
+message UploadKycImgRequest {
+    string UserID = 1;
+    string ImgType = 2;
+    string ImgBase64 = 3;
+}
+
+message UploadKycImgResponse {
+    // return ImgID
+    string Info = 1;
+}
+
+message GetKycImgRequest {
+    string ImgID = 2;
+}
+
+message GetKycImgResponse {
+    // return ImgBase64
+    string Info = 1;
 }

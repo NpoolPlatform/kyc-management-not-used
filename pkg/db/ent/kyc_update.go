@@ -82,16 +82,8 @@ func (ku *KycUpdate) SetUserHandlingCardImg(s string) *KycUpdate {
 }
 
 // SetReviewStatus sets the "review_status" field.
-func (ku *KycUpdate) SetReviewStatus(b bool) *KycUpdate {
-	ku.mutation.SetReviewStatus(b)
-	return ku
-}
-
-// SetNillableReviewStatus sets the "review_status" field if the given value is not nil.
-func (ku *KycUpdate) SetNillableReviewStatus(b *bool) *KycUpdate {
-	if b != nil {
-		ku.SetReviewStatus(*b)
-	}
+func (ku *KycUpdate) SetReviewStatus(s string) *KycUpdate {
+	ku.mutation.SetReviewStatus(s)
 	return ku
 }
 
@@ -280,7 +272,7 @@ func (ku *KycUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := ku.mutation.ReviewStatus(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeBool,
+			Type:   field.TypeString,
 			Value:  value,
 			Column: kyc.FieldReviewStatus,
 		})
@@ -387,16 +379,8 @@ func (kuo *KycUpdateOne) SetUserHandlingCardImg(s string) *KycUpdateOne {
 }
 
 // SetReviewStatus sets the "review_status" field.
-func (kuo *KycUpdateOne) SetReviewStatus(b bool) *KycUpdateOne {
-	kuo.mutation.SetReviewStatus(b)
-	return kuo
-}
-
-// SetNillableReviewStatus sets the "review_status" field if the given value is not nil.
-func (kuo *KycUpdateOne) SetNillableReviewStatus(b *bool) *KycUpdateOne {
-	if b != nil {
-		kuo.SetReviewStatus(*b)
-	}
+func (kuo *KycUpdateOne) SetReviewStatus(s string) *KycUpdateOne {
+	kuo.mutation.SetReviewStatus(s)
 	return kuo
 }
 
@@ -609,7 +593,7 @@ func (kuo *KycUpdateOne) sqlSave(ctx context.Context) (_node *Kyc, err error) {
 	}
 	if value, ok := kuo.mutation.ReviewStatus(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeBool,
+			Type:   field.TypeString,
 			Value:  value,
 			Column: kyc.FieldReviewStatus,
 		})

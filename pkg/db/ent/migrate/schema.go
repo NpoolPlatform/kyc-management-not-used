@@ -20,7 +20,7 @@ var (
 		{Name: "front_card_img", Type: field.TypeString},
 		{Name: "back_card_img", Type: field.TypeString},
 		{Name: "user_handling_card_img", Type: field.TypeString},
-		{Name: "review_status", Type: field.TypeBool, Default: false},
+		{Name: "review_status", Type: field.TypeString},
 		{Name: "create_at", Type: field.TypeUint32},
 		{Name: "update_at", Type: field.TypeUint32},
 	}

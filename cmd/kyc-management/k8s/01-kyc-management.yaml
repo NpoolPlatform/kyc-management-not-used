@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+	apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kyc-management
@@ -47,4 +47,13 @@ metadata:
 spec:
   ports:
   - name: api
-    port: 8080
+    port: 50120
+    targetPort: 50120
+  - name: grpc
+    port: 50121
+    targetPort: 50121
+  - name: prometheus
+    port: 50122
+    targetPort: 50122
+  selector:
+    app: kyc-management
