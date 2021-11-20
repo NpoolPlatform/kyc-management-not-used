@@ -18,6 +18,8 @@ type Kyc struct {
 	ID uuid.UUID `json:"id,omitempty"`
 	// UserID holds the value of the "user_id" field.
 	UserID uuid.UUID `json:"user_id,omitempty"`
+	// AppID holds the value of the "app_id" field.
+	AppID uuid.UUID `json:"app_id,omitempty"`
 	// FirstName holds the value of the "first_name" field.
 	FirstName string `json:"first_name,omitempty"`
 	// LastName holds the value of the "last_name" field.
@@ -51,7 +53,7 @@ func (*Kyc) scanValues(columns []string) ([]interface{}, error) {
 			values[i] = new(sql.NullInt64)
 		case kyc.FieldFirstName, kyc.FieldLastName, kyc.FieldRegion, kyc.FieldCardType, kyc.FieldCardID, kyc.FieldFrontCardImg, kyc.FieldBackCardImg, kyc.FieldUserHandlingCardImg, kyc.FieldReviewStatus:
 			values[i] = new(sql.NullString)
-		case kyc.FieldID, kyc.FieldUserID:
+		case kyc.FieldID, kyc.FieldUserID, kyc.FieldAppID:
 			values[i] = new(uuid.UUID)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Kyc", columns[i])
@@ -79,6 +81,12 @@ func (k *Kyc) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
 			} else if value != nil {
 				k.UserID = *value
+			}
+		case kyc.FieldAppID:
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field app_id", values[i])
+			} else if value != nil {
+				k.AppID = *value
 			}
 		case kyc.FieldFirstName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -176,6 +184,8 @@ func (k *Kyc) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", k.ID))
 	builder.WriteString(", user_id=")
 	builder.WriteString(fmt.Sprintf("%v", k.UserID))
+	builder.WriteString(", app_id=")
+	builder.WriteString(fmt.Sprintf("%v", k.AppID))
 	builder.WriteString(", first_name=")
 	builder.WriteString(k.FirstName)
 	builder.WriteString(", last_name=")

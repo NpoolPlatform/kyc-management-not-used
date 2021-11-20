@@ -70,6 +70,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| AppID | [string](#string) |  |  |
 | ImgID | [string](#string) |  |  |
 
 
@@ -100,6 +101,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| AppID | [string](#string) |  |  |
 | KycIDs | [string](#string) | repeated |  |
 
 
@@ -132,6 +134,7 @@
 | ----- | ---- | ----- | ----------- |
 | ID | [string](#string) |  |  |
 | UserID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
 | FirstName | [string](#string) |  |  |
 | LastName | [string](#string) |  |  |
 | Region | [string](#string) |  |  |
@@ -190,6 +193,7 @@
 | Status | [int32](#int32) |  | 1: pass audit 2: refuse audit other: wait audit |
 | UserID | [string](#string) |  |  |
 | KycID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
 
 
 
@@ -222,6 +226,7 @@
 | UserID | [string](#string) |  |  |
 | ImgType | [string](#string) |  |  |
 | ImgBase64 | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
 
 
 

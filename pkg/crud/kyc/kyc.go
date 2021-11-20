@@ -8,6 +8,7 @@ import (
 	"github.com/NpoolPlatform/kyc-management/pkg/db"
 	"github.com/NpoolPlatform/kyc-management/pkg/db/ent"
 	"github.com/NpoolPlatform/kyc-management/pkg/db/ent/kyc"
+	"github.com/NpoolPlatform/kyc-management/pkg/grpc"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 )
@@ -42,10 +43,29 @@ func Create(ctx context.Context, in *npool.CreateKycRecordRequest) (*npool.Creat
 		return nil, xerrors.Errorf("invalid user id: %v", err)
 	}
 
+	appID, err := uuid.Parse(in.Info.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
+	_, err = db.Client().
+		Kyc.
+		Query().
+		Where(
+			kyc.And(
+				kyc.AppID(appID),
+				kyc.UserID(userID),
+			),
+		).Only(ctx)
+	if err == nil {
+		return nil, xerrors.Errorf("user kyc record has been existed: %v", err)
+	}
+
 	info, err := db.Client().
 		Kyc.
 		Create().
 		SetUserID(userID).
+		SetAppID(appID).
 		SetFirstName(in.Info.FirstName).
 		SetLastName(in.Info.LastName).
 		SetRegion(in.Info.Region).
@@ -115,7 +135,12 @@ func Get(ctx context.Context, in *npool.GetKycInfoRequest) (*npool.GetKycInfoRes
 func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycResponse, error) {
 	userID, err := uuid.Parse(in.Info.UserID)
 	if err != nil {
-		return nil, err
+		return nil, xerrors.Errorf("invalid user id: %v", err)
+	}
+
+	appID, err := uuid.Parse(in.Info.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
 	}
 	id := ""
 	if in.Info.ID == "" {
@@ -123,7 +148,10 @@ func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycRe
 			Kyc.
 			Query().
 			Where(
-				kyc.UserID(userID),
+				kyc.And(
+					kyc.UserID(userID),
+					kyc.AppID(appID),
+				),
 			).Only(ctx)
 		if err != nil {
 			return nil, xerrors.Errorf("fail to query user kyc info: %v", err)
@@ -168,6 +196,11 @@ func UpdateReviewStatus(ctx context.Context, in *npool.UpdateKycStatusRequest) (
 	if err != nil {
 		return nil, err
 	}
+
+	appID, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
 	status := ""
 	switch in.Status {
 	case 1:
@@ -186,11 +219,26 @@ func UpdateReviewStatus(ctx context.Context, in *npool.UpdateKycStatusRequest) (
 				kyc.UserID(userID),
 				kyc.ID(id),
 			),
+			kyc.And(
+				kyc.AppID(appID),
+			),
 		).
 		SetReviewStatus(status).
 		Save(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to update kyc status: %v", err)
+	}
+
+	if in.Status == 1 {
+		err := grpc.UpdateUserKycStatus(in.UserID, in.AppID, true)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		err := grpc.UpdateUserKycStatus(in.UserID, in.AppID, false)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return &npool.UpdateKycStatusResponse{

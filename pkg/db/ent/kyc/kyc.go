@@ -13,6 +13,8 @@ const (
 	FieldID = "id"
 	// FieldUserID holds the string denoting the user_id field in the database.
 	FieldUserID = "user_id"
+	// FieldAppID holds the string denoting the app_id field in the database.
+	FieldAppID = "app_id"
 	// FieldFirstName holds the string denoting the first_name field in the database.
 	FieldFirstName = "first_name"
 	// FieldLastName holds the string denoting the last_name field in the database.
@@ -43,6 +45,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldUserID,
+	FieldAppID,
 	FieldFirstName,
 	FieldLastName,
 	FieldRegion,

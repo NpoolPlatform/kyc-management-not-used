@@ -33,6 +33,7 @@ type KycMutation struct {
 	typ                    string
 	id                     *uuid.UUID
 	user_id                *uuid.UUID
+	app_id                 *uuid.UUID
 	first_name             *string
 	last_name              *string
 	region                 *string
@@ -171,6 +172,42 @@ func (m *KycMutation) OldUserID(ctx context.Context) (v uuid.UUID, err error) {
 // ResetUserID resets all changes to the "user_id" field.
 func (m *KycMutation) ResetUserID() {
 	m.user_id = nil
+}
+
+// SetAppID sets the "app_id" field.
+func (m *KycMutation) SetAppID(u uuid.UUID) {
+	m.app_id = &u
+}
+
+// AppID returns the value of the "app_id" field in the mutation.
+func (m *KycMutation) AppID() (r uuid.UUID, exists bool) {
+	v := m.app_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAppID returns the old "app_id" field's value of the Kyc entity.
+// If the Kyc object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *KycMutation) OldAppID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldAppID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldAppID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAppID: %w", err)
+	}
+	return oldValue.AppID, nil
+}
+
+// ResetAppID resets all changes to the "app_id" field.
+func (m *KycMutation) ResetAppID() {
+	m.app_id = nil
 }
 
 // SetFirstName sets the "first_name" field.
@@ -628,9 +665,12 @@ func (m *KycMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *KycMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 13)
 	if m.user_id != nil {
 		fields = append(fields, kyc.FieldUserID)
+	}
+	if m.app_id != nil {
+		fields = append(fields, kyc.FieldAppID)
 	}
 	if m.first_name != nil {
 		fields = append(fields, kyc.FieldFirstName)
@@ -675,6 +715,8 @@ func (m *KycMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case kyc.FieldUserID:
 		return m.UserID()
+	case kyc.FieldAppID:
+		return m.AppID()
 	case kyc.FieldFirstName:
 		return m.FirstName()
 	case kyc.FieldLastName:
@@ -708,6 +750,8 @@ func (m *KycMutation) OldField(ctx context.Context, name string) (ent.Value, err
 	switch name {
 	case kyc.FieldUserID:
 		return m.OldUserID(ctx)
+	case kyc.FieldAppID:
+		return m.OldAppID(ctx)
 	case kyc.FieldFirstName:
 		return m.OldFirstName(ctx)
 	case kyc.FieldLastName:
@@ -745,6 +789,13 @@ func (m *KycMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUserID(v)
+		return nil
+	case kyc.FieldAppID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAppID(v)
 		return nil
 	case kyc.FieldFirstName:
 		v, ok := value.(string)
@@ -901,6 +952,9 @@ func (m *KycMutation) ResetField(name string) error {
 	switch name {
 	case kyc.FieldUserID:
 		m.ResetUserID()
+		return nil
+	case kyc.FieldAppID:
+		m.ResetAppID()
 		return nil
 	case kyc.FieldFirstName:
 		m.ResetFirstName()

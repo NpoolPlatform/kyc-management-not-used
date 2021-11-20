@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	applicationconst "github.com/NpoolPlatform/application-management/pkg/message/const"
 	"github.com/NpoolPlatform/go-service-framework/pkg/app"
 	"github.com/NpoolPlatform/go-service-framework/pkg/config"
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
@@ -25,7 +26,9 @@ func main() {
 	err := app.Init(serviceName, description, "", "", "./", nil, commands,
 		config.ServiceNameToNamespace(mysqlconst.MysqlServiceName),
 		config.ServiceNameToNamespace(redisconst.RedisServiceName),
-		config.ServiceNameToNamespace(rabbitmqconst.RabbitMQServiceName))
+		config.ServiceNameToNamespace(rabbitmqconst.RabbitMQServiceName),
+		config.ServiceNameToNamespace(applicationconst.ServiceName),
+	)
 	if err != nil {
 		logger.Sugar().Errorf("fail to create %v: %v", serviceName, err)
 		return

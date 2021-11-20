@@ -15,11 +15,11 @@ func init() {
 	kycFields := schema.Kyc{}.Fields()
 	_ = kycFields
 	// kycDescCreateAt is the schema descriptor for create_at field.
-	kycDescCreateAt := kycFields[11].Descriptor()
+	kycDescCreateAt := kycFields[12].Descriptor()
 	// kyc.DefaultCreateAt holds the default value on creation for the create_at field.
 	kyc.DefaultCreateAt = kycDescCreateAt.Default.(func() uint32)
 	// kycDescUpdateAt is the schema descriptor for update_at field.
-	kycDescUpdateAt := kycFields[12].Descriptor()
+	kycDescUpdateAt := kycFields[13].Descriptor()
 	// kyc.DefaultUpdateAt holds the default value on creation for the update_at field.
 	kyc.DefaultUpdateAt = kycDescUpdateAt.Default.(func() uint32)
 	// kyc.UpdateDefaultUpdateAt holds the default value on update for the update_at field.

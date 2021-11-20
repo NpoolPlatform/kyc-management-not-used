@@ -26,6 +26,12 @@ func (kc *KycCreate) SetUserID(u uuid.UUID) *KycCreate {
 	return kc
 }
 
+// SetAppID sets the "app_id" field.
+func (kc *KycCreate) SetAppID(u uuid.UUID) *KycCreate {
+	kc.mutation.SetAppID(u)
+	return kc
+}
+
 // SetFirstName sets the "first_name" field.
 func (kc *KycCreate) SetFirstName(s string) *KycCreate {
 	kc.mutation.SetFirstName(s)
@@ -204,6 +210,9 @@ func (kc *KycCreate) check() error {
 	if _, ok := kc.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "user_id"`)}
 	}
+	if _, ok := kc.mutation.AppID(); !ok {
+		return &ValidationError{Name: "app_id", err: errors.New(`ent: missing required field "app_id"`)}
+	}
 	if _, ok := kc.mutation.FirstName(); !ok {
 		return &ValidationError{Name: "first_name", err: errors.New(`ent: missing required field "first_name"`)}
 	}
@@ -276,6 +285,14 @@ func (kc *KycCreate) createSpec() (*Kyc, *sqlgraph.CreateSpec) {
 			Column: kyc.FieldUserID,
 		})
 		_node.UserID = value
+	}
+	if value, ok := kc.mutation.AppID(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Value:  value,
+			Column: kyc.FieldAppID,
+		})
+		_node.AppID = value
 	}
 	if value, ok := kc.mutation.FirstName(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

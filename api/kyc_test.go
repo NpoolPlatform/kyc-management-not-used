@@ -21,6 +21,7 @@ func TestKycAPI(t *testing.T) { // nolint
 	cli := resty.New()
 
 	userID := uuid.New().String()
+	appID := uuid.New().String()
 
 	imgType := "test"
 	imgBase64 := "iVBORw0KGgoAAAANSUhEUgAAAB4AAAAZCAYAAAAmNZ4aAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAySURBVEhL7c2hAQAgDMTAp/vv3CI6QxDkTGROX3mgtjjHGMcYxxjHGMcYxxjHmN/GyQBA0AQuiLmS2gAAAABJRU5ErkJggg=="
@@ -44,6 +45,7 @@ func TestKycAPI(t *testing.T) { // nolint
 
 	kycInfo := &npool.KycInfo{
 		UserID:              userID,
+		AppID:               appID,
 		FirstName:           "test",
 		LastName:            "test",
 		Region:              "test",
@@ -102,7 +104,7 @@ func TestKycAPI(t *testing.T) { // nolint
 		}).
 		Post("http://localhost:50120/v1/update/kyc/status")
 	if assert.Nil(t, err) {
-		assert.Equal(t, 200, resp3.StatusCode())
+		assert.NotEqual(t, 200, resp3.StatusCode())
 	}
 
 	resp4, err := cli.R().

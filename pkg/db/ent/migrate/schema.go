@@ -11,12 +11,13 @@ var (
 	// KycsColumns holds the columns for the "kycs" table.
 	KycsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
-		{Name: "user_id", Type: field.TypeUUID, Unique: true},
+		{Name: "user_id", Type: field.TypeUUID},
+		{Name: "app_id", Type: field.TypeUUID},
 		{Name: "first_name", Type: field.TypeString},
 		{Name: "last_name", Type: field.TypeString},
 		{Name: "region", Type: field.TypeString},
 		{Name: "card_type", Type: field.TypeString},
-		{Name: "card_id", Type: field.TypeString, Unique: true},
+		{Name: "card_id", Type: field.TypeString},
 		{Name: "front_card_img", Type: field.TypeString},
 		{Name: "back_card_img", Type: field.TypeString},
 		{Name: "user_handling_card_img", Type: field.TypeString},

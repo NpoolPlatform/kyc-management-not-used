@@ -33,6 +33,12 @@ func (ku *KycUpdate) SetUserID(u uuid.UUID) *KycUpdate {
 	return ku
 }
 
+// SetAppID sets the "app_id" field.
+func (ku *KycUpdate) SetAppID(u uuid.UUID) *KycUpdate {
+	ku.mutation.SetAppID(u)
+	return ku
+}
+
 // SetFirstName sets the "first_name" field.
 func (ku *KycUpdate) SetFirstName(s string) *KycUpdate {
 	ku.mutation.SetFirstName(s)
@@ -214,6 +220,13 @@ func (ku *KycUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: kyc.FieldUserID,
 		})
 	}
+	if value, ok := ku.mutation.AppID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Value:  value,
+			Column: kyc.FieldAppID,
+		})
+	}
 	if value, ok := ku.mutation.FirstName(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -327,6 +340,12 @@ type KycUpdateOne struct {
 // SetUserID sets the "user_id" field.
 func (kuo *KycUpdateOne) SetUserID(u uuid.UUID) *KycUpdateOne {
 	kuo.mutation.SetUserID(u)
+	return kuo
+}
+
+// SetAppID sets the "app_id" field.
+func (kuo *KycUpdateOne) SetAppID(u uuid.UUID) *KycUpdateOne {
+	kuo.mutation.SetAppID(u)
 	return kuo
 }
 
@@ -533,6 +552,13 @@ func (kuo *KycUpdateOne) sqlSave(ctx context.Context) (_node *Kyc, err error) {
 			Type:   field.TypeUUID,
 			Value:  value,
 			Column: kyc.FieldUserID,
+		})
+	}
+	if value, ok := kuo.mutation.AppID(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUUID,
+			Value:  value,
+			Column: kyc.FieldAppID,
 		})
 	}
 	if value, ok := kuo.mutation.FirstName(); ok {

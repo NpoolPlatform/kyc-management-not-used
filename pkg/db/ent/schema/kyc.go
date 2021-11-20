@@ -20,12 +20,13 @@ func (Kyc) Fields() []ent.Field {
 		field.UUID("id", uuid.UUID{}).
 			Default(uuid.New).
 			Unique(),
-		field.UUID("user_id", uuid.UUID{}).Unique(),
+		field.UUID("user_id", uuid.UUID{}),
+		field.UUID("app_id", uuid.UUID{}),
 		field.String("first_name"),
 		field.String("last_name"),
 		field.String("region"),
 		field.String("card_type"),
-		field.String("card_id").Unique(),
+		field.String("card_id"),
 		field.String("front_card_img"),
 		field.String("back_card_img"),
 		field.String("user_handling_card_img"),

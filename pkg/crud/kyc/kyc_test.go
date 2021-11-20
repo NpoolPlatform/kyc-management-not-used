@@ -28,8 +28,10 @@ func TestKycCRUD(t *testing.T) { // nolint
 	}
 
 	userID := uuid.New().String()
+	appID := uuid.New().String()
 	kycInfo := &npool.KycInfo{
 		UserID:              userID,
+		AppID:               appID,
 		FirstName:           "test",
 		LastName:            "test",
 		Region:              "test",
@@ -63,22 +65,19 @@ func TestKycCRUD(t *testing.T) { // nolint
 		assert.NotNil(t, resp1)
 	}
 
-	resp4, err := UpdateReviewStatus(context.Background(), &npool.UpdateKycStatusRequest{
+	_, err = UpdateReviewStatus(context.Background(), &npool.UpdateKycStatusRequest{
 		UserID: kycInfo.UserID,
 		Status: 1,
+		AppID:  appID,
 	})
-	if assert.Nil(t, err) {
-		assert.NotNil(t, resp4)
-	}
+	assert.NotNil(t, err)
 
-	resp5, err := UpdateReviewStatus(context.Background(), &npool.UpdateKycStatusRequest{
+	_, err = UpdateReviewStatus(context.Background(), &npool.UpdateKycStatusRequest{
 		KycID:  kycInfo.ID,
 		Status: 2,
+		AppID:  appID,
 	})
-	if assert.Nil(t, err) {
-		assert.NotNil(t, resp5)
-	}
-
+	assert.NotNil(t, err)
 	resp6, err := Update(context.Background(), &npool.UpdateKycRequest{
 		Info: kycInfo,
 	})
