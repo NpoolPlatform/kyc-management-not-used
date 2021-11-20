@@ -32,6 +32,7 @@ func Init() error {
 		config.ServiceNameToNamespace(redisconst.RedisServiceName),
 		config.ServiceNameToNamespace(rabbitmqconst.RabbitMQServiceName),
 		config.ServiceNameToNamespace(applicationconst.ServiceName),
+		config.ServiceNameToNamespace(ossconst.S3NameSpace),
 	)
 	if err != nil {
 		return xerrors.Errorf("cannot init app stub: %v", err)

@@ -9,6 +9,7 @@ import (
 	"github.com/NpoolPlatform/go-service-framework/pkg/config"
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	mysqlconst "github.com/NpoolPlatform/go-service-framework/pkg/mysql/const"
+	ossconst "github.com/NpoolPlatform/go-service-framework/pkg/oss/const"
 	rabbitmqconst "github.com/NpoolPlatform/go-service-framework/pkg/rabbitmq/const"
 	redisconst "github.com/NpoolPlatform/go-service-framework/pkg/redis/const"
 	cli "github.com/urfave/cli/v2"
@@ -28,6 +29,7 @@ func main() {
 		config.ServiceNameToNamespace(redisconst.RedisServiceName),
 		config.ServiceNameToNamespace(rabbitmqconst.RabbitMQServiceName),
 		config.ServiceNameToNamespace(applicationconst.ServiceName),
+		config.ServiceNameToNamespace(ossconst.S3NameSpace),
 	)
 	if err != nil {
 		logger.Sugar().Errorf("fail to create %v: %v", serviceName, err)
