@@ -77,7 +77,7 @@ pipeline {
             cd .apollo-base-config
             ./apollo-base-config.sh $APP_ID $TARGET_ENV $vhost
             ./apollo-item-config.sh $APP_ID $TARGET_ENV $vhost database_name kyc_management
-            ./apollo-item-config.sh $APP_ID $TARGET_ENV $vhost kyc_bucket $KYC_BUCKET
+            ./apollo-item-config.sh $APP_ID $TARGET_ENV $vhost kyc_bucket kyc-bucket
             cd -
           done
           kubectl exec --namespace kube-system $devboxpod -- make -C /tmp/$servicename deps before-test test after-test
@@ -130,7 +130,7 @@ pipeline {
             cd .apollo-base-config
             ./apollo-base-config.sh $APP_ID $TARGET_ENV $vhost
             ./apollo-item-config.sh $APP_ID $TARGET_ENV $vhost database_name kyc_management
-            ./apollo-item-config.sh $APP_ID $TARGET_ENV $vhost kyc_bucket $KYC_BUCKET
+            ./apollo-item-config.sh $APP_ID $TARGET_ENV $vhost kyc_bucket kyc-bucket
           done
         '''.stripIndent())
       }
