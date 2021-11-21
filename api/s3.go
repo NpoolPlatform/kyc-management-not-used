@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (s *Server) UploadImgToS3(ctx context.Context, in *npool.UploadKycImgRequest) (*npool.UploadKycImgResponse, error) {
+func (s *Server) UploadKycImg(ctx context.Context, in *npool.UploadKycImgRequest) (*npool.UploadKycImgResponse, error) {
 	resp, err := s3.UploadKycImg(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("fail to upload img to s3: %v", err)
@@ -19,7 +19,7 @@ func (s *Server) UploadImgToS3(ctx context.Context, in *npool.UploadKycImgReques
 	return resp, nil
 }
 
-func (s *Server) GetImgFromS3(ctx context.Context, in *npool.GetKycImgRequest) (*npool.GetKycImgResponse, error) {
+func (s *Server) GetKycImg(ctx context.Context, in *npool.GetKycImgRequest) (*npool.GetKycImgResponse, error) {
 	resp, err := s3.GetKycImg(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("fail to get img from s3: %v", err)

@@ -37,10 +37,11 @@ func TestKycMiddleware(t *testing.T) {
 		ImgBase64: "hjoasdidhjasihdasiodhsaiofhjasiofjioasjfiopasjfpoasjfopasjfasopfjpasfjasipjfpj",
 	})
 	if assert.Nil(t, err) {
-		assert.NotNil(t, err)
+		assert.NotNil(t, resp)
 	}
 
 	kycInfo := &npool.KycInfo{
+		AppID:               uuid.New().String(),
 		UserID:              userID,
 		FirstName:           "test",
 		LastName:            "test",
