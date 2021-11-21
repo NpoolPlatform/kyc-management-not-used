@@ -42,7 +42,7 @@ func Init() error {
 		return xerrors.Errorf("cannot init database: %v", err)
 	}
 
-	err = oss.Init(ossconst.SecretStoreKey, "kyc-bucket")
+	err = oss.Init(ossconst.SecretStoreKey, "kyc_bucket")
 	if err != nil {
 		return xerrors.Errorf("fail to init s3: %v", err)
 	}

@@ -23,7 +23,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-const BukectKey = "kyc-bucket"
+const BukectKey = "kyc_bucket"
 
 var runCmd = &cli.Command{
 	Name:    "run",

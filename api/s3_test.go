@@ -43,7 +43,7 @@ func TestS3API(t *testing.T) { // nolint
 	resp1, err := cli.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.GetKycImgRequest{
-			ImgID: imgID,
+			ImgID: "kyc/" + imgID,
 		}).Post("http://localhost:50120/v1/get/kyc/img")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp1.StatusCode())

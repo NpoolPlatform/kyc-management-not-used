@@ -1,0 +1,9 @@
+{
+	"appId": "89089012783789789719823798127398",
+	"cluster": "development",
+	"namespaceName": "application-management-npool-top",
+	"releaseKey": "20211110035437-5a1144aa8fa7661a",
+	"configurations": {
+		"database_name": "application_management"
+	}
+}
