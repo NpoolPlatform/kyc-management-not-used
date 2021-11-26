@@ -15,7 +15,7 @@ spec:
     - host: api.npool.top
       http:
         paths:
-          - path: /kyc-management
+          - path: /api/kyc-management
             backend:
               serviceName: kyc-management
               servicePort: 50120
@@ -39,7 +39,7 @@ spec:
     - host: api.xpool.top
       http:
         paths:
-          - path: /kyc-management
+          - path: /api/kyc-management
             backend:
               serviceName: kyc-management
               servicePort: 50120
@@ -54,4 +54,4 @@ metadata:
 spec:
   stripPrefix:
     prefixes:
-      - /kyc-management
+      - /api/kyc-management
