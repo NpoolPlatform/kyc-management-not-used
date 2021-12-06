@@ -1,11 +1,11 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: kyc-management-ingress
+  name: kyc-management-traefik-ingress
   namespace: kube-system
   annotations:
-    k8s.kuboard.cn/displayName: kyc-management
-    k8s.kuboard.cn/workload: kyc-management
+    k8s.kuboard.cn/displayName: kyc-management-traefik
+    k8s.kuboard.cn/workload: kyc-management-traefik
     kubernetes.io/ingress.class: "traefik-internet"
     traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
     traefik.ingress.kubernetes.io/router.middlewares: kube-system-strip-kyc-management-prefix@kubernetescrd,kube-system-common-headers@kubernetescrd
@@ -15,7 +15,7 @@ spec:
     - host: api.npool.top
       http: &http_rules
         paths:
-          - path: /api/kyc-management
+          - path: /api/kyc-management/version
             backend:
               serviceName: kyc-management
               servicePort: 50120
