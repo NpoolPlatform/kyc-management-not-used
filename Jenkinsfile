@@ -82,7 +82,7 @@ pipeline {
             cd .apollo-base-config
             ./apollo-base-config.sh $APP_ID $TARGET_ENV $vhost
             ./apollo-item-config.sh $APP_ID $TARGET_ENV $vhost database_name kyc_management
-            ./apollo-item-config.sh $APP_ID $TARGET_ENV $vhost kyc_bucket kyc-bucketa
+            ./apollo-item-config.sh $APP_ID $TARGET_ENV $vhost kyc_bucket kyc-bucket
             cd -
           done
         '''.stripIndent())
