@@ -61,8 +61,10 @@ pipeline {
 
     stage('Config target') {
       when {
-        expression { BUILD_TARGET == 'true' }
-        expression { DEPLOY_TARGET == 'true' }
+        anyOf {
+          expression { BUILD_TARGET == 'true' }
+          expression { DEPLOY_TARGET == 'true' }
+        }
       }
       steps {
         sh 'rm .apollo-base-config -rf'
