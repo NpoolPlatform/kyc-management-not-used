@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: kyc-management
-        image: entropypool/kyc-management:latest
+        image: uhub.service.ucloud.cn/entropypool/kyc-management:latest
         imagePullPolicy: Always
         env:
         - name: ENV_ENVIRONMENT_TARGET
