@@ -116,6 +116,7 @@ pipeline {
         expression { BUILD_TARGET == 'true' }
       }
       steps {
+        sh 'make verify-build'
         sh 'DEVELOPMENT=development make generate-docker-images'
       }
     }
@@ -239,6 +240,7 @@ pipeline {
           git reset --hard
           git checkout $tag
         '''.stripIndent())
+        sh 'make verify-build'
         sh 'DEVELOPMENT=other make generate-docker-images'
       }
     }
