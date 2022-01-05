@@ -2,7 +2,7 @@ package s3
 
 import (
 	"context"
-	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"testing"
@@ -18,7 +18,7 @@ func init() {
 		return
 	}
 	if err := testinit.Init(); err != nil {
-		fmt.Printf("cannot init test stub: %v\n", err)
+		log.Fatal(err)
 	}
 }
 

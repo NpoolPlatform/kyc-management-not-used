@@ -6,10 +6,10 @@
 - [npool/kyc-management.proto](#npool/kyc-management.proto)
     - [CreateKycRecordRequest](#kyc.management.v1.CreateKycRecordRequest)
     - [CreateKycRecordResponse](#kyc.management.v1.CreateKycRecordResponse)
+    - [GetAllKycInfosRequest](#kyc.management.v1.GetAllKycInfosRequest)
+    - [GetAllKycInfosResponse](#kyc.management.v1.GetAllKycInfosResponse)
     - [GetKycImgRequest](#kyc.management.v1.GetKycImgRequest)
     - [GetKycImgResponse](#kyc.management.v1.GetKycImgResponse)
-    - [GetKycInfoRequest](#kyc.management.v1.GetKycInfoRequest)
-    - [GetKycInfoResponse](#kyc.management.v1.GetKycInfoResponse)
     - [KycInfo](#kyc.management.v1.KycInfo)
     - [UpdateKycRequest](#kyc.management.v1.UpdateKycRequest)
     - [UpdateKycResponse](#kyc.management.v1.UpdateKycResponse)
@@ -62,6 +62,37 @@
 
 
 
+<a name="kyc.management.v1.GetAllKycInfosRequest"></a>
+
+### GetAllKycInfosRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| AppID | [string](#string) |  |  |
+| KycIDs | [string](#string) | repeated |  |
+
+
+
+
+
+
+<a name="kyc.management.v1.GetAllKycInfosResponse"></a>
+
+### GetAllKycInfosResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Infos | [KycInfo](#kyc.management.v1.KycInfo) | repeated |  |
+
+
+
+
+
+
 <a name="kyc.management.v1.GetKycImgRequest"></a>
 
 ### GetKycImgRequest
@@ -87,37 +118,6 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | Info | [string](#string) |  | return ImgBase64 |
-
-
-
-
-
-
-<a name="kyc.management.v1.GetKycInfoRequest"></a>
-
-### GetKycInfoRequest
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| AppID | [string](#string) |  |  |
-| KycIDs | [string](#string) | repeated |  |
-
-
-
-
-
-
-<a name="kyc.management.v1.GetKycInfoResponse"></a>
-
-### GetKycInfoResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| Infos | [KycInfo](#kyc.management.v1.KycInfo) | repeated |  |
 
 
 
@@ -278,7 +278,7 @@ Service Name
 | ----------- | ------------ | ------------- | ------------|
 | Version | [.google.protobuf.Empty](#google.protobuf.Empty) | [VersionResponse](#kyc.management.v1.VersionResponse) | Method Version |
 | CreateKycRecord | [CreateKycRecordRequest](#kyc.management.v1.CreateKycRecordRequest) | [CreateKycRecordResponse](#kyc.management.v1.CreateKycRecordResponse) |  |
-| GetKycInfo | [GetKycInfoRequest](#kyc.management.v1.GetKycInfoRequest) | [GetKycInfoResponse](#kyc.management.v1.GetKycInfoResponse) |  |
+| GetAllKycInfos | [GetAllKycInfosRequest](#kyc.management.v1.GetAllKycInfosRequest) | [GetAllKycInfosResponse](#kyc.management.v1.GetAllKycInfosResponse) |  |
 | UpdateKycStatus | [UpdateKycStatusRequest](#kyc.management.v1.UpdateKycStatusRequest) | [UpdateKycStatusResponse](#kyc.management.v1.UpdateKycStatusResponse) | update kyc status |
 | UpdateKyc | [UpdateKycRequest](#kyc.management.v1.UpdateKycRequest) | [UpdateKycResponse](#kyc.management.v1.UpdateKycResponse) |  |
 | UploadKycImg | [UploadKycImgRequest](#kyc.management.v1.UploadKycImgRequest) | [UploadKycImgResponse](#kyc.management.v1.UploadKycImgResponse) |  |

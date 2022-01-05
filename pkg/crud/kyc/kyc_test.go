@@ -2,7 +2,7 @@ package kyc
 
 import (
 	"context"
-	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"testing"
@@ -18,7 +18,7 @@ func init() {
 		return
 	}
 	if err := testinit.Init(); err != nil {
-		fmt.Printf("cannot init test stub: %v\n", err)
+		log.Fatal(err)
 	}
 }
 
@@ -58,7 +58,7 @@ func TestKycCRUD(t *testing.T) { // nolint
 		kycInfo.ID = resp.Info.ID
 	}
 
-	resp1, err := Get(context.Background(), &npool.GetKycInfoRequest{
+	resp1, err := GetAll(context.Background(), &npool.GetAllKycInfosRequest{
 		KycIDs: []string{kycInfo.ID},
 	})
 	if assert.Nil(t, err) {

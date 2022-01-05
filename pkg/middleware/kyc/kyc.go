@@ -8,8 +8,8 @@ import (
 	"github.com/NpoolPlatform/kyc-management/pkg/s3"
 )
 
-func GetKycInfo(ctx context.Context, in *npool.GetKycInfoRequest) (*npool.GetKycInfoResponse, error) {
-	resp, err := crudkyc.Get(ctx, in)
+func GetKycInfo(ctx context.Context, in *npool.GetAllKycInfosRequest) (*npool.GetAllKycInfosResponse, error) {
+	resp, err := crudkyc.GetAll(ctx, in)
 	if err != nil {
 		return nil, err
 	}
@@ -41,7 +41,7 @@ func GetKycInfo(ctx context.Context, in *npool.GetKycInfoRequest) (*npool.GetKyc
 		info.UserHandlingCardImg = userHandlingCardImg.Info
 		response = append(response, info)
 	}
-	return &npool.GetKycInfoResponse{
+	return &npool.GetAllKycInfosResponse{
 		Infos: response,
 	}, nil
 }
