@@ -17,7 +17,7 @@ const (
 	FailAudit = "failed"
 )
 
-func DbRowToKyc(row *ent.Kyc) *npool.KycInfo {
+func DBRowToKyc(row *ent.Kyc) *npool.KycInfo {
 	return &npool.KycInfo{
 		ID:                  row.ID.String(),
 		UserID:              row.UserID.String(),
@@ -84,7 +84,7 @@ func Create(ctx context.Context, in *npool.CreateKycRecordRequest) (*npool.Creat
 	}
 
 	return &npool.CreateKycRecordResponse{
-		Info: DbRowToKyc(info),
+		Info: DBRowToKyc(info),
 	}, nil
 }
 
@@ -119,7 +119,7 @@ func GetKycByUserIDAndAppID(ctx context.Context, appID, userID uuid.UUID) (*npoo
 				kyc.UserID(userID),
 			),
 		).Only(ctx)
-	return DbRowToKyc(resp), err
+	return DBRowToKyc(resp), err
 }
 
 func GetKycByID(ctx context.Context, kycID uuid.UUID) (*npool.KycInfo, error) {
@@ -132,7 +132,7 @@ func GetKycByID(ctx context.Context, kycID uuid.UUID) (*npool.KycInfo, error) {
 		Where(
 			kyc.ID(kycID),
 		).Only(ctx)
-	return DbRowToKyc(resp), err
+	return DBRowToKyc(resp), err
 }
 
 func GetAll(ctx context.Context, in *npool.GetAllKycInfosRequest) (*npool.GetAllKycInfosResponse, error) {
@@ -161,7 +161,7 @@ func GetAll(ctx context.Context, in *npool.GetAllKycInfosRequest) (*npool.GetAll
 			return nil, xerrors.Errorf("fail to get %v kyc info: %v", kycid, err)
 		}
 
-		response = append(response, DbRowToKyc(info))
+		response = append(response, DBRowToKyc(info))
 	}
 
 	return &npool.GetAllKycInfosResponse{
@@ -228,7 +228,7 @@ func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycRe
 	}
 
 	return &npool.UpdateKycResponse{
-		Info: DbRowToKyc(info),
+		Info: DBRowToKyc(info),
 	}, nil
 }
 

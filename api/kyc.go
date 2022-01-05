@@ -75,7 +75,7 @@ func (s *Server) UpdateKycStatus(ctx context.Context, in *npool.UpdateKycStatusR
 		}
 	}
 	return &npool.UpdateKycStatusResponse{
-		Info: kyc.DbRowToKyc(resp),
+		Info: kyc.DBRowToKyc(resp),
 	}, nil
 }
 
