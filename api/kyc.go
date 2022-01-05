@@ -61,7 +61,7 @@ func (s *Server) UpdateKycStatus(ctx context.Context, in *npool.UpdateKycStatusR
 	kycID, err := uuid.Parse(in.GetKycID())
 	if err != nil {
 		logger.Sugar().Errorf("UpdateKycStatus error: %v is not a valid uuid: %v", in.GetKycID(), err)
-		return nil, status.Errorf(codes.InvalidArgument, "Invalid kyc id <%v>: %v", in.GetKycID(), err)
+		return nil, status.Errorf(codes.InvalidArgument, "Invalid kyc id <%v>", in.GetKycID())
 	}
 
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
