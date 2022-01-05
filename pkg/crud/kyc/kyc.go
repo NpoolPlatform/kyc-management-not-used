@@ -106,33 +106,31 @@ func parse2ID(userIDString, idString string) (uuid.UUID, uuid.UUID, error) { // 
 	return userID, id, nil
 }
 
-func GetKycByUserIDAndAppID(ctx context.Context, appID, userID uuid.UUID) (*npool.KycInfo, error) {
+func GetKycByUserIDAndAppID(ctx context.Context, appID, userID uuid.UUID) (*ent.Kyc, error) {
 	cli, err := db.Client()
 	if err != nil {
 		return nil, xerrors.Errorf("fail get db client: %v", err)
 	}
 
-	resp, err := cli.Kyc.Query().
+	return cli.Kyc.Query().
 		Where(
 			kyc.And(
 				kyc.AppID(appID),
 				kyc.UserID(userID),
 			),
 		).Only(ctx)
-	return DBRowToKyc(resp), err
 }
 
-func GetKycByID(ctx context.Context, kycID uuid.UUID) (*npool.KycInfo, error) {
+func GetKycByID(ctx context.Context, kycID uuid.UUID) (*ent.Kyc, error) {
 	cli, err := db.Client()
 	if err != nil {
 		return nil, xerrors.Errorf("fail get db client: %v", err)
 	}
 
-	resp, err := cli.Kyc.Query().
+	return cli.Kyc.Query().
 		Where(
 			kyc.ID(kycID),
 		).Only(ctx)
-	return DBRowToKyc(resp), err
 }
 
 func GetAll(ctx context.Context, in *npool.GetAllKycInfosRequest) (*npool.GetAllKycInfosResponse, error) {
