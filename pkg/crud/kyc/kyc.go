@@ -48,7 +48,12 @@ func Create(ctx context.Context, in *npool.CreateKycRecordRequest) (*npool.Creat
 		return nil, xerrors.Errorf("invalid app id: %v", err)
 	}
 
-	_, err = db.Client().
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	_, err = cli.
 		Kyc.
 		Query().
 		Where(
@@ -61,7 +66,7 @@ func Create(ctx context.Context, in *npool.CreateKycRecordRequest) (*npool.Creat
 		return nil, xerrors.Errorf("user kyc record has been existed: %v", err)
 	}
 
-	info, err := db.Client().
+	info, err := cli.
 		Kyc.
 		Create().
 		SetUserID(userID).
@@ -104,6 +109,11 @@ func parse2ID(userIDString, idString string) (uuid.UUID, uuid.UUID, error) { // 
 }
 
 func Get(ctx context.Context, in *npool.GetKycInfoRequest) (*npool.GetKycInfoResponse, error) {
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
 	kycIDs := []uuid.UUID{}
 	for _, id := range in.KycIDs {
 		id, err := uuid.Parse(id)
@@ -114,7 +124,7 @@ func Get(ctx context.Context, in *npool.GetKycInfoRequest) (*npool.GetKycInfoRes
 	}
 	response := []*npool.KycInfo{}
 	for _, kycid := range kycIDs {
-		info, err := db.Client().
+		info, err := cli.
 			Kyc.
 			Query().
 			Where(
@@ -133,6 +143,11 @@ func Get(ctx context.Context, in *npool.GetKycInfoRequest) (*npool.GetKycInfoRes
 }
 
 func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycResponse, error) {
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
 	userID, err := uuid.Parse(in.Info.UserID)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid user id: %v", err)
@@ -144,7 +159,7 @@ func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycRe
 	}
 	id := ""
 	if in.Info.ID == "" {
-		info, err := db.Client().
+		info, err := cli.
 			Kyc.
 			Query().
 			Where(
@@ -167,7 +182,7 @@ func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycRe
 		return nil, xerrors.Errorf("invalid kyc record id: %v", err)
 	}
 
-	info, err := db.Client().
+	info, err := cli.
 		Kyc.
 		UpdateOneID(kycID).
 		SetUserID(userID).
@@ -192,6 +207,11 @@ func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycRe
 }
 
 func UpdateReviewStatus(ctx context.Context, in *npool.UpdateKycStatusRequest) (*npool.UpdateKycStatusResponse, error) {
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
 	userID, id, err := parse2ID(in.UserID, in.KycID)
 	if err != nil {
 		return nil, err
@@ -211,7 +231,7 @@ func UpdateReviewStatus(ctx context.Context, in *npool.UpdateKycStatusRequest) (
 		status = WaitAudit
 	}
 
-	_, err = db.Client().
+	_, err = cli.
 		Kyc.
 		Update().
 		Where(
