@@ -12,12 +12,12 @@ import (
 )
 
 const (
-	WaitAudit = "auditing"
-	PassAudit = "audited"
-	FailAudit = "failed"
+	PassAudit = "audited"  // 1
+	FailAudit = "failed"   // 2
+	WaitAudit = "auditing" // 3
 )
 
-func DBRowToKyc(row *ent.Kyc) *npool.KycInfo {
+func dbRowToKyc(row *ent.Kyc) *npool.KycInfo {
 	return &npool.KycInfo{
 		ID:                  row.ID.String(),
 		UserID:              row.UserID.String(),
@@ -84,7 +84,7 @@ func Create(ctx context.Context, in *npool.CreateKycRecordRequest) (*npool.Creat
 	}
 
 	return &npool.CreateKycRecordResponse{
-		Info: DBRowToKyc(info),
+		Info: dbRowToKyc(info),
 	}, nil
 }
 
@@ -106,31 +106,40 @@ func parse2ID(userIDString, idString string) (uuid.UUID, uuid.UUID, error) { // 
 	return userID, id, nil
 }
 
-func GetKycByUserIDAndAppID(ctx context.Context, appID, userID uuid.UUID) (*ent.Kyc, error) {
+func GetKycByUserIDAndAppID(ctx context.Context, appID, userID uuid.UUID) (*npool.KycInfo, error) {
 	cli, err := db.Client()
 	if err != nil {
 		return nil, xerrors.Errorf("fail get db client: %v", err)
 	}
-
-	return cli.Kyc.Query().
+	info, err := cli.Kyc.Query().
 		Where(
 			kyc.And(
 				kyc.AppID(appID),
 				kyc.UserID(userID),
 			),
 		).Only(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return dbRowToKyc(info), nil
 }
 
-func GetKycByID(ctx context.Context, kycID uuid.UUID) (*ent.Kyc, error) {
+func GetKycByID(ctx context.Context, kycID uuid.UUID) (*npool.KycInfo, error) {
 	cli, err := db.Client()
 	if err != nil {
 		return nil, xerrors.Errorf("fail get db client: %v", err)
 	}
 
-	return cli.Kyc.Query().
+	info, err := cli.Kyc.Query().
 		Where(
 			kyc.ID(kycID),
 		).Only(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return dbRowToKyc(info), nil
 }
 
 func GetAll(ctx context.Context, in *npool.GetAllKycInfosRequest) (*npool.GetAllKycInfosResponse, error) {
@@ -159,7 +168,7 @@ func GetAll(ctx context.Context, in *npool.GetAllKycInfosRequest) (*npool.GetAll
 			return nil, xerrors.Errorf("fail to get %v kyc info: %v", kycid, err)
 		}
 
-		response = append(response, DBRowToKyc(info))
+		response = append(response, dbRowToKyc(info))
 	}
 
 	return &npool.GetAllKycInfosResponse{
@@ -226,11 +235,11 @@ func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycRe
 	}
 
 	return &npool.UpdateKycResponse{
-		Info: DBRowToKyc(info),
+		Info: dbRowToKyc(info),
 	}, nil
 }
 
-func UpdateReviewStatus(ctx context.Context, kycID uuid.UUID, status int32) (*ent.Kyc, error) {
+func UpdateReviewStatus(ctx context.Context, kycID uuid.UUID, status int32) (*npool.KycInfo, error) {
 	cli, err := db.Client()
 	if err != nil {
 		return nil, xerrors.Errorf("fail get db client: %v", err)
@@ -242,15 +251,18 @@ func UpdateReviewStatus(ctx context.Context, kycID uuid.UUID, status int32) (*en
 		statusString = PassAudit
 	case 2:
 		statusString = FailAudit
-	default:
+	case 3:
 		statusString = WaitAudit
 	}
 
-	resp, err := cli.
+	info, err := cli.
 		Kyc.
 		UpdateOneID(kycID).
 		SetReviewStatus(statusString).
 		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
 
-	return resp, err
+	return dbRowToKyc(info), err
 }
