@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"time"
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	"github.com/NpoolPlatform/kyc-management/message/npool"
@@ -11,6 +12,9 @@ import (
 )
 
 func (s *Server) UploadKycImg(ctx context.Context, in *npool.UploadKycImgRequest) (*npool.UploadKycImgResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	resp, err := s3.UploadKycImg(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("fail to upload img to s3: %v", err)
@@ -20,6 +24,9 @@ func (s *Server) UploadKycImg(ctx context.Context, in *npool.UploadKycImgRequest
 }
 
 func (s *Server) GetKycImg(ctx context.Context, in *npool.GetKycImgRequest) (*npool.GetKycImgResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	resp, err := s3.GetKycImg(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("fail to get img from s3: %v", err)

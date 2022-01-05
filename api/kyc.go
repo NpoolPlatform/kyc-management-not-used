@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"time"
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	"github.com/NpoolPlatform/kyc-management/message/npool"
@@ -11,6 +12,9 @@ import (
 )
 
 func (s *Server) CreateKycRecord(ctx context.Context, in *npool.CreateKycRecordRequest) (*npool.CreateKycRecordResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	resp, err := kyc.Create(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("fail to create kyc record: %v", err)
@@ -20,6 +24,9 @@ func (s *Server) CreateKycRecord(ctx context.Context, in *npool.CreateKycRecordR
 }
 
 func (s *Server) GetKycInfo(ctx context.Context, in *npool.GetKycInfoRequest) (*npool.GetKycInfoResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	resp, err := kyc.Get(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("fail to get kyc record: %v", err)
@@ -29,6 +36,9 @@ func (s *Server) GetKycInfo(ctx context.Context, in *npool.GetKycInfoRequest) (*
 }
 
 func (s *Server) UpdateKycStatus(ctx context.Context, in *npool.UpdateKycStatusRequest) (*npool.UpdateKycStatusResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	resp, err := kyc.UpdateReviewStatus(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("fail to update kyc status: %v", err)
@@ -38,6 +48,9 @@ func (s *Server) UpdateKycStatus(ctx context.Context, in *npool.UpdateKycStatusR
 }
 
 func (s *Server) UpdateKyc(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	resp, err := kyc.Update(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("fail to update kyc record: %v", err)
