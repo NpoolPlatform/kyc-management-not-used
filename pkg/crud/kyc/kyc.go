@@ -2,7 +2,6 @@ package kyc
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/NpoolPlatform/kyc-management/message/npool"
 	"github.com/NpoolPlatform/kyc-management/pkg/db"
@@ -197,7 +196,6 @@ func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycRe
 		SetReviewStatus(WaitAudit).
 		Save(ctx)
 	if err != nil {
-		fmt.Println(err)
 		return nil, xerrors.Errorf("fail to update user kyc: %v", err)
 	}
 
