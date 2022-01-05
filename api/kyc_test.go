@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"strconv"
 	"testing"
@@ -88,7 +87,6 @@ func TestKycAPI(t *testing.T) { // nolint
 		}).
 		Post("http://localhost:50120/v1/get/all/kyc/infos")
 	if assert.Nil(t, err) {
-		fmt.Println("resp1 is", resp2)
 		assert.Equal(t, 200, resp2.StatusCode())
 		err := json.Unmarshal(resp2.Body(), &response1)
 		if assert.Nil(t, err) {
