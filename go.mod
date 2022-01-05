@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	entgo.io/ent v0.9.1
-	github.com/NpoolPlatform/application-management v0.0.0-20211211102648-f013d1cb53b4
+	github.com/NpoolPlatform/application-management v0.0.0-20211228043636-766772748ce7
 	github.com/NpoolPlatform/go-service-framework v0.0.0-20211222114515-4928e6cf3f1f
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/google/uuid v1.3.0

@@ -49,9 +49,8 @@ github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/DATA-DOG/go-sqlmock v1.5.0 h1:Shsta01QNfFxHCfpW6YH2STWB0MudeXXEWMr20OEh60=
 github.com/DATA-DOG/go-sqlmock v1.5.0/go.mod h1:f/Ixk793poVmq4qj/V1dPUg2JEAKC73Q5eFN3EC/SaM=
-github.com/NpoolPlatform/application-management v0.0.0-20211211102648-f013d1cb53b4 h1:RoYsL67b/T3x6aipCzhT5pwAoYDYttbzeWpP6H/Zvko=
-github.com/NpoolPlatform/application-management v0.0.0-20211211102648-f013d1cb53b4/go.mod h1:tnaxdTAWZg7V8em9OD5B4525RUqP6rLBU+oPdU22U78=
-github.com/NpoolPlatform/go-service-framework v0.0.0-20211207121121-adb2402676f0/go.mod h1:6OR9IRTWXpkr7Igky6a7zbnDG2o5Vmx9zuIzNJ3M9xs=
+github.com/NpoolPlatform/application-management v0.0.0-20211228043636-766772748ce7 h1:qFPfmyHFlJROJD5o21tp0BLMGhsuj76uK/82csUfJM0=
+github.com/NpoolPlatform/application-management v0.0.0-20211228043636-766772748ce7/go.mod h1:xLlxtCGadiwq2HqbtxbeH0a5b+SkvGWda1SO3F3d02I=
 github.com/NpoolPlatform/go-service-framework v0.0.0-20211222114515-4928e6cf3f1f h1:lRODA53ytJrn34SFmwbDRglulni2AJketigyyrNZVpc=
 github.com/NpoolPlatform/go-service-framework v0.0.0-20211222114515-4928e6cf3f1f/go.mod h1:kR7v9OYmi38GLucJoVUOxLYiA3xtLp5TY/fWqrR6WRw=
 github.com/OneOfOne/xxhash v1.2.2 h1:KMrpdQIwFcEqXDklaen+P1axHaj9BSKzvpUUfnHldSE=

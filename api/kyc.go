@@ -67,7 +67,7 @@ func (s *Server) UpdateKycStatus(ctx context.Context, in *npool.UpdateKycStatusR
 	}
 
 	if in.Status == 1 {
-		err := grpc.UpdateUserKycStatus(kycInfo.UserID, kycInfo.AppID, true)
+		err := grpc.UpdateUserKycStatus(ctx, kycInfo.UserID, kycInfo.AppID, true)
 		if err != nil {
 			_, err := kyc.UpdateReviewStatus(ctx, kycID, 3)
 			if err != nil {
@@ -78,7 +78,7 @@ func (s *Server) UpdateKycStatus(ctx context.Context, in *npool.UpdateKycStatusR
 			return nil, status.Error(codes.Internal, "internal server error")
 		}
 	} else {
-		err := grpc.UpdateUserKycStatus(kycInfo.UserID, kycInfo.AppID, false)
+		err := grpc.UpdateUserKycStatus(ctx, kycInfo.UserID, kycInfo.AppID, false)
 		if err != nil {
 			_, err := kyc.UpdateReviewStatus(ctx, kycID, 3)
 			if err != nil {
