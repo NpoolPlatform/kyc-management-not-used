@@ -7,7 +7,6 @@ import (
 	"github.com/NpoolPlatform/kyc-management/pkg/db"
 	"github.com/NpoolPlatform/kyc-management/pkg/db/ent"
 	"github.com/NpoolPlatform/kyc-management/pkg/db/ent/kyc"
-	"github.com/NpoolPlatform/kyc-management/pkg/grpc"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 )
@@ -107,7 +106,7 @@ func parse2ID(userIDString, idString string) (uuid.UUID, uuid.UUID, error) { // 
 	return userID, id, nil
 }
 
-func Get(ctx context.Context, kycID string) (*npool.KycInfo, error) {
+func GetKycByUserIDAndAppID(ctx context.Context, appID, userID uuid.UUID) (*npool.KycInfo, error) {
 	cli, err := db.Client()
 	if err != nil {
 		return nil, xerrors.Errorf("fail get db client: %v", err)
@@ -115,7 +114,23 @@ func Get(ctx context.Context, kycID string) (*npool.KycInfo, error) {
 
 	resp, err := cli.Kyc.Query().
 		Where(
-			kyc.ID(uuid.MustParse(kycID)),
+			kyc.And(
+				kyc.AppID(appID),
+				kyc.UserID(userID),
+			),
+		).Only(ctx)
+	return dbRowToKyc(resp), err
+}
+
+func GetKycByID(ctx context.Context, kycID uuid.UUID) (*npool.KycInfo, error) {
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	resp, err := cli.Kyc.Query().
+		Where(
+			kyc.ID(kycID),
 		).Only(ctx)
 	return dbRowToKyc(resp), err
 }
@@ -217,62 +232,27 @@ func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycRe
 	}, nil
 }
 
-func UpdateReviewStatus(ctx context.Context, in *npool.UpdateKycStatusRequest) (*npool.UpdateKycStatusResponse, error) {
+func UpdateReviewStatus(ctx context.Context, kycID uuid.UUID, status int32) error {
 	cli, err := db.Client()
 	if err != nil {
-		return nil, xerrors.Errorf("fail get db client: %v", err)
+		return xerrors.Errorf("fail get db client: %v", err)
 	}
 
-	userID, id, err := parse2ID(in.UserID, in.KycID)
-	if err != nil {
-		return nil, err
-	}
-
-	appID, err := uuid.Parse(in.AppID)
-	if err != nil {
-		return nil, xerrors.Errorf("invalid app id: %v", err)
-	}
-	status := ""
-	switch in.Status {
+	var statusString string
+	switch status {
 	case 1:
-		status = PassAudit
+		statusString = PassAudit
 	case 2:
-		status = FailAudit
+		statusString = FailAudit
 	default:
-		status = WaitAudit
+		statusString = WaitAudit
 	}
 
 	_, err = cli.
 		Kyc.
-		Update().
-		Where(
-			kyc.Or(
-				kyc.UserID(userID),
-				kyc.ID(id),
-			),
-			kyc.And(
-				kyc.AppID(appID),
-			),
-		).
-		SetReviewStatus(status).
+		UpdateOneID(kycID).
+		SetReviewStatus(statusString).
 		Save(ctx)
-	if err != nil {
-		return nil, xerrors.Errorf("fail to update kyc status: %v", err)
-	}
 
-	if in.Status == 1 {
-		err := grpc.UpdateUserKycStatus(in.UserID, in.AppID, true)
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		err := grpc.UpdateUserKycStatus(in.UserID, in.AppID, false)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	return &npool.UpdateKycStatusResponse{
-		Info: status,
-	}, nil
+	return err
 }

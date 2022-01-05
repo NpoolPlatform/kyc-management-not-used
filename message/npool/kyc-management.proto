@@ -103,7 +103,7 @@ message UpdateKycStatusRequest {
 }
 
 message UpdateKycStatusResponse {
-    string Info = 1;
+    KycInfo Info = 1;
 }
 
 message UpdateKycRequest {

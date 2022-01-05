@@ -208,7 +208,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| Info | [string](#string) |  |  |
+| Info | [KycInfo](#kyc.management.v1.KycInfo) |  |  |
 
 
 
