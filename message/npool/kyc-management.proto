@@ -22,9 +22,9 @@ service KycManagement {
             body: "*"
         };
     };
-    rpc GetKycInfo (GetKycInfoRequest) returns (GetKycInfoResponse) {
+    rpc GetAllKycInfos (GetAllKycInfosRequest) returns (GetAllKycInfosResponse) {
         option (google.api.http) = {
-            post: "/v1/get/kyc/info"
+            post: "/v1/get/all/kyc/infos"
             body: "*"
         };
     };
@@ -85,12 +85,12 @@ message CreateKycRecordResponse {
     KycInfo Info = 1;
 }
 
-message GetKycInfoRequest {
+message GetAllKycInfosRequest {
     string AppID = 1;
     repeated string KycIDs = 2;
 }
 
-message GetKycInfoResponse {
+message GetAllKycInfosResponse {
     repeated KycInfo Infos = 1;
 }
 

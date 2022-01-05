@@ -69,7 +69,7 @@ func TestKycMiddleware(t *testing.T) {
 		kycInfo.ID = resp1.Info.ID
 	}
 
-	resp2, err := GetKycInfo(context.Background(), &npool.GetKycInfoRequest{
+	resp2, err := GetKycInfo(context.Background(), &npool.GetAllKycInfosRequest{
 		KycIDs: []string{kycInfo.ID},
 	})
 	if assert.Nil(t, err) {

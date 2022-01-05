@@ -58,7 +58,7 @@ func TestKycCRUD(t *testing.T) { // nolint
 		kycInfo.ID = resp.Info.ID
 	}
 
-	resp1, err := Get(context.Background(), &npool.GetKycInfoRequest{
+	resp1, err := GetAll(context.Background(), &npool.GetAllKycInfosRequest{
 		KycIDs: []string{kycInfo.ID},
 	})
 	if assert.Nil(t, err) {

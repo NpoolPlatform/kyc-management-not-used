@@ -80,13 +80,13 @@ func TestKycAPI(t *testing.T) { // nolint
 		}
 	}
 
-	response1 := npool.GetKycInfoResponse{}
+	response1 := npool.GetAllKycInfosResponse{}
 	resp2, err := cli.R().
 		SetHeader("Content-Type", "application/json").
-		SetBody(npool.GetKycInfoRequest{
+		SetBody(npool.GetAllKycInfosRequest{
 			KycIDs: []string{kycInfo.ID},
 		}).
-		Post("http://localhost:50120/v1/get/kyc/info")
+		Post("http://localhost:50120/v1/get/all/kyc/infos")
 	if assert.Nil(t, err) {
 		fmt.Println("resp1 is", resp2)
 		assert.Equal(t, 200, resp2.StatusCode())
