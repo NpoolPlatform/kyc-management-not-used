@@ -2,11 +2,11 @@ package kyc
 
 import (
 	"context"
+	"log"
 	"os"
 	"strconv"
 	"testing"
 
-	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	"github.com/NpoolPlatform/kyc-management/message/npool"
 	testinit "github.com/NpoolPlatform/kyc-management/pkg/test-init"
 	"github.com/google/uuid"
@@ -18,7 +18,7 @@ func init() {
 		return
 	}
 	if err := testinit.Init(); err != nil {
-		logger.Sugar().Error(err)
+		log.Fatal(err)
 	}
 }
 
