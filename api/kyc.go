@@ -55,7 +55,7 @@ func (s *Server) UpdateKycStatus(ctx context.Context, in *npool.UpdateKycStatusR
 		return nil, status.Errorf(codes.NotFound, "This kyc record <%v> can not be found", in.GetKycID())
 	}
 
-	err = kyc.UpdateReviewStatus(ctx, kycID, in.GetStatus())
+	resp, err := kyc.UpdateReviewStatus(ctx, kycID, in.GetStatus())
 	if err != nil {
 		logger.Sugar().Errorf("UpdateKycStatus error: %v", err)
 		return nil, status.Error(codes.Internal, "internal server error")
@@ -75,7 +75,7 @@ func (s *Server) UpdateKycStatus(ctx context.Context, in *npool.UpdateKycStatusR
 		}
 	}
 	return &npool.UpdateKycStatusResponse{
-		Info: kycInfo,
+		Info: kyc.DbRowToKyc(resp),
 	}, nil
 }
 

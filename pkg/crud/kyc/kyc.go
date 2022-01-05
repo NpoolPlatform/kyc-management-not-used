@@ -17,7 +17,7 @@ const (
 	FailAudit = "failed"
 )
 
-func dbRowToKyc(row *ent.Kyc) *npool.KycInfo {
+func DbRowToKyc(row *ent.Kyc) *npool.KycInfo {
 	return &npool.KycInfo{
 		ID:                  row.ID.String(),
 		UserID:              row.UserID.String(),
@@ -84,7 +84,7 @@ func Create(ctx context.Context, in *npool.CreateKycRecordRequest) (*npool.Creat
 	}
 
 	return &npool.CreateKycRecordResponse{
-		Info: dbRowToKyc(info),
+		Info: DbRowToKyc(info),
 	}, nil
 }
 
@@ -119,7 +119,7 @@ func GetKycByUserIDAndAppID(ctx context.Context, appID, userID uuid.UUID) (*npoo
 				kyc.UserID(userID),
 			),
 		).Only(ctx)
-	return dbRowToKyc(resp), err
+	return DbRowToKyc(resp), err
 }
 
 func GetKycByID(ctx context.Context, kycID uuid.UUID) (*npool.KycInfo, error) {
@@ -132,7 +132,7 @@ func GetKycByID(ctx context.Context, kycID uuid.UUID) (*npool.KycInfo, error) {
 		Where(
 			kyc.ID(kycID),
 		).Only(ctx)
-	return dbRowToKyc(resp), err
+	return DbRowToKyc(resp), err
 }
 
 func GetAll(ctx context.Context, in *npool.GetAllKycInfosRequest) (*npool.GetAllKycInfosResponse, error) {
@@ -161,7 +161,7 @@ func GetAll(ctx context.Context, in *npool.GetAllKycInfosRequest) (*npool.GetAll
 			return nil, xerrors.Errorf("fail to get %v kyc info: %v", kycid, err)
 		}
 
-		response = append(response, dbRowToKyc(info))
+		response = append(response, DbRowToKyc(info))
 	}
 
 	return &npool.GetAllKycInfosResponse{
@@ -228,14 +228,14 @@ func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycRe
 	}
 
 	return &npool.UpdateKycResponse{
-		Info: dbRowToKyc(info),
+		Info: DbRowToKyc(info),
 	}, nil
 }
 
-func UpdateReviewStatus(ctx context.Context, kycID uuid.UUID, status int32) error {
+func UpdateReviewStatus(ctx context.Context, kycID uuid.UUID, status int32) (*ent.Kyc, error) {
 	cli, err := db.Client()
 	if err != nil {
-		return xerrors.Errorf("fail get db client: %v", err)
+		return nil, xerrors.Errorf("fail get db client: %v", err)
 	}
 
 	var statusString string
@@ -248,11 +248,11 @@ func UpdateReviewStatus(ctx context.Context, kycID uuid.UUID, status int32) erro
 		statusString = WaitAudit
 	}
 
-	_, err = cli.
+	resp, err := cli.
 		Kyc.
 		UpdateOneID(kycID).
 		SetReviewStatus(statusString).
 		Save(ctx)
 
-	return err
+	return resp, err
 }
