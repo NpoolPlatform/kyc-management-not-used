@@ -81,8 +81,8 @@ func (kc *KycCreate) SetUserHandlingCardImg(s string) *KycCreate {
 }
 
 // SetReviewStatus sets the "review_status" field.
-func (kc *KycCreate) SetReviewStatus(s string) *KycCreate {
-	kc.mutation.SetReviewStatus(s)
+func (kc *KycCreate) SetReviewStatus(u uint32) *KycCreate {
+	kc.mutation.SetReviewStatus(u)
 	return kc
 }
 
@@ -360,7 +360,7 @@ func (kc *KycCreate) createSpec() (*Kyc, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := kc.mutation.ReviewStatus(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: kyc.FieldReviewStatus,
 		})

@@ -72,7 +72,7 @@ message KycInfo {
     string FrontCardImg = 8;
     string BackCardImg = 9;
     string UserHandlingCardImg = 10;
-    string ReviewStatus = 11;
+    uint32 ReviewStatus = 11;
     uint32 CreateAT = 12;
     uint32 UpdateAT = 13;
 }
@@ -96,14 +96,14 @@ message GetAllKycInfosResponse {
 
 message UpdateKycStatusRequest {
     // 1: pass audit 2: refuse audit other: wait audit
-    int32 Status = 1;
+    uint32 Status = 1;
     string UserID = 2;
     string KycID = 3;
     string AppID = 4;
 }
 
 message UpdateKycStatusResponse {
-    string Info = 1;
+    KycInfo Info = 1;
 }
 
 message UpdateKycRequest {

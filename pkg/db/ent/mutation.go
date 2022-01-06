@@ -42,7 +42,8 @@ type KycMutation struct {
 	front_card_img         *string
 	back_card_img          *string
 	user_handling_card_img *string
-	review_status          *string
+	review_status          *uint32
+	addreview_status       *uint32
 	create_at              *uint32
 	addcreate_at           *uint32
 	update_at              *uint32
@@ -499,12 +500,13 @@ func (m *KycMutation) ResetUserHandlingCardImg() {
 }
 
 // SetReviewStatus sets the "review_status" field.
-func (m *KycMutation) SetReviewStatus(s string) {
-	m.review_status = &s
+func (m *KycMutation) SetReviewStatus(u uint32) {
+	m.review_status = &u
+	m.addreview_status = nil
 }
 
 // ReviewStatus returns the value of the "review_status" field in the mutation.
-func (m *KycMutation) ReviewStatus() (r string, exists bool) {
+func (m *KycMutation) ReviewStatus() (r uint32, exists bool) {
 	v := m.review_status
 	if v == nil {
 		return
@@ -515,7 +517,7 @@ func (m *KycMutation) ReviewStatus() (r string, exists bool) {
 // OldReviewStatus returns the old "review_status" field's value of the Kyc entity.
 // If the Kyc object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *KycMutation) OldReviewStatus(ctx context.Context) (v string, err error) {
+func (m *KycMutation) OldReviewStatus(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldReviewStatus is only allowed on UpdateOne operations")
 	}
@@ -529,9 +531,28 @@ func (m *KycMutation) OldReviewStatus(ctx context.Context) (v string, err error)
 	return oldValue.ReviewStatus, nil
 }
 
+// AddReviewStatus adds u to the "review_status" field.
+func (m *KycMutation) AddReviewStatus(u uint32) {
+	if m.addreview_status != nil {
+		*m.addreview_status += u
+	} else {
+		m.addreview_status = &u
+	}
+}
+
+// AddedReviewStatus returns the value that was added to the "review_status" field in this mutation.
+func (m *KycMutation) AddedReviewStatus() (r uint32, exists bool) {
+	v := m.addreview_status
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
 // ResetReviewStatus resets all changes to the "review_status" field.
 func (m *KycMutation) ResetReviewStatus() {
 	m.review_status = nil
+	m.addreview_status = nil
 }
 
 // SetCreateAt sets the "create_at" field.
@@ -854,7 +875,7 @@ func (m *KycMutation) SetField(name string, value ent.Value) error {
 		m.SetUserHandlingCardImg(v)
 		return nil
 	case kyc.FieldReviewStatus:
-		v, ok := value.(string)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -882,6 +903,9 @@ func (m *KycMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *KycMutation) AddedFields() []string {
 	var fields []string
+	if m.addreview_status != nil {
+		fields = append(fields, kyc.FieldReviewStatus)
+	}
 	if m.addcreate_at != nil {
 		fields = append(fields, kyc.FieldCreateAt)
 	}
@@ -896,6 +920,8 @@ func (m *KycMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *KycMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
+	case kyc.FieldReviewStatus:
+		return m.AddedReviewStatus()
 	case kyc.FieldCreateAt:
 		return m.AddedCreateAt()
 	case kyc.FieldUpdateAt:
@@ -909,6 +935,13 @@ func (m *KycMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *KycMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case kyc.FieldReviewStatus:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddReviewStatus(v)
+		return nil
 	case kyc.FieldCreateAt:
 		v, ok := value.(uint32)
 		if !ok {

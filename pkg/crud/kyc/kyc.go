@@ -7,16 +7,30 @@ import (
 	"github.com/NpoolPlatform/kyc-management/pkg/db"
 	"github.com/NpoolPlatform/kyc-management/pkg/db/ent"
 	"github.com/NpoolPlatform/kyc-management/pkg/db/ent/kyc"
-	"github.com/NpoolPlatform/kyc-management/pkg/grpc"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 )
 
+type State uint8
+
 const (
-	WaitAudit = "auditing"
-	PassAudit = "audited"
-	FailAudit = "failed"
+	InvalidState State = 0
+	WaitState    State = 1
+	PassState    State = 2
+	FailState    State = 3
 )
+
+func UintToKycState(num uint32) (State, error) {
+	switch num {
+	case 1:
+		return WaitState, nil
+	case 2:
+		return PassState, nil
+	case 3:
+		return FailState, nil
+	}
+	return InvalidState, xerrors.Errorf("kyc review state is not invalid")
+}
 
 func dbRowToKyc(row *ent.Kyc) *npool.KycInfo {
 	return &npool.KycInfo{
@@ -78,7 +92,7 @@ func Create(ctx context.Context, in *npool.CreateKycRecordRequest) (*npool.Creat
 		SetFrontCardImg(in.Info.FrontCardImg).
 		SetBackCardImg(in.Info.BackCardImg).
 		SetUserHandlingCardImg(in.Info.UserHandlingCardImg).
-		SetReviewStatus(WaitAudit).
+		SetReviewStatus(uint32(WaitState)).
 		Save(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to create user kyc: %v", err)
@@ -107,17 +121,40 @@ func parse2ID(userIDString, idString string) (uuid.UUID, uuid.UUID, error) { // 
 	return userID, id, nil
 }
 
-func Get(ctx context.Context, kycID string) (*npool.KycInfo, error) {
+func GetKycByUserIDAndAppID(ctx context.Context, appID, userID uuid.UUID) (*npool.KycInfo, error) {
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+	info, err := cli.Kyc.Query().
+		Where(
+			kyc.And(
+				kyc.AppID(appID),
+				kyc.UserID(userID),
+			),
+		).Only(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return dbRowToKyc(info), nil
+}
+
+func GetKycByID(ctx context.Context, kycID uuid.UUID) (*npool.KycInfo, error) {
 	cli, err := db.Client()
 	if err != nil {
 		return nil, xerrors.Errorf("fail get db client: %v", err)
 	}
 
-	resp, err := cli.Kyc.Query().
+	info, err := cli.Kyc.Query().
 		Where(
-			kyc.ID(uuid.MustParse(kycID)),
+			kyc.ID(kycID),
 		).Only(ctx)
-	return dbRowToKyc(resp), err
+	if err != nil {
+		return nil, err
+	}
+
+	return dbRowToKyc(info), nil
 }
 
 func GetAll(ctx context.Context, in *npool.GetAllKycInfosRequest) (*npool.GetAllKycInfosResponse, error) {
@@ -206,7 +243,6 @@ func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycRe
 		SetFrontCardImg(in.Info.FrontCardImg).
 		SetBackCardImg(in.Info.BackCardImg).
 		SetUserHandlingCardImg(in.Info.UserHandlingCardImg).
-		SetReviewStatus(WaitAudit).
 		Save(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to update user kyc: %v", err)
@@ -217,62 +253,20 @@ func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycRe
 	}, nil
 }
 
-func UpdateReviewStatus(ctx context.Context, in *npool.UpdateKycStatusRequest) (*npool.UpdateKycStatusResponse, error) {
+func UpdateReviewStatus(ctx context.Context, kycID uuid.UUID, status State) (*npool.KycInfo, error) {
 	cli, err := db.Client()
 	if err != nil {
 		return nil, xerrors.Errorf("fail get db client: %v", err)
 	}
 
-	userID, id, err := parse2ID(in.UserID, in.KycID)
+	info, err := cli.
+		Kyc.
+		UpdateOneID(kycID).
+		SetReviewStatus(uint32(status)).
+		Save(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	appID, err := uuid.Parse(in.AppID)
-	if err != nil {
-		return nil, xerrors.Errorf("invalid app id: %v", err)
-	}
-	status := ""
-	switch in.Status {
-	case 1:
-		status = PassAudit
-	case 2:
-		status = FailAudit
-	default:
-		status = WaitAudit
-	}
-
-	_, err = cli.
-		Kyc.
-		Update().
-		Where(
-			kyc.Or(
-				kyc.UserID(userID),
-				kyc.ID(id),
-			),
-			kyc.And(
-				kyc.AppID(appID),
-			),
-		).
-		SetReviewStatus(status).
-		Save(ctx)
-	if err != nil {
-		return nil, xerrors.Errorf("fail to update kyc status: %v", err)
-	}
-
-	if in.Status == 1 {
-		err := grpc.UpdateUserKycStatus(in.UserID, in.AppID, true)
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		err := grpc.UpdateUserKycStatus(in.UserID, in.AppID, false)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	return &npool.UpdateKycStatusResponse{
-		Info: status,
-	}, nil
+	return dbRowToKyc(info), err
 }

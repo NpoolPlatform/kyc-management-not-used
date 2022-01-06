@@ -143,7 +143,7 @@
 | FrontCardImg | [string](#string) |  |  |
 | BackCardImg | [string](#string) |  |  |
 | UserHandlingCardImg | [string](#string) |  |  |
-| ReviewStatus | [string](#string) |  |  |
+| ReviewStatus | [uint32](#uint32) |  |  |
 | CreateAT | [uint32](#uint32) |  |  |
 | UpdateAT | [uint32](#uint32) |  |  |
 
@@ -190,7 +190,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| Status | [int32](#int32) |  | 1: pass audit 2: refuse audit other: wait audit |
+| Status | [uint32](#uint32) |  | 1: pass audit 2: refuse audit other: wait audit |
 | UserID | [string](#string) |  |  |
 | KycID | [string](#string) |  |  |
 | AppID | [string](#string) |  |  |
@@ -208,7 +208,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| Info | [string](#string) |  |  |
+| Info | [KycInfo](#kyc.management.v1.KycInfo) |  |  |
 
 
 

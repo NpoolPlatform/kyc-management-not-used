@@ -8,7 +8,7 @@ import (
 	mygrpc "github.com/NpoolPlatform/go-service-framework/pkg/grpc"
 )
 
-func UpdateUserKycStatus(userID, appID string, status bool) error {
+func UpdateUserKycStatus(ctx context.Context, userID, appID string, status bool) error {
 	conn, err := mygrpc.GetGRPCConn(applicationconst.ServiceName, mygrpc.GRPCTAG)
 	if err != nil {
 		return err
@@ -17,7 +17,7 @@ func UpdateUserKycStatus(userID, appID string, status bool) error {
 	defer conn.Close()
 
 	client := pbApplication.NewApplicationManagementClient(conn)
-	_, err = client.UpdateUserKYCStatus(context.Background(), &pbApplication.UpdateUserKYCStatusRequest{
+	_, err = client.UpdateUserKYCStatus(ctx, &pbApplication.UpdateUserKYCStatusRequest{
 		UserID: userID,
 		AppID:  appID,
 		Status: status,
