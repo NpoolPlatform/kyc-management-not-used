@@ -14,9 +14,10 @@ import (
 type State uint8
 
 const (
-	WaitState State = 1
-	PassState State = 2
-	FailState State = 3
+	InvalidState State = 0
+	WaitState    State = 1
+	PassState    State = 2
+	FailState    State = 3
 )
 
 func UintToKycState(num uint32) (State, error) {
@@ -28,7 +29,7 @@ func UintToKycState(num uint32) (State, error) {
 	case 3:
 		return FailState, nil
 	}
-	return 0, xerrors.Errorf("kyc review state is not invalid")
+	return InvalidState, xerrors.Errorf("kyc review state is not invalid")
 }
 
 func dbRowToKyc(row *ent.Kyc) *npool.KycInfo {
