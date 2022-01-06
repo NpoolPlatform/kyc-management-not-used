@@ -88,8 +88,15 @@ func (ku *KycUpdate) SetUserHandlingCardImg(s string) *KycUpdate {
 }
 
 // SetReviewStatus sets the "review_status" field.
-func (ku *KycUpdate) SetReviewStatus(s string) *KycUpdate {
-	ku.mutation.SetReviewStatus(s)
+func (ku *KycUpdate) SetReviewStatus(u uint32) *KycUpdate {
+	ku.mutation.ResetReviewStatus()
+	ku.mutation.SetReviewStatus(u)
+	return ku
+}
+
+// AddReviewStatus adds u to the "review_status" field.
+func (ku *KycUpdate) AddReviewStatus(u uint32) *KycUpdate {
+	ku.mutation.AddReviewStatus(u)
 	return ku
 }
 
@@ -285,7 +292,14 @@ func (ku *KycUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := ku.mutation.ReviewStatus(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: kyc.FieldReviewStatus,
+		})
+	}
+	if value, ok := ku.mutation.AddedReviewStatus(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: kyc.FieldReviewStatus,
 		})
@@ -398,8 +412,15 @@ func (kuo *KycUpdateOne) SetUserHandlingCardImg(s string) *KycUpdateOne {
 }
 
 // SetReviewStatus sets the "review_status" field.
-func (kuo *KycUpdateOne) SetReviewStatus(s string) *KycUpdateOne {
-	kuo.mutation.SetReviewStatus(s)
+func (kuo *KycUpdateOne) SetReviewStatus(u uint32) *KycUpdateOne {
+	kuo.mutation.ResetReviewStatus()
+	kuo.mutation.SetReviewStatus(u)
+	return kuo
+}
+
+// AddReviewStatus adds u to the "review_status" field.
+func (kuo *KycUpdateOne) AddReviewStatus(u uint32) *KycUpdateOne {
+	kuo.mutation.AddReviewStatus(u)
 	return kuo
 }
 
@@ -619,7 +640,14 @@ func (kuo *KycUpdateOne) sqlSave(ctx context.Context) (_node *Kyc, err error) {
 	}
 	if value, ok := kuo.mutation.ReviewStatus(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: kyc.FieldReviewStatus,
+		})
+	}
+	if value, ok := kuo.mutation.AddedReviewStatus(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: kyc.FieldReviewStatus,
 		})

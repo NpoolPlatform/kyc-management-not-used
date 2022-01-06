@@ -11,11 +11,39 @@ import (
 	"golang.org/x/xerrors"
 )
 
+type State uint8
+
 const (
-	PassAudit = "audited"  // 1
-	FailAudit = "failed"   // 2
-	WaitAudit = "auditing" // 3
+	PassState State = 1
+	WaitState State = 2
+	FailState State = 3
 )
+
+func UintToKycState(num uint32) State {
+	switch num {
+	case 1:
+		return PassState
+	case 2:
+		return WaitState
+	case 3:
+		return FailState
+	default:
+		return WaitState
+	}
+}
+
+func (k State) String() string {
+	switch k {
+	case PassState:
+		return "pass audit"
+	case WaitState:
+		return "waiting audit"
+	case FailState:
+		return "fail audit"
+	default:
+		return "waiting audit"
+	}
+}
 
 func dbRowToKyc(row *ent.Kyc) *npool.KycInfo {
 	return &npool.KycInfo{
@@ -77,7 +105,7 @@ func Create(ctx context.Context, in *npool.CreateKycRecordRequest) (*npool.Creat
 		SetFrontCardImg(in.Info.FrontCardImg).
 		SetBackCardImg(in.Info.BackCardImg).
 		SetUserHandlingCardImg(in.Info.UserHandlingCardImg).
-		SetReviewStatus(WaitAudit).
+		SetReviewStatus(uint32(WaitState)).
 		Save(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to create user kyc: %v", err)
@@ -228,7 +256,6 @@ func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycRe
 		SetFrontCardImg(in.Info.FrontCardImg).
 		SetBackCardImg(in.Info.BackCardImg).
 		SetUserHandlingCardImg(in.Info.UserHandlingCardImg).
-		SetReviewStatus(WaitAudit).
 		Save(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to update user kyc: %v", err)
@@ -239,26 +266,16 @@ func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycRe
 	}, nil
 }
 
-func UpdateReviewStatus(ctx context.Context, kycID uuid.UUID, status int32) (*npool.KycInfo, error) {
+func UpdateReviewStatus(ctx context.Context, kycID uuid.UUID, status State) (*npool.KycInfo, error) {
 	cli, err := db.Client()
 	if err != nil {
 		return nil, xerrors.Errorf("fail get db client: %v", err)
 	}
 
-	var statusString string
-	switch status {
-	case 1:
-		statusString = PassAudit
-	case 2:
-		statusString = FailAudit
-	case 3:
-		statusString = WaitAudit
-	}
-
 	info, err := cli.
 		Kyc.
 		UpdateOneID(kycID).
-		SetReviewStatus(statusString).
+		SetReviewStatus(uint32(status)).
 		Save(ctx)
 	if err != nil {
 		return nil, err

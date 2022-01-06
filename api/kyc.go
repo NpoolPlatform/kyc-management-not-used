@@ -55,12 +55,12 @@ func (s *Server) UpdateKycStatus(ctx context.Context, in *npool.UpdateKycStatusR
 		return nil, status.Errorf(codes.NotFound, "This kyc record <%v> can not be found", in.GetKycID())
 	}
 
-	if originalKycInfo.ReviewStatus != kyc.WaitAudit {
+	if originalKycInfo.ReviewStatus != uint32(kyc.WaitState) {
 		logger.Sugar().Errorf("UpdateKycStatus error: kyc status must be waiting!")
 		return nil, status.Error(codes.InvalidArgument, "Invalid kyc status, kyc status must be waiting")
 	}
 
-	kycInfo, err := kyc.UpdateReviewStatus(ctx, kycID, in.GetStatus())
+	kycInfo, err := kyc.UpdateReviewStatus(ctx, kycID, kyc.UintToKycState(in.GetStatus()))
 	if err != nil {
 		logger.Sugar().Errorf("UpdateKycStatus error: %v", err)
 		return nil, status.Error(codes.Internal, "internal server error")
@@ -69,7 +69,7 @@ func (s *Server) UpdateKycStatus(ctx context.Context, in *npool.UpdateKycStatusR
 	if in.Status == 1 {
 		err := grpc.UpdateUserKycStatus(ctx, kycInfo.UserID, kycInfo.AppID, true)
 		if err != nil {
-			_, err := kyc.UpdateReviewStatus(ctx, kycID, 3)
+			_, err := kyc.UpdateReviewStatus(ctx, kycID, kyc.WaitState)
 			if err != nil {
 				logger.Sugar().Errorf("UpdateKycStatus error when update user kyc status: %v", err)
 				return nil, status.Error(codes.Internal, "internal server error")
@@ -80,7 +80,7 @@ func (s *Server) UpdateKycStatus(ctx context.Context, in *npool.UpdateKycStatusR
 	} else {
 		err := grpc.UpdateUserKycStatus(ctx, kycInfo.UserID, kycInfo.AppID, false)
 		if err != nil {
-			_, err := kyc.UpdateReviewStatus(ctx, kycID, 3)
+			_, err := kyc.UpdateReviewStatus(ctx, kycID, kyc.WaitState)
 			if err != nil {
 				logger.Sugar().Errorf("UpdateKycStatus error when update user kyc status: %v", err)
 				return nil, status.Error(codes.Internal, "internal server error")
