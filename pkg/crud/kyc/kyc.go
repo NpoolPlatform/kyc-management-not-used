@@ -14,35 +14,21 @@ import (
 type State uint8
 
 const (
-	PassState State = 1
-	WaitState State = 2
+	WaitState State = 1
+	PassState State = 2
 	FailState State = 3
 )
 
-func UintToKycState(num uint32) State {
+func UintToKycState(num uint32) (State, error) {
 	switch num {
 	case 1:
-		return PassState
+		return WaitState, nil
 	case 2:
-		return WaitState
+		return PassState, nil
 	case 3:
-		return FailState
-	default:
-		return WaitState
+		return FailState, nil
 	}
-}
-
-func (k State) String() string {
-	switch k {
-	case PassState:
-		return "pass audit"
-	case WaitState:
-		return "waiting audit"
-	case FailState:
-		return "fail audit"
-	default:
-		return "waiting audit"
-	}
+	return 0, xerrors.Errorf("kyc review state is not invalid")
 }
 
 func dbRowToKyc(row *ent.Kyc) *npool.KycInfo {
