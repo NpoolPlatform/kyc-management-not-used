@@ -65,8 +65,8 @@ message KycInfo {
     string FrontCardImg = 8;
     string BackCardImg = 9;
     string UserHandlingCardImg = 10;
-    uint32 CreateAT = 12;
-    uint32 UpdateAT = 13;
+    uint32 CreateAT = 11;
+    uint32 UpdateAT = 12;
 }
 
 message CreateKycRecordRequest {
