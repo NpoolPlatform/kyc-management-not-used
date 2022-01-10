@@ -51,6 +51,7 @@ func (Kyc) Edges() []ent.Edge {
 
 func (Kyc) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("user_id"),
+		index.Fields("user_id", "app_id"),
+		index.Fields("card_id", "card_type", "app_id"),
 	}
 }

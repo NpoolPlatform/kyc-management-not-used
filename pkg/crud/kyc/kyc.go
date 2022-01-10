@@ -23,12 +23,12 @@ func dbRowToKyc(row *ent.Kyc) *npool.KycInfo {
 		FrontCardImg:        row.FrontCardImg,
 		BackCardImg:         row.BackCardImg,
 		UserHandlingCardImg: row.UserHandlingCardImg,
-		CreateAT:            row.CreateAt,
-		UpdateAT:            row.UpdateAt,
+		CreateAt:            row.CreateAt,
+		UpdateAt:            row.UpdateAt,
 	}
 }
 
-func Create(ctx context.Context, in *npool.CreateKycRecordRequest) (*npool.CreateKycRecordResponse, error) {
+func Create(ctx context.Context, in *npool.CreateKycRequest) (*npool.CreateKycResponse, error) {
 	cli, err := db.Client()
 	if err != nil {
 		return nil, xerrors.Errorf("fail get db client: %v", err)
@@ -39,20 +39,20 @@ func Create(ctx context.Context, in *npool.CreateKycRecordRequest) (*npool.Creat
 		Create().
 		SetUserID(uuid.MustParse(in.GetUserID())).
 		SetAppID(uuid.MustParse(in.GetAppID())).
-		SetFirstName(in.GetInfo().GetFirstName()).
-		SetLastName(in.GetInfo().GetLastName()).
-		SetRegion(in.GetInfo().GetRegion()).
-		SetCardType(in.GetInfo().GetCardType()).
-		SetCardID(in.GetInfo().GetCardID()).
-		SetFrontCardImg(in.GetInfo().GetFrontCardImg()).
-		SetBackCardImg(in.GetInfo().GetBackCardImg()).
-		SetUserHandlingCardImg(in.GetInfo().GetUserHandlingCardImg()).
+		SetFirstName(in.GetFirstName()).
+		SetLastName(in.GetLastName()).
+		SetRegion(in.GetRegion()).
+		SetCardType(in.GetCardType()).
+		SetCardID(in.GetCardID()).
+		SetFrontCardImg(in.GetFrontCardImg()).
+		SetBackCardImg(in.GetBackCardImg()).
+		SetUserHandlingCardImg(in.GetUserHandlingCardImg()).
 		Save(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	return &npool.CreateKycRecordResponse{
+	return &npool.CreateKycResponse{
 		Info: dbRowToKyc(info),
 	}, nil
 }
@@ -74,6 +74,22 @@ func GetKycByUserIDAndAppID(ctx context.Context, appID, userID uuid.UUID) (*npoo
 	}
 
 	return dbRowToKyc(info), nil
+}
+
+func ExistKycByUserIDAndAppID(ctx context.Context, appID, userID uuid.UUID) (bool, error) {
+	cli, err := db.Client()
+	if err != nil {
+		return false, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	return cli.Kyc.Query().
+		Where(
+			kyc.And(
+				kyc.AppID(appID),
+				kyc.UserID(userID),
+			),
+		).
+		Exist(ctx)
 }
 
 func GetKycByID(ctx context.Context, kycID uuid.UUID) (*npool.KycInfo, error) {
@@ -187,4 +203,30 @@ func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycRe
 	return &npool.UpdateKycResponse{
 		Info: dbRowToKyc(info),
 	}, nil
+}
+
+func DeleteUserKycRecordByKycID(ctx context.Context, kycID uuid.UUID) error {
+	cli, err := db.Client()
+	if err != nil {
+		return xerrors.Errorf("fail to get db client: %v", err)
+	}
+
+	return cli.Kyc.DeleteOneID(kycID).Exec(ctx)
+}
+
+func ExistCradTypeCardIDInApp(ctx context.Context, cardType, cardID string, appID uuid.UUID) (bool, error) {
+	cli, err := db.Client()
+	if err != nil {
+		return false, xerrors.Errorf("fail to get db client: %v", err)
+	}
+
+	return cli.Kyc.Query().
+		Where(
+			kyc.And(
+				kyc.AppID(appID),
+				kyc.CardType(cardType),
+				kyc.CardID(cardID),
+			),
+		).
+		Exist(ctx)
 }

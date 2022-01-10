@@ -31,9 +31,14 @@ var (
 		PrimaryKey: []*schema.Column{KycsColumns[0]},
 		Indexes: []*schema.Index{
 			{
-				Name:    "kyc_user_id",
+				Name:    "kyc_user_id_app_id",
 				Unique:  false,
-				Columns: []*schema.Column{KycsColumns[1]},
+				Columns: []*schema.Column{KycsColumns[1], KycsColumns[2]},
+			},
+			{
+				Name:    "kyc_card_id_card_type_app_id",
+				Unique:  false,
+				Columns: []*schema.Column{KycsColumns[7], KycsColumns[6], KycsColumns[2]},
 			},
 		},
 	}

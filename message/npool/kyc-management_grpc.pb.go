@@ -21,7 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 type KycManagementClient interface {
 	// Method Version
 	Version(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*VersionResponse, error)
-	CreateKycRecord(ctx context.Context, in *CreateKycRecordRequest, opts ...grpc.CallOption) (*CreateKycRecordResponse, error)
+	CreateKycRecord(ctx context.Context, in *CreateKycRequest, opts ...grpc.CallOption) (*CreateKycResponse, error)
 	GetAllKycInfos(ctx context.Context, in *GetAllKycInfosRequest, opts ...grpc.CallOption) (*GetAllKycInfosResponse, error)
 	UpdateKyc(ctx context.Context, in *UpdateKycRequest, opts ...grpc.CallOption) (*UpdateKycResponse, error)
 	UploadKycImg(ctx context.Context, in *UploadKycImgRequest, opts ...grpc.CallOption) (*UploadKycImgResponse, error)
@@ -45,8 +45,8 @@ func (c *kycManagementClient) Version(ctx context.Context, in *emptypb.Empty, op
 	return out, nil
 }
 
-func (c *kycManagementClient) CreateKycRecord(ctx context.Context, in *CreateKycRecordRequest, opts ...grpc.CallOption) (*CreateKycRecordResponse, error) {
-	out := new(CreateKycRecordResponse)
+func (c *kycManagementClient) CreateKycRecord(ctx context.Context, in *CreateKycRequest, opts ...grpc.CallOption) (*CreateKycResponse, error) {
+	out := new(CreateKycResponse)
 	err := c.cc.Invoke(ctx, "/kyc.management.v1.KycManagement/CreateKycRecord", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -96,7 +96,7 @@ func (c *kycManagementClient) GetKycImg(ctx context.Context, in *GetKycImgReques
 type KycManagementServer interface {
 	// Method Version
 	Version(context.Context, *emptypb.Empty) (*VersionResponse, error)
-	CreateKycRecord(context.Context, *CreateKycRecordRequest) (*CreateKycRecordResponse, error)
+	CreateKycRecord(context.Context, *CreateKycRequest) (*CreateKycResponse, error)
 	GetAllKycInfos(context.Context, *GetAllKycInfosRequest) (*GetAllKycInfosResponse, error)
 	UpdateKyc(context.Context, *UpdateKycRequest) (*UpdateKycResponse, error)
 	UploadKycImg(context.Context, *UploadKycImgRequest) (*UploadKycImgResponse, error)
@@ -111,7 +111,7 @@ type UnimplementedKycManagementServer struct {
 func (UnimplementedKycManagementServer) Version(context.Context, *emptypb.Empty) (*VersionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Version not implemented")
 }
-func (UnimplementedKycManagementServer) CreateKycRecord(context.Context, *CreateKycRecordRequest) (*CreateKycRecordResponse, error) {
+func (UnimplementedKycManagementServer) CreateKycRecord(context.Context, *CreateKycRequest) (*CreateKycResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateKycRecord not implemented")
 }
 func (UnimplementedKycManagementServer) GetAllKycInfos(context.Context, *GetAllKycInfosRequest) (*GetAllKycInfosResponse, error) {
@@ -158,7 +158,7 @@ func _KycManagement_Version_Handler(srv interface{}, ctx context.Context, dec fu
 }
 
 func _KycManagement_CreateKycRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateKycRecordRequest)
+	in := new(CreateKycRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -170,7 +170,7 @@ func _KycManagement_CreateKycRecord_Handler(srv interface{}, ctx context.Context
 		FullMethod: "/kyc.management.v1.KycManagement/CreateKycRecord",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KycManagementServer).CreateKycRecord(ctx, req.(*CreateKycRecordRequest))
+		return srv.(KycManagementServer).CreateKycRecord(ctx, req.(*CreateKycRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

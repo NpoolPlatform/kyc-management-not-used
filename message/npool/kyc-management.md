@@ -4,8 +4,8 @@
 ## Table of Contents
 
 - [npool/kyc-management.proto](#npool/kyc-management.proto)
-    - [CreateKycRecordRequest](#kyc.management.v1.CreateKycRecordRequest)
-    - [CreateKycRecordResponse](#kyc.management.v1.CreateKycRecordResponse)
+    - [CreateKycRequest](#kyc.management.v1.CreateKycRequest)
+    - [CreateKycResponse](#kyc.management.v1.CreateKycResponse)
     - [GetAllKycInfosRequest](#kyc.management.v1.GetAllKycInfosRequest)
     - [GetAllKycInfosResponse](#kyc.management.v1.GetAllKycInfosResponse)
     - [GetKycImgRequest](#kyc.management.v1.GetKycImgRequest)
@@ -30,9 +30,9 @@
 
 
 
-<a name="kyc.management.v1.CreateKycRecordRequest"></a>
+<a name="kyc.management.v1.CreateKycRequest"></a>
 
-### CreateKycRecordRequest
+### CreateKycRequest
 
 
 
@@ -40,16 +40,23 @@
 | ----- | ---- | ----- | ----------- |
 | AppID | [string](#string) |  |  |
 | UserID | [string](#string) |  |  |
-| Info | [KycInfo](#kyc.management.v1.KycInfo) |  |  |
+| FirstName | [string](#string) |  |  |
+| LastName | [string](#string) |  |  |
+| Region | [string](#string) |  |  |
+| CardType | [string](#string) |  |  |
+| CardID | [string](#string) |  |  |
+| FrontCardImg | [string](#string) |  |  |
+| BackCardImg | [string](#string) |  |  |
+| UserHandlingCardImg | [string](#string) |  |  |
 
 
 
 
 
 
-<a name="kyc.management.v1.CreateKycRecordResponse"></a>
+<a name="kyc.management.v1.CreateKycResponse"></a>
 
-### CreateKycRecordResponse
+### CreateKycResponse
 
 
 
@@ -143,8 +150,8 @@
 | FrontCardImg | [string](#string) |  |  |
 | BackCardImg | [string](#string) |  |  |
 | UserHandlingCardImg | [string](#string) |  |  |
-| CreateAT | [uint32](#uint32) |  |  |
-| UpdateAT | [uint32](#uint32) |  |  |
+| CreateAt | [uint32](#uint32) |  |  |
+| UpdateAt | [uint32](#uint32) |  |  |
 
 
 
@@ -243,7 +250,7 @@ Service Name
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
 | Version | [.google.protobuf.Empty](#google.protobuf.Empty) | [VersionResponse](#kyc.management.v1.VersionResponse) | Method Version |
-| CreateKycRecord | [CreateKycRecordRequest](#kyc.management.v1.CreateKycRecordRequest) | [CreateKycRecordResponse](#kyc.management.v1.CreateKycRecordResponse) |  |
+| CreateKycRecord | [CreateKycRequest](#kyc.management.v1.CreateKycRequest) | [CreateKycResponse](#kyc.management.v1.CreateKycResponse) |  |
 | GetAllKycInfos | [GetAllKycInfosRequest](#kyc.management.v1.GetAllKycInfosRequest) | [GetAllKycInfosResponse](#kyc.management.v1.GetAllKycInfosResponse) |  |
 | UpdateKyc | [UpdateKycRequest](#kyc.management.v1.UpdateKycRequest) | [UpdateKycResponse](#kyc.management.v1.UpdateKycResponse) |  |
 | UploadKycImg | [UploadKycImgRequest](#kyc.management.v1.UploadKycImgRequest) | [UploadKycImgResponse](#kyc.management.v1.UploadKycImgResponse) |  |

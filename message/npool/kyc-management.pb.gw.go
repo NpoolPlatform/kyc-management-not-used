@@ -67,7 +67,7 @@ func local_request_KycManagement_Version_0(ctx context.Context, marshaler runtim
 }
 
 func request_KycManagement_CreateKycRecord_0(ctx context.Context, marshaler runtime.Marshaler, client KycManagementClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq CreateKycRecordRequest
+	var protoReq CreateKycRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -84,7 +84,7 @@ func request_KycManagement_CreateKycRecord_0(ctx context.Context, marshaler runt
 }
 
 func local_request_KycManagement_CreateKycRecord_0(ctx context.Context, marshaler runtime.Marshaler, server KycManagementServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq CreateKycRecordRequest
+	var protoReq CreateKycRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -271,7 +271,7 @@ func RegisterKycManagementHandlerServer(ctx context.Context, mux *runtime.ServeM
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/kyc.management.v1.KycManagement/CreateKycRecord", runtime.WithHTTPPathPattern("/v1/create/kyc/record"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/kyc.management.v1.KycManagement/CreateKycRecord", runtime.WithHTTPPathPattern("/v1/create/kyc"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -445,7 +445,7 @@ func RegisterKycManagementHandlerClient(ctx context.Context, mux *runtime.ServeM
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/kyc.management.v1.KycManagement/CreateKycRecord", runtime.WithHTTPPathPattern("/v1/create/kyc/record"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/kyc.management.v1.KycManagement/CreateKycRecord", runtime.WithHTTPPathPattern("/v1/create/kyc"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -547,7 +547,7 @@ func RegisterKycManagementHandlerClient(ctx context.Context, mux *runtime.ServeM
 var (
 	pattern_KycManagement_Version_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0}, []string{"version"}, ""))
 
-	pattern_KycManagement_CreateKycRecord_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v1", "create", "kyc", "record"}, ""))
+	pattern_KycManagement_CreateKycRecord_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "create", "kyc"}, ""))
 
 	pattern_KycManagement_GetAllKycInfos_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"v1", "get", "all", "kyc", "infos"}, ""))
 

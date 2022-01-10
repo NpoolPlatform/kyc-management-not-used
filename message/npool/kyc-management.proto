@@ -16,9 +16,9 @@ service KycManagement {
             body: "*"
         };
     }
-    rpc CreateKycRecord (CreateKycRecordRequest) returns (CreateKycRecordResponse) {
+    rpc CreateKycRecord (CreateKycRequest) returns (CreateKycResponse) {
         option (google.api.http) = {
-            post: "/v1/create/kyc/record"
+            post: "/v1/create/kyc"
             body: "*"
         };
     };
@@ -65,17 +65,24 @@ message KycInfo {
     string FrontCardImg = 8;
     string BackCardImg = 9;
     string UserHandlingCardImg = 10;
-    uint32 CreateAT = 11;
-    uint32 UpdateAT = 12;
+    uint32 CreateAt = 11;
+    uint32 UpdateAt = 12;
 }
 
-message CreateKycRecordRequest {
+message CreateKycRequest {
     string AppID = 1;
     string UserID = 2;
-    KycInfo Info = 3;
+    string FirstName = 3;
+    string LastName = 4;
+    string Region = 5;
+    string CardType = 6;
+    string CardID = 7;
+    string FrontCardImg = 8;
+    string BackCardImg = 9;
+    string UserHandlingCardImg = 10;
 }
 
-message CreateKycRecordResponse {
+message CreateKycResponse {
     KycInfo Info = 1;
 }
 
