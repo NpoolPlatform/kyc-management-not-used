@@ -15,6 +15,53 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+func kycInfoCheck(in *npool.CreateKycRequest) error {
+	if in.GetCardID() == "" {
+		return status.Error(codes.InvalidArgument, "user card id can not be empty")
+	}
+
+	if len(in.GetCardID()) > 30 {
+		return status.Error(codes.InvalidArgument, "user card id is not invalid")
+	}
+
+	if in.GetCardType() == "" {
+		return status.Error(codes.InvalidArgument, "user card type can not be empty")
+	}
+
+	if in.GetFirstName() == "" {
+		return status.Error(codes.InvalidArgument, "user first name can not be empty")
+	}
+
+	if utf8.RuneCountInString(in.GetFirstName()) > 50 {
+		return status.Error(codes.InvalidArgument, "user first name is not invalid")
+	}
+
+	if in.GetLastName() == "" {
+		return status.Error(codes.InvalidArgument, "user last name can not be empty")
+	}
+
+	if utf8.RuneCountInString(in.GetLastName()) > 50 {
+		return status.Error(codes.InvalidArgument, "user last name is not invalid")
+	}
+
+	if in.GetRegion() == "" {
+		return status.Error(codes.InvalidArgument, "user region can not be empty")
+	}
+
+	if in.GetFrontCardImg() == "" {
+		return status.Error(codes.InvalidArgument, "user front card image can not be empty")
+	}
+
+	if in.GetUserHandlingCardImg() == "" {
+		return status.Error(codes.InvalidArgument, "user front card image can not be empty")
+	}
+
+	if in.GetBackCardImg() == "" {
+		return status.Error(codes.InvalidArgument, "user back card image can not be empty")
+	}
+	return nil
+}
+
 func (s *Server) CreateKyc(ctx context.Context, in *npool.CreateKycRequest) (*npool.CreateKycResponse, error) {
 	appID, err := uuid.Parse(in.GetAppID())
 	if err != nil {
@@ -28,59 +75,9 @@ func (s *Server) CreateKyc(ctx context.Context, in *npool.CreateKycRequest) (*np
 		return nil, status.Error(codes.InvalidArgument, "user id is invalid")
 	}
 
-	if in.GetCardID() == "" {
-		logger.Sugar().Error("CreateKyc error: user card id can not be empty")
-		return nil, status.Error(codes.InvalidArgument, "user card id can not be empty")
-	}
-
-	if len(in.GetCardID()) > 30 {
-		logger.Sugar().Error("CreateKyc error: user card id is not invalid")
-		return nil, status.Error(codes.InvalidArgument, "user card id is not invalid")
-	}
-
-	if in.GetCardType() == "" {
-		logger.Sugar().Error("CreateKyc error: user card type can not be empty")
-		return nil, status.Error(codes.InvalidArgument, "user card type can not be empty")
-	}
-
-	if in.GetFirstName() == "" {
-		logger.Sugar().Error("CreateKyc error: user first name can not be empty")
-		return nil, status.Error(codes.InvalidArgument, "user first name can not be empty")
-	}
-
-	if utf8.RuneCountInString(in.GetFirstName()) > 50 {
-		logger.Sugar().Error("CreateKyc error: user first name is not invalid")
-		return nil, status.Error(codes.InvalidArgument, "user first name is not invalid")
-	}
-
-	if in.GetLastName() == "" {
-		logger.Sugar().Error("CreateKyc error: user last name can not be empty")
-		return nil, status.Error(codes.InvalidArgument, "user last name can not be empty")
-	}
-
-	if utf8.RuneCountInString(in.GetLastName()) > 50 {
-		logger.Sugar().Error("CreateKyc error: user last name is not invalid")
-		return nil, status.Error(codes.InvalidArgument, "user last name is not invalid")
-	}
-
-	if in.GetRegion() == "" {
-		logger.Sugar().Error("CreateKyc error: user region can not be empty")
-		return nil, status.Error(codes.InvalidArgument, "user region can not be empty")
-	}
-
-	if in.GetFrontCardImg() == "" {
-		logger.Sugar().Error("CreateKyc error: user front card image can not be empty")
-		return nil, status.Error(codes.InvalidArgument, "user front card image can not be empty")
-	}
-
-	if in.GetUserHandlingCardImg() == "" {
-		logger.Sugar().Error("CreateKyc error: user handling card image can not be empty")
-		return nil, status.Error(codes.InvalidArgument, "user front card image can not be empty")
-	}
-
-	if in.GetBackCardImg() == "" {
-		logger.Sugar().Error("CreateKyc error: user back card image can not be empty")
-		return nil, status.Error(codes.InvalidArgument, "user back card image can not be empty")
+	if err := kycInfoCheck(in); err != nil {
+		logger.Sugar().Errorf("CreateKyc error: %v", err.Error())
+		return nil, err
 	}
 
 	ctx, cancel := context.WithTimeout(ctx, myconst.GrpcTimeout)
@@ -112,9 +109,9 @@ func (s *Server) CreateKyc(ctx context.Context, in *npool.CreateKycRequest) (*np
 	if err != nil {
 		logger.Sugar().Errorf("CreateKyc call CreateReview error: %v", err)
 
-		err := kyc.DeleteUserKycRecordByKycID(ctx, uuid.MustParse(resp.GetInfo().GetID()))
+		err := kyc.DeleteUserKycByKycID(ctx, uuid.MustParse(resp.GetInfo().GetID()))
 		if err != nil {
-			logger.Sugar().Errorf("CreateKyc call CreateReview and CreateReview call DeleteUserKycRecordByKycID error: %v", err)
+			logger.Sugar().Errorf("CreateKyc call DeleteUserKycByKycID error: %v", err)
 			return nil, status.Errorf(codes.Internal, "internal server error")
 		}
 		return nil, status.Error(codes.Internal, "internal server error")

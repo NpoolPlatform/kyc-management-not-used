@@ -205,7 +205,7 @@ func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycRe
 	}, nil
 }
 
-func DeleteUserKycRecordByKycID(ctx context.Context, kycID uuid.UUID) error {
+func DeleteUserKycByKycID(ctx context.Context, kycID uuid.UUID) error {
 	cli, err := db.Client()
 	if err != nil {
 		return xerrors.Errorf("fail to get db client: %v", err)
