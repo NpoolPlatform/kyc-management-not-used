@@ -161,13 +161,6 @@ func UserHandlingCardImg(v string) predicate.Kyc {
 	})
 }
 
-// ReviewStatus applies equality check predicate on the "review_status" field. It's identical to ReviewStatusEQ.
-func ReviewStatus(v uint32) predicate.Kyc {
-	return predicate.Kyc(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldReviewStatus), v))
-	})
-}
-
 // CreateAt applies equality check predicate on the "create_at" field. It's identical to CreateAtEQ.
 func CreateAt(v uint32) predicate.Kyc {
 	return predicate.Kyc(func(s *sql.Selector) {
@@ -1219,82 +1212,6 @@ func UserHandlingCardImgEqualFold(v string) predicate.Kyc {
 func UserHandlingCardImgContainsFold(v string) predicate.Kyc {
 	return predicate.Kyc(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldUserHandlingCardImg), v))
-	})
-}
-
-// ReviewStatusEQ applies the EQ predicate on the "review_status" field.
-func ReviewStatusEQ(v uint32) predicate.Kyc {
-	return predicate.Kyc(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldReviewStatus), v))
-	})
-}
-
-// ReviewStatusNEQ applies the NEQ predicate on the "review_status" field.
-func ReviewStatusNEQ(v uint32) predicate.Kyc {
-	return predicate.Kyc(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldReviewStatus), v))
-	})
-}
-
-// ReviewStatusIn applies the In predicate on the "review_status" field.
-func ReviewStatusIn(vs ...uint32) predicate.Kyc {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Kyc(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.In(s.C(FieldReviewStatus), v...))
-	})
-}
-
-// ReviewStatusNotIn applies the NotIn predicate on the "review_status" field.
-func ReviewStatusNotIn(vs ...uint32) predicate.Kyc {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.Kyc(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.NotIn(s.C(FieldReviewStatus), v...))
-	})
-}
-
-// ReviewStatusGT applies the GT predicate on the "review_status" field.
-func ReviewStatusGT(v uint32) predicate.Kyc {
-	return predicate.Kyc(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldReviewStatus), v))
-	})
-}
-
-// ReviewStatusGTE applies the GTE predicate on the "review_status" field.
-func ReviewStatusGTE(v uint32) predicate.Kyc {
-	return predicate.Kyc(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldReviewStatus), v))
-	})
-}
-
-// ReviewStatusLT applies the LT predicate on the "review_status" field.
-func ReviewStatusLT(v uint32) predicate.Kyc {
-	return predicate.Kyc(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldReviewStatus), v))
-	})
-}
-
-// ReviewStatusLTE applies the LTE predicate on the "review_status" field.
-func ReviewStatusLTE(v uint32) predicate.Kyc {
-	return predicate.Kyc(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldReviewStatus), v))
 	})
 }
 

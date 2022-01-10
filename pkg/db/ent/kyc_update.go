@@ -87,19 +87,6 @@ func (ku *KycUpdate) SetUserHandlingCardImg(s string) *KycUpdate {
 	return ku
 }
 
-// SetReviewStatus sets the "review_status" field.
-func (ku *KycUpdate) SetReviewStatus(u uint32) *KycUpdate {
-	ku.mutation.ResetReviewStatus()
-	ku.mutation.SetReviewStatus(u)
-	return ku
-}
-
-// AddReviewStatus adds u to the "review_status" field.
-func (ku *KycUpdate) AddReviewStatus(u uint32) *KycUpdate {
-	ku.mutation.AddReviewStatus(u)
-	return ku
-}
-
 // SetCreateAt sets the "create_at" field.
 func (ku *KycUpdate) SetCreateAt(u uint32) *KycUpdate {
 	ku.mutation.ResetCreateAt()
@@ -290,20 +277,6 @@ func (ku *KycUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: kyc.FieldUserHandlingCardImg,
 		})
 	}
-	if value, ok := ku.mutation.ReviewStatus(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: kyc.FieldReviewStatus,
-		})
-	}
-	if value, ok := ku.mutation.AddedReviewStatus(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: kyc.FieldReviewStatus,
-		})
-	}
 	if value, ok := ku.mutation.CreateAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeUint32,
@@ -408,19 +381,6 @@ func (kuo *KycUpdateOne) SetBackCardImg(s string) *KycUpdateOne {
 // SetUserHandlingCardImg sets the "user_handling_card_img" field.
 func (kuo *KycUpdateOne) SetUserHandlingCardImg(s string) *KycUpdateOne {
 	kuo.mutation.SetUserHandlingCardImg(s)
-	return kuo
-}
-
-// SetReviewStatus sets the "review_status" field.
-func (kuo *KycUpdateOne) SetReviewStatus(u uint32) *KycUpdateOne {
-	kuo.mutation.ResetReviewStatus()
-	kuo.mutation.SetReviewStatus(u)
-	return kuo
-}
-
-// AddReviewStatus adds u to the "review_status" field.
-func (kuo *KycUpdateOne) AddReviewStatus(u uint32) *KycUpdateOne {
-	kuo.mutation.AddReviewStatus(u)
 	return kuo
 }
 
@@ -636,20 +596,6 @@ func (kuo *KycUpdateOne) sqlSave(ctx context.Context) (_node *Kyc, err error) {
 			Type:   field.TypeString,
 			Value:  value,
 			Column: kyc.FieldUserHandlingCardImg,
-		})
-	}
-	if value, ok := kuo.mutation.ReviewStatus(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: kyc.FieldReviewStatus,
-		})
-	}
-	if value, ok := kuo.mutation.AddedReviewStatus(); ok {
-		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: kyc.FieldReviewStatus,
 		})
 	}
 	if value, ok := kuo.mutation.CreateAt(); ok {

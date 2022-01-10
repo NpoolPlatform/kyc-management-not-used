@@ -31,8 +31,6 @@ const (
 	FieldBackCardImg = "back_card_img"
 	// FieldUserHandlingCardImg holds the string denoting the user_handling_card_img field in the database.
 	FieldUserHandlingCardImg = "user_handling_card_img"
-	// FieldReviewStatus holds the string denoting the review_status field in the database.
-	FieldReviewStatus = "review_status"
 	// FieldCreateAt holds the string denoting the create_at field in the database.
 	FieldCreateAt = "create_at"
 	// FieldUpdateAt holds the string denoting the update_at field in the database.
@@ -54,7 +52,6 @@ var Columns = []string{
 	FieldFrontCardImg,
 	FieldBackCardImg,
 	FieldUserHandlingCardImg,
-	FieldReviewStatus,
 	FieldCreateAt,
 	FieldUpdateAt,
 }

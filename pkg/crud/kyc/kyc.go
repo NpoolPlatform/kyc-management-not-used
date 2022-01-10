@@ -23,7 +23,6 @@ func dbRowToKyc(row *ent.Kyc) *npool.KycInfo {
 		FrontCardImg:        row.FrontCardImg,
 		BackCardImg:         row.BackCardImg,
 		UserHandlingCardImg: row.UserHandlingCardImg,
-		ReviewStatus:        row.ReviewStatus,
 		CreateAT:            row.CreateAt,
 		UpdateAT:            row.UpdateAt,
 	}

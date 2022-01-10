@@ -141,7 +141,6 @@
 | FrontCardImg | [string](#string) |  |  |
 | BackCardImg | [string](#string) |  |  |
 | UserHandlingCardImg | [string](#string) |  |  |
-| ReviewStatus | [uint32](#uint32) |  |  |
 | CreateAT | [uint32](#uint32) |  |  |
 | UpdateAT | [uint32](#uint32) |  |  |
 

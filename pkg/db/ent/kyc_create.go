@@ -80,12 +80,6 @@ func (kc *KycCreate) SetUserHandlingCardImg(s string) *KycCreate {
 	return kc
 }
 
-// SetReviewStatus sets the "review_status" field.
-func (kc *KycCreate) SetReviewStatus(u uint32) *KycCreate {
-	kc.mutation.SetReviewStatus(u)
-	return kc
-}
-
 // SetCreateAt sets the "create_at" field.
 func (kc *KycCreate) SetCreateAt(u uint32) *KycCreate {
 	kc.mutation.SetCreateAt(u)
@@ -237,9 +231,6 @@ func (kc *KycCreate) check() error {
 	if _, ok := kc.mutation.UserHandlingCardImg(); !ok {
 		return &ValidationError{Name: "user_handling_card_img", err: errors.New(`ent: missing required field "user_handling_card_img"`)}
 	}
-	if _, ok := kc.mutation.ReviewStatus(); !ok {
-		return &ValidationError{Name: "review_status", err: errors.New(`ent: missing required field "review_status"`)}
-	}
 	if _, ok := kc.mutation.CreateAt(); !ok {
 		return &ValidationError{Name: "create_at", err: errors.New(`ent: missing required field "create_at"`)}
 	}
@@ -357,14 +348,6 @@ func (kc *KycCreate) createSpec() (*Kyc, *sqlgraph.CreateSpec) {
 			Column: kyc.FieldUserHandlingCardImg,
 		})
 		_node.UserHandlingCardImg = value
-	}
-	if value, ok := kc.mutation.ReviewStatus(); ok {
-		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeUint32,
-			Value:  value,
-			Column: kyc.FieldReviewStatus,
-		})
-		_node.ReviewStatus = value
 	}
 	if value, ok := kc.mutation.CreateAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
