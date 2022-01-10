@@ -36,8 +36,6 @@ type Kyc struct {
 	BackCardImg string `json:"back_card_img,omitempty"`
 	// UserHandlingCardImg holds the value of the "user_handling_card_img" field.
 	UserHandlingCardImg string `json:"user_handling_card_img,omitempty"`
-	// ReviewStatus holds the value of the "review_status" field.
-	ReviewStatus uint32 `json:"review_status,omitempty"`
 	// CreateAt holds the value of the "create_at" field.
 	CreateAt uint32 `json:"create_at,omitempty"`
 	// UpdateAt holds the value of the "update_at" field.
@@ -49,7 +47,7 @@ func (*Kyc) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case kyc.FieldReviewStatus, kyc.FieldCreateAt, kyc.FieldUpdateAt:
+		case kyc.FieldCreateAt, kyc.FieldUpdateAt:
 			values[i] = new(sql.NullInt64)
 		case kyc.FieldFirstName, kyc.FieldLastName, kyc.FieldRegion, kyc.FieldCardType, kyc.FieldCardID, kyc.FieldFrontCardImg, kyc.FieldBackCardImg, kyc.FieldUserHandlingCardImg:
 			values[i] = new(sql.NullString)
@@ -136,12 +134,6 @@ func (k *Kyc) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				k.UserHandlingCardImg = value.String
 			}
-		case kyc.FieldReviewStatus:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field review_status", values[i])
-			} else if value.Valid {
-				k.ReviewStatus = uint32(value.Int64)
-			}
 		case kyc.FieldCreateAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field create_at", values[i])
@@ -202,8 +194,6 @@ func (k *Kyc) String() string {
 	builder.WriteString(k.BackCardImg)
 	builder.WriteString(", user_handling_card_img=")
 	builder.WriteString(k.UserHandlingCardImg)
-	builder.WriteString(", review_status=")
-	builder.WriteString(fmt.Sprintf("%v", k.ReviewStatus))
 	builder.WriteString(", create_at=")
 	builder.WriteString(fmt.Sprintf("%v", k.CreateAt))
 	builder.WriteString(", update_at=")

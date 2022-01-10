@@ -13,8 +13,6 @@
     - [KycInfo](#kyc.management.v1.KycInfo)
     - [UpdateKycRequest](#kyc.management.v1.UpdateKycRequest)
     - [UpdateKycResponse](#kyc.management.v1.UpdateKycResponse)
-    - [UpdateKycStatusRequest](#kyc.management.v1.UpdateKycStatusRequest)
-    - [UpdateKycStatusResponse](#kyc.management.v1.UpdateKycStatusResponse)
     - [UploadKycImgRequest](#kyc.management.v1.UploadKycImgRequest)
     - [UploadKycImgResponse](#kyc.management.v1.UploadKycImgResponse)
     - [VersionResponse](#kyc.management.v1.VersionResponse)
@@ -143,7 +141,6 @@
 | FrontCardImg | [string](#string) |  |  |
 | BackCardImg | [string](#string) |  |  |
 | UserHandlingCardImg | [string](#string) |  |  |
-| ReviewStatus | [uint32](#uint32) |  |  |
 | CreateAT | [uint32](#uint32) |  |  |
 | UpdateAT | [uint32](#uint32) |  |  |
 
@@ -170,39 +167,6 @@
 <a name="kyc.management.v1.UpdateKycResponse"></a>
 
 ### UpdateKycResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| Info | [KycInfo](#kyc.management.v1.KycInfo) |  |  |
-
-
-
-
-
-
-<a name="kyc.management.v1.UpdateKycStatusRequest"></a>
-
-### UpdateKycStatusRequest
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| Status | [uint32](#uint32) |  | 1: pass audit 2: refuse audit other: wait audit |
-| UserID | [string](#string) |  |  |
-| KycID | [string](#string) |  |  |
-| AppID | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="kyc.management.v1.UpdateKycStatusResponse"></a>
-
-### UpdateKycStatusResponse
 
 
 
@@ -279,7 +243,6 @@ Service Name
 | Version | [.google.protobuf.Empty](#google.protobuf.Empty) | [VersionResponse](#kyc.management.v1.VersionResponse) | Method Version |
 | CreateKycRecord | [CreateKycRecordRequest](#kyc.management.v1.CreateKycRecordRequest) | [CreateKycRecordResponse](#kyc.management.v1.CreateKycRecordResponse) |  |
 | GetAllKycInfos | [GetAllKycInfosRequest](#kyc.management.v1.GetAllKycInfosRequest) | [GetAllKycInfosResponse](#kyc.management.v1.GetAllKycInfosResponse) |  |
-| UpdateKycStatus | [UpdateKycStatusRequest](#kyc.management.v1.UpdateKycStatusRequest) | [UpdateKycStatusResponse](#kyc.management.v1.UpdateKycStatusResponse) | update kyc status |
 | UpdateKyc | [UpdateKycRequest](#kyc.management.v1.UpdateKycRequest) | [UpdateKycResponse](#kyc.management.v1.UpdateKycResponse) |  |
 | UploadKycImg | [UploadKycImgRequest](#kyc.management.v1.UploadKycImgRequest) | [UploadKycImgResponse](#kyc.management.v1.UploadKycImgResponse) |  |
 | GetKycImg | [GetKycImgRequest](#kyc.management.v1.GetKycImgRequest) | [GetKycImgResponse](#kyc.management.v1.GetKycImgResponse) |  |

@@ -11,27 +11,6 @@ import (
 	"golang.org/x/xerrors"
 )
 
-type State uint8
-
-const (
-	InvalidState State = 0
-	WaitState    State = 1
-	PassState    State = 2
-	FailState    State = 3
-)
-
-func UintToKycState(num uint32) (State, error) {
-	switch num {
-	case 1:
-		return WaitState, nil
-	case 2:
-		return PassState, nil
-	case 3:
-		return FailState, nil
-	}
-	return InvalidState, xerrors.Errorf("kyc review state is not invalid")
-}
-
 func dbRowToKyc(row *ent.Kyc) *npool.KycInfo {
 	return &npool.KycInfo{
 		ID:                  row.ID.String(),
@@ -44,7 +23,6 @@ func dbRowToKyc(row *ent.Kyc) *npool.KycInfo {
 		FrontCardImg:        row.FrontCardImg,
 		BackCardImg:         row.BackCardImg,
 		UserHandlingCardImg: row.UserHandlingCardImg,
-		ReviewStatus:        row.ReviewStatus,
 		CreateAT:            row.CreateAt,
 		UpdateAT:            row.UpdateAt,
 	}
@@ -92,7 +70,6 @@ func Create(ctx context.Context, in *npool.CreateKycRecordRequest) (*npool.Creat
 		SetFrontCardImg(in.Info.FrontCardImg).
 		SetBackCardImg(in.Info.BackCardImg).
 		SetUserHandlingCardImg(in.Info.UserHandlingCardImg).
-		SetReviewStatus(uint32(WaitState)).
 		Save(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to create user kyc: %v", err)
@@ -251,22 +228,4 @@ func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycRe
 	return &npool.UpdateKycResponse{
 		Info: dbRowToKyc(info),
 	}, nil
-}
-
-func UpdateReviewStatus(ctx context.Context, kycID uuid.UUID, status State) (*npool.KycInfo, error) {
-	cli, err := db.Client()
-	if err != nil {
-		return nil, xerrors.Errorf("fail get db client: %v", err)
-	}
-
-	info, err := cli.
-		Kyc.
-		UpdateOneID(kycID).
-		SetReviewStatus(uint32(status)).
-		Save(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	return dbRowToKyc(info), err
 }

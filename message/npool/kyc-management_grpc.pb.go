@@ -23,8 +23,6 @@ type KycManagementClient interface {
 	Version(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*VersionResponse, error)
 	CreateKycRecord(ctx context.Context, in *CreateKycRecordRequest, opts ...grpc.CallOption) (*CreateKycRecordResponse, error)
 	GetAllKycInfos(ctx context.Context, in *GetAllKycInfosRequest, opts ...grpc.CallOption) (*GetAllKycInfosResponse, error)
-	// update kyc status
-	UpdateKycStatus(ctx context.Context, in *UpdateKycStatusRequest, opts ...grpc.CallOption) (*UpdateKycStatusResponse, error)
 	UpdateKyc(ctx context.Context, in *UpdateKycRequest, opts ...grpc.CallOption) (*UpdateKycResponse, error)
 	UploadKycImg(ctx context.Context, in *UploadKycImgRequest, opts ...grpc.CallOption) (*UploadKycImgResponse, error)
 	GetKycImg(ctx context.Context, in *GetKycImgRequest, opts ...grpc.CallOption) (*GetKycImgResponse, error)
@@ -59,15 +57,6 @@ func (c *kycManagementClient) CreateKycRecord(ctx context.Context, in *CreateKyc
 func (c *kycManagementClient) GetAllKycInfos(ctx context.Context, in *GetAllKycInfosRequest, opts ...grpc.CallOption) (*GetAllKycInfosResponse, error) {
 	out := new(GetAllKycInfosResponse)
 	err := c.cc.Invoke(ctx, "/kyc.management.v1.KycManagement/GetAllKycInfos", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *kycManagementClient) UpdateKycStatus(ctx context.Context, in *UpdateKycStatusRequest, opts ...grpc.CallOption) (*UpdateKycStatusResponse, error) {
-	out := new(UpdateKycStatusResponse)
-	err := c.cc.Invoke(ctx, "/kyc.management.v1.KycManagement/UpdateKycStatus", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -109,8 +98,6 @@ type KycManagementServer interface {
 	Version(context.Context, *emptypb.Empty) (*VersionResponse, error)
 	CreateKycRecord(context.Context, *CreateKycRecordRequest) (*CreateKycRecordResponse, error)
 	GetAllKycInfos(context.Context, *GetAllKycInfosRequest) (*GetAllKycInfosResponse, error)
-	// update kyc status
-	UpdateKycStatus(context.Context, *UpdateKycStatusRequest) (*UpdateKycStatusResponse, error)
 	UpdateKyc(context.Context, *UpdateKycRequest) (*UpdateKycResponse, error)
 	UploadKycImg(context.Context, *UploadKycImgRequest) (*UploadKycImgResponse, error)
 	GetKycImg(context.Context, *GetKycImgRequest) (*GetKycImgResponse, error)
@@ -129,9 +116,6 @@ func (UnimplementedKycManagementServer) CreateKycRecord(context.Context, *Create
 }
 func (UnimplementedKycManagementServer) GetAllKycInfos(context.Context, *GetAllKycInfosRequest) (*GetAllKycInfosResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllKycInfos not implemented")
-}
-func (UnimplementedKycManagementServer) UpdateKycStatus(context.Context, *UpdateKycStatusRequest) (*UpdateKycStatusResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateKycStatus not implemented")
 }
 func (UnimplementedKycManagementServer) UpdateKyc(context.Context, *UpdateKycRequest) (*UpdateKycResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateKyc not implemented")
@@ -209,24 +193,6 @@ func _KycManagement_GetAllKycInfos_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
-func _KycManagement_UpdateKycStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateKycStatusRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(KycManagementServer).UpdateKycStatus(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/kyc.management.v1.KycManagement/UpdateKycStatus",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KycManagementServer).UpdateKycStatus(ctx, req.(*UpdateKycStatusRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _KycManagement_UpdateKyc_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateKycRequest)
 	if err := dec(in); err != nil {
@@ -299,10 +265,6 @@ var KycManagement_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAllKycInfos",
 			Handler:    _KycManagement_GetAllKycInfos_Handler,
-		},
-		{
-			MethodName: "UpdateKycStatus",
-			Handler:    _KycManagement_UpdateKycStatus_Handler,
 		},
 		{
 			MethodName: "UpdateKyc",
