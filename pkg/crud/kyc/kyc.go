@@ -29,55 +29,29 @@ func dbRowToKyc(row *ent.Kyc) *npool.KycInfo {
 }
 
 func Create(ctx context.Context, in *npool.CreateKycRecordRequest) (*npool.CreateKycRecordResponse, error) {
-	userID, err := uuid.Parse(in.Info.UserID)
-	if err != nil {
-		return nil, xerrors.Errorf("invalid user id: %v", err)
-	}
-
-	appID, err := uuid.Parse(in.Info.AppID)
-	if err != nil {
-		return nil, xerrors.Errorf("invalid app id: %v", err)
-	}
-
 	cli, err := db.Client()
 	if err != nil {
 		return nil, xerrors.Errorf("fail get db client: %v", err)
 	}
 
-	_, err = cli.
-		Kyc.
-		Query().
-		Where(
-			kyc.And(
-				kyc.AppID(appID),
-				kyc.UserID(userID),
-			),
-		).Only(ctx)
-	if err == nil {
-		return nil, xerrors.Errorf("user kyc record has been existed: %v", err)
-	}
-
 	info, err := cli.
 		Kyc.
 		Create().
-		SetUserID(userID).
-		SetAppID(appID).
-		SetFirstName(in.Info.FirstName).
-		SetLastName(in.Info.LastName).
-		SetRegion(in.Info.Region).
-		SetCardType(in.Info.CardType).
-		SetCardID(in.Info.CardID).
-		SetFrontCardImg(in.Info.FrontCardImg).
-		SetBackCardImg(in.Info.BackCardImg).
-		SetUserHandlingCardImg(in.Info.UserHandlingCardImg).
+		SetUserID(uuid.MustParse(in.GetUserID())).
+		SetAppID(uuid.MustParse(in.GetAppID())).
+		SetFirstName(in.GetInfo().GetFirstName()).
+		SetLastName(in.GetInfo().GetLastName()).
+		SetRegion(in.GetInfo().GetRegion()).
+		SetCardType(in.GetInfo().GetCardType()).
+		SetCardID(in.GetInfo().GetCardID()).
+		SetFrontCardImg(in.GetInfo().GetFrontCardImg()).
+		SetBackCardImg(in.GetInfo().GetBackCardImg()).
+		SetUserHandlingCardImg(in.GetInfo().GetUserHandlingCardImg()).
 		Save(ctx)
-	if err != nil {
-		return nil, xerrors.Errorf("fail to create user kyc: %v", err)
-	}
 
 	return &npool.CreateKycRecordResponse{
 		Info: dbRowToKyc(info),
-	}, nil
+	}, err
 }
 
 func parse2ID(userIDString, idString string) (uuid.UUID, uuid.UUID, error) { // nolint

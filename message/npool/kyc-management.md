@@ -38,6 +38,8 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| AppID | [string](#string) |  |  |
+| UserID | [string](#string) |  |  |
 | Info | [KycInfo](#kyc.management.v1.KycInfo) |  |  |
 
 

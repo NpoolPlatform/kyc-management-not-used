@@ -70,7 +70,9 @@ message KycInfo {
 }
 
 message CreateKycRecordRequest {
-    KycInfo Info = 1;
+    string AppID = 1;
+    string UserID = 2;
+    KycInfo Info = 3;
 }
 
 message CreateKycRecordResponse {
