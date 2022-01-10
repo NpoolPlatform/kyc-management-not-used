@@ -83,20 +83,20 @@ func (s *Server) CreateKyc(ctx context.Context, in *npool.CreateKycRequest) (*np
 	ctx, cancel := context.WithTimeout(ctx, myconst.GrpcTimeout)
 	defer cancel()
 
-	if exist, err := kyc.ExistCradTypeCardIDInApp(ctx, in.GetCardType(), in.GetCardID(), appID); err != nil {
-		logger.Sugar().Errorf("CreateKyc error: internal server error: %v", err)
-		return nil, status.Error(codes.Internal, "internal server error")
-	} else if exist {
-		logger.Sugar().Error("CreayeKyc error: this card type card id has been existed in this app")
-		return nil, status.Error(codes.AlreadyExists, "this card type card id has been existed in this app")
-	}
-
 	if exist, err := kyc.ExistKycByUserIDAndAppID(ctx, appID, userID); err != nil {
 		logger.Sugar().Errorf("CreateKyc error: internal server error: %v", err)
 		return nil, status.Error(codes.Internal, "internal server error")
 	} else if exist {
 		logger.Sugar().Error("CreateKyc error: user has already created a kyc record")
 		return nil, status.Error(codes.AlreadyExists, "user has already created a kyc record")
+	}
+
+	if exist, err := kyc.ExistCradTypeCardIDInApp(ctx, in.GetCardType(), in.GetCardID(), appID); err != nil {
+		logger.Sugar().Errorf("CreateKyc error: internal server error: %v", err)
+		return nil, status.Error(codes.Internal, "internal server error")
+	} else if exist {
+		logger.Sugar().Error("CreayeKyc error: this card type card id has been existed in this app")
+		return nil, status.Error(codes.AlreadyExists, "this card type card id has been existed in this app")
 	}
 
 	resp, err := kyc.Create(ctx, in)
