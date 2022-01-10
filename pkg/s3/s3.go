@@ -10,8 +10,8 @@ import (
 )
 
 func UploadKycImg(ctx context.Context, in *npool.UploadKycImgRequest) (*npool.UploadKycImgResponse, error) {
-	encodeImg := base64.StdEncoding.EncodeToString([]byte(in.ImgBase64))
-	s3Key := "kyc/" + in.ImgType + in.UserID
+	encodeImg := base64.StdEncoding.EncodeToString([]byte(in.GetImgBase64()))
+	s3Key := "kyc/" + in.GetAppID() + "/" + in.GetUserID() + "/" + in.GetImgType()
 
 	err := oss.PutObject(ctx, s3Key, []byte(encodeImg), true)
 	if err != nil {
@@ -24,7 +24,7 @@ func UploadKycImg(ctx context.Context, in *npool.UploadKycImgRequest) (*npool.Up
 }
 
 func GetKycImg(ctx context.Context, in *npool.GetKycImgRequest) (*npool.GetKycImgResponse, error) {
-	resp, err := oss.GetObject(ctx, in.ImgID, true)
+	resp, err := oss.GetObject(ctx, in.GetImgID(), true)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to get img from s3: %v", err)
 	}

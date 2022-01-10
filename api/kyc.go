@@ -2,30 +2,126 @@ package api
 
 import (
 	"context"
-	"time"
+	"unicode/utf8"
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	"github.com/NpoolPlatform/kyc-management/message/npool"
 	"github.com/NpoolPlatform/kyc-management/pkg/crud/kyc"
+	mygrpc "github.com/NpoolPlatform/kyc-management/pkg/grpc"
+	myconst "github.com/NpoolPlatform/kyc-management/pkg/message/const"
 	mkyc "github.com/NpoolPlatform/kyc-management/pkg/middleware/kyc"
+	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
-func (s *Server) CreateKycRecord(ctx context.Context, in *npool.CreateKycRecordRequest) (*npool.CreateKycRecordResponse, error) {
-	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+func kycInfoCheck(in *npool.CreateKycRequest) error {
+	if in.GetCardID() == "" {
+		return status.Error(codes.InvalidArgument, "user card id can not be empty")
+	}
+
+	if len(in.GetCardID()) > 30 {
+		return status.Error(codes.InvalidArgument, "user card id is not invalid")
+	}
+
+	if in.GetCardType() == "" {
+		return status.Error(codes.InvalidArgument, "user card type can not be empty")
+	}
+
+	if in.GetFirstName() == "" {
+		return status.Error(codes.InvalidArgument, "user first name can not be empty")
+	}
+
+	if utf8.RuneCountInString(in.GetFirstName()) > 50 {
+		return status.Error(codes.InvalidArgument, "user first name is not invalid")
+	}
+
+	if in.GetLastName() == "" {
+		return status.Error(codes.InvalidArgument, "user last name can not be empty")
+	}
+
+	if utf8.RuneCountInString(in.GetLastName()) > 50 {
+		return status.Error(codes.InvalidArgument, "user last name is not invalid")
+	}
+
+	if in.GetRegion() == "" {
+		return status.Error(codes.InvalidArgument, "user region can not be empty")
+	}
+
+	if in.GetFrontCardImg() == "" {
+		return status.Error(codes.InvalidArgument, "user front card image can not be empty")
+	}
+
+	if in.GetUserHandlingCardImg() == "" {
+		return status.Error(codes.InvalidArgument, "user front card image can not be empty")
+	}
+
+	if in.GetBackCardImg() == "" {
+		return status.Error(codes.InvalidArgument, "user back card image can not be empty")
+	}
+	return nil
+}
+
+func (s *Server) CreateKyc(ctx context.Context, in *npool.CreateKycRequest) (*npool.CreateKycResponse, error) {
+	appID, err := uuid.Parse(in.GetAppID())
+	if err != nil {
+		logger.Sugar().Errorf("CreateKyc error: app id is invalid: %v", err)
+		return nil, status.Error(codes.InvalidArgument, "app id is invalid")
+	}
+
+	userID, err := uuid.Parse(in.GetUserID())
+	if err != nil {
+		logger.Sugar().Errorf("CreateKyc error: user id is invalid: %v", err)
+		return nil, status.Error(codes.InvalidArgument, "user id is invalid")
+	}
+
+	if err := kycInfoCheck(in); err != nil {
+		logger.Sugar().Errorf("CreateKyc error: %v", err.Error())
+		return nil, err
+	}
+
+	ctx, cancel := context.WithTimeout(ctx, myconst.GrpcTimeout)
 	defer cancel()
+
+	if exist, err := kyc.ExistKycByUserIDAndAppID(ctx, appID, userID); err != nil {
+		logger.Sugar().Errorf("CreateKyc error: internal server error: %v", err)
+		return nil, status.Error(codes.Internal, "internal server error")
+	} else if exist {
+		logger.Sugar().Error("CreateKyc error: user has already created a kyc record")
+		return nil, status.Error(codes.AlreadyExists, "user has already created a kyc record")
+	}
+
+	if exist, err := kyc.ExistCradTypeCardIDInApp(ctx, in.GetCardType(), in.GetCardID(), appID); err != nil {
+		logger.Sugar().Errorf("CreateKyc error: internal server error: %v", err)
+		return nil, status.Error(codes.Internal, "internal server error")
+	} else if exist {
+		logger.Sugar().Error("CreayeKyc error: this card type card id has been existed in this app")
+		return nil, status.Error(codes.AlreadyExists, "this card type card id has been existed in this app")
+	}
 
 	resp, err := kyc.Create(ctx, in)
 	if err != nil {
-		logger.Sugar().Errorf("fail to create kyc record: %v", err)
-		return nil, status.Errorf(codes.Internal, "internal server error: %v", err)
+		logger.Sugar().Errorf("CreateKyc error: internal server error: %v", err)
+		return nil, status.Error(codes.Internal, "internal server error")
 	}
+
+	_, err = mygrpc.CreateKycReview(ctx, resp.GetInfo().GetID(), resp.GetInfo().GetAppID())
+	if err != nil {
+		logger.Sugar().Errorf("CreateKyc call CreateReview error: %v", err)
+
+		err := kyc.DeleteUserKycByKycID(ctx, uuid.MustParse(resp.GetInfo().GetID()))
+		if err != nil {
+			logger.Sugar().Errorf("CreateKyc call DeleteUserKycByKycID error: %v", err)
+			return nil, status.Errorf(codes.Internal, "internal server error")
+		}
+		return nil, status.Error(codes.Internal, "internal server error")
+	}
+
 	return resp, nil
 }
 
 func (s *Server) GetAllKycInfos(ctx context.Context, in *npool.GetAllKycInfosRequest) (*npool.GetAllKycInfosResponse, error) {
-	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	ctx, cancel := context.WithTimeout(ctx, myconst.GrpcTimeout)
 	defer cancel()
 
 	resp, err := mkyc.GetKycInfo(ctx, in)
@@ -37,7 +133,7 @@ func (s *Server) GetAllKycInfos(ctx context.Context, in *npool.GetAllKycInfosReq
 }
 
 func (s *Server) UpdateKyc(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycResponse, error) {
-	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	ctx, cancel := context.WithTimeout(ctx, myconst.GrpcTimeout)
 	defer cancel()
 
 	resp, err := kyc.Update(ctx, in)

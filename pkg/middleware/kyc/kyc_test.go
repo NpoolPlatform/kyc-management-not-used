@@ -53,8 +53,17 @@ func TestKycMiddleware(t *testing.T) {
 		UserHandlingCardImg: resp.Info,
 	}
 
-	resp1, err := crudkyc.Create(context.Background(), &npool.CreateKycRecordRequest{
-		Info: kycInfo,
+	resp1, err := crudkyc.Create(context.Background(), &npool.CreateKycRequest{
+		AppID:               uuid.New().String(),
+		UserID:              userID,
+		FirstName:           "test",
+		LastName:            "test",
+		Region:              "test",
+		CardType:            "ID Card",
+		CardID:              uuid.New().String(),
+		FrontCardImg:        resp.Info,
+		BackCardImg:         resp.Info,
+		UserHandlingCardImg: resp.Info,
 	})
 	if assert.Nil(t, err) {
 		assert.NotEqual(t, resp1.Info.ID, uuid.UUID{})
