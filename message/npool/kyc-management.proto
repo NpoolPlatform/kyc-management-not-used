@@ -28,13 +28,6 @@ service KycManagement {
             body: "*"
         };
     };
-    // update kyc status
-    rpc UpdateKycStatus (UpdateKycStatusRequest) returns (UpdateKycStatusResponse) {
-        option (google.api.http) = {
-            post: "/v1/update/kyc/status"
-            body: "*"
-        };
-    };
     rpc UpdateKyc (UpdateKycRequest) returns (UpdateKycResponse) {
         option (google.api.http) = {
             post: "/v1/update/kyc"
@@ -92,18 +85,6 @@ message GetAllKycInfosRequest {
 
 message GetAllKycInfosResponse {
     repeated KycInfo Infos = 1;
-}
-
-message UpdateKycStatusRequest {
-    // 1: pass audit 2: refuse audit other: wait audit
-    uint32 Status = 1;
-    string UserID = 2;
-    string KycID = 3;
-    string AppID = 4;
-}
-
-message UpdateKycStatusResponse {
-    KycInfo Info = 1;
 }
 
 message UpdateKycRequest {

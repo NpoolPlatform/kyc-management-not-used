@@ -94,17 +94,6 @@ func TestKycAPI(t *testing.T) { // nolint
 		}
 	}
 
-	resp3, err := cli.R().
-		SetHeader("Content-Type", "application/json").
-		SetBody(npool.UpdateKycStatusRequest{
-			UserID: kycInfo.UserID,
-			Status: 1,
-		}).
-		Post("http://localhost:50120/v1/update/kyc/status")
-	if assert.Nil(t, err) {
-		assert.NotEqual(t, 200, resp3.StatusCode())
-	}
-
 	resp4, err := cli.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.UpdateKycRequest{
