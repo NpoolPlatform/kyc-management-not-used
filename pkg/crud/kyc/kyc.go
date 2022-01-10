@@ -48,28 +48,13 @@ func Create(ctx context.Context, in *npool.CreateKycRecordRequest) (*npool.Creat
 		SetBackCardImg(in.GetInfo().GetBackCardImg()).
 		SetUserHandlingCardImg(in.GetInfo().GetUserHandlingCardImg()).
 		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	return &npool.CreateKycRecordResponse{
 		Info: dbRowToKyc(info),
-	}, err
-}
-
-func parse2ID(userIDString, idString string) (uuid.UUID, uuid.UUID, error) { // nolint
-	var userID, id uuid.UUID
-	var err error
-	if userIDString != "" {
-		userID, err = uuid.Parse(userIDString)
-		if err != nil {
-			return uuid.UUID{}, uuid.UUID{}, xerrors.Errorf("invalid user id: %v", err)
-		}
-	}
-	if idString != "" {
-		id, err = uuid.Parse(idString)
-		if err != nil {
-			return uuid.UUID{}, uuid.UUID{}, xerrors.Errorf("invalid kyc id: %v", err)
-		}
-	}
-	return userID, id, nil
+	}, nil
 }
 
 func GetKycByUserIDAndAppID(ctx context.Context, appID, userID uuid.UUID) (*npool.KycInfo, error) {
