@@ -22,7 +22,9 @@ type KycManagementClient interface {
 	// Method Version
 	Version(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*VersionResponse, error)
 	CreateKycRecord(ctx context.Context, in *CreateKycRequest, opts ...grpc.CallOption) (*CreateKycResponse, error)
-	GetAllKycInfos(ctx context.Context, in *GetAllKycInfosRequest, opts ...grpc.CallOption) (*GetAllKycInfosResponse, error)
+	GetKycByUserID(ctx context.Context, in *GetKycByUserIDRequest, opts ...grpc.CallOption) (*GetKycByUserIDResponse, error)
+	GetKycByAppID(ctx context.Context, in *GetKycByAppIDRequest, opts ...grpc.CallOption) (*GetKycByAppIDResponse, error)
+	GetAllKyc(ctx context.Context, in *GetAllKycRequest, opts ...grpc.CallOption) (*GetAllKycResponse, error)
 	UpdateKyc(ctx context.Context, in *UpdateKycRequest, opts ...grpc.CallOption) (*UpdateKycResponse, error)
 	UploadKycImg(ctx context.Context, in *UploadKycImgRequest, opts ...grpc.CallOption) (*UploadKycImgResponse, error)
 	GetKycImg(ctx context.Context, in *GetKycImgRequest, opts ...grpc.CallOption) (*GetKycImgResponse, error)
@@ -54,9 +56,27 @@ func (c *kycManagementClient) CreateKycRecord(ctx context.Context, in *CreateKyc
 	return out, nil
 }
 
-func (c *kycManagementClient) GetAllKycInfos(ctx context.Context, in *GetAllKycInfosRequest, opts ...grpc.CallOption) (*GetAllKycInfosResponse, error) {
-	out := new(GetAllKycInfosResponse)
-	err := c.cc.Invoke(ctx, "/kyc.management.v1.KycManagement/GetAllKycInfos", in, out, opts...)
+func (c *kycManagementClient) GetKycByUserID(ctx context.Context, in *GetKycByUserIDRequest, opts ...grpc.CallOption) (*GetKycByUserIDResponse, error) {
+	out := new(GetKycByUserIDResponse)
+	err := c.cc.Invoke(ctx, "/kyc.management.v1.KycManagement/GetKycByUserID", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *kycManagementClient) GetKycByAppID(ctx context.Context, in *GetKycByAppIDRequest, opts ...grpc.CallOption) (*GetKycByAppIDResponse, error) {
+	out := new(GetKycByAppIDResponse)
+	err := c.cc.Invoke(ctx, "/kyc.management.v1.KycManagement/GetKycByAppID", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *kycManagementClient) GetAllKyc(ctx context.Context, in *GetAllKycRequest, opts ...grpc.CallOption) (*GetAllKycResponse, error) {
+	out := new(GetAllKycResponse)
+	err := c.cc.Invoke(ctx, "/kyc.management.v1.KycManagement/GetAllKyc", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -97,7 +117,9 @@ type KycManagementServer interface {
 	// Method Version
 	Version(context.Context, *emptypb.Empty) (*VersionResponse, error)
 	CreateKycRecord(context.Context, *CreateKycRequest) (*CreateKycResponse, error)
-	GetAllKycInfos(context.Context, *GetAllKycInfosRequest) (*GetAllKycInfosResponse, error)
+	GetKycByUserID(context.Context, *GetKycByUserIDRequest) (*GetKycByUserIDResponse, error)
+	GetKycByAppID(context.Context, *GetKycByAppIDRequest) (*GetKycByAppIDResponse, error)
+	GetAllKyc(context.Context, *GetAllKycRequest) (*GetAllKycResponse, error)
 	UpdateKyc(context.Context, *UpdateKycRequest) (*UpdateKycResponse, error)
 	UploadKycImg(context.Context, *UploadKycImgRequest) (*UploadKycImgResponse, error)
 	GetKycImg(context.Context, *GetKycImgRequest) (*GetKycImgResponse, error)
@@ -114,8 +136,14 @@ func (UnimplementedKycManagementServer) Version(context.Context, *emptypb.Empty)
 func (UnimplementedKycManagementServer) CreateKycRecord(context.Context, *CreateKycRequest) (*CreateKycResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateKycRecord not implemented")
 }
-func (UnimplementedKycManagementServer) GetAllKycInfos(context.Context, *GetAllKycInfosRequest) (*GetAllKycInfosResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetAllKycInfos not implemented")
+func (UnimplementedKycManagementServer) GetKycByUserID(context.Context, *GetKycByUserIDRequest) (*GetKycByUserIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetKycByUserID not implemented")
+}
+func (UnimplementedKycManagementServer) GetKycByAppID(context.Context, *GetKycByAppIDRequest) (*GetKycByAppIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetKycByAppID not implemented")
+}
+func (UnimplementedKycManagementServer) GetAllKyc(context.Context, *GetAllKycRequest) (*GetAllKycResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllKyc not implemented")
 }
 func (UnimplementedKycManagementServer) UpdateKyc(context.Context, *UpdateKycRequest) (*UpdateKycResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateKyc not implemented")
@@ -175,20 +203,56 @@ func _KycManagement_CreateKycRecord_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _KycManagement_GetAllKycInfos_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetAllKycInfosRequest)
+func _KycManagement_GetKycByUserID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetKycByUserIDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(KycManagementServer).GetAllKycInfos(ctx, in)
+		return srv.(KycManagementServer).GetKycByUserID(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/kyc.management.v1.KycManagement/GetAllKycInfos",
+		FullMethod: "/kyc.management.v1.KycManagement/GetKycByUserID",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KycManagementServer).GetAllKycInfos(ctx, req.(*GetAllKycInfosRequest))
+		return srv.(KycManagementServer).GetKycByUserID(ctx, req.(*GetKycByUserIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KycManagement_GetKycByAppID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetKycByAppIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KycManagementServer).GetKycByAppID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kyc.management.v1.KycManagement/GetKycByAppID",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KycManagementServer).GetKycByAppID(ctx, req.(*GetKycByAppIDRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _KycManagement_GetAllKyc_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllKycRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KycManagementServer).GetAllKyc(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kyc.management.v1.KycManagement/GetAllKyc",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KycManagementServer).GetAllKyc(ctx, req.(*GetAllKycRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -263,8 +327,16 @@ var KycManagement_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _KycManagement_CreateKycRecord_Handler,
 		},
 		{
-			MethodName: "GetAllKycInfos",
-			Handler:    _KycManagement_GetAllKycInfos_Handler,
+			MethodName: "GetKycByUserID",
+			Handler:    _KycManagement_GetKycByUserID_Handler,
+		},
+		{
+			MethodName: "GetKycByAppID",
+			Handler:    _KycManagement_GetKycByAppID_Handler,
+		},
+		{
+			MethodName: "GetAllKyc",
+			Handler:    _KycManagement_GetAllKyc_Handler,
 		},
 		{
 			MethodName: "UpdateKyc",

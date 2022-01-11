@@ -6,11 +6,16 @@
 - [npool/kyc-management.proto](#npool/kyc-management.proto)
     - [CreateKycRequest](#kyc.management.v1.CreateKycRequest)
     - [CreateKycResponse](#kyc.management.v1.CreateKycResponse)
-    - [GetAllKycInfosRequest](#kyc.management.v1.GetAllKycInfosRequest)
-    - [GetAllKycInfosResponse](#kyc.management.v1.GetAllKycInfosResponse)
+    - [GetAllKycRequest](#kyc.management.v1.GetAllKycRequest)
+    - [GetAllKycResponse](#kyc.management.v1.GetAllKycResponse)
+    - [GetKycByAppIDRequest](#kyc.management.v1.GetKycByAppIDRequest)
+    - [GetKycByAppIDResponse](#kyc.management.v1.GetKycByAppIDResponse)
+    - [GetKycByUserIDRequest](#kyc.management.v1.GetKycByUserIDRequest)
+    - [GetKycByUserIDResponse](#kyc.management.v1.GetKycByUserIDResponse)
     - [GetKycImgRequest](#kyc.management.v1.GetKycImgRequest)
     - [GetKycImgResponse](#kyc.management.v1.GetKycImgResponse)
     - [KycInfo](#kyc.management.v1.KycInfo)
+    - [PageInfo](#kyc.management.v1.PageInfo)
     - [UpdateKycRequest](#kyc.management.v1.UpdateKycRequest)
     - [UpdateKycResponse](#kyc.management.v1.UpdateKycResponse)
     - [UploadKycImgRequest](#kyc.management.v1.UploadKycImgRequest)
@@ -69,31 +74,92 @@
 
 
 
-<a name="kyc.management.v1.GetAllKycInfosRequest"></a>
+<a name="kyc.management.v1.GetAllKycRequest"></a>
 
-### GetAllKycInfosRequest
+### GetAllKycRequest
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| AppID | [string](#string) |  |  |
-| KycIDs | [string](#string) | repeated |  |
+| PageInfo | [PageInfo](#kyc.management.v1.PageInfo) |  |  |
 
 
 
 
 
 
-<a name="kyc.management.v1.GetAllKycInfosResponse"></a>
+<a name="kyc.management.v1.GetAllKycResponse"></a>
 
-### GetAllKycInfosResponse
+### GetAllKycResponse
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | Infos | [KycInfo](#kyc.management.v1.KycInfo) | repeated |  |
+
+
+
+
+
+
+<a name="kyc.management.v1.GetKycByAppIDRequest"></a>
+
+### GetKycByAppIDRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| AppID | [string](#string) |  |  |
+| PageInfo | [PageInfo](#kyc.management.v1.PageInfo) |  |  |
+
+
+
+
+
+
+<a name="kyc.management.v1.GetKycByAppIDResponse"></a>
+
+### GetKycByAppIDResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Infos | [KycInfo](#kyc.management.v1.KycInfo) | repeated |  |
+
+
+
+
+
+
+<a name="kyc.management.v1.GetKycByUserIDRequest"></a>
+
+### GetKycByUserIDRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| AppID | [string](#string) |  |  |
+| UserID | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="kyc.management.v1.GetKycByUserIDResponse"></a>
+
+### GetKycByUserIDResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [KycInfo](#kyc.management.v1.KycInfo) |  |  |
 
 
 
@@ -158,6 +224,22 @@
 
 
 
+<a name="kyc.management.v1.PageInfo"></a>
+
+### PageInfo
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| PageIndex | [int32](#int32) |  |  |
+| PageSize | [int32](#int32) |  |  |
+
+
+
+
+
+
 <a name="kyc.management.v1.UpdateKycRequest"></a>
 
 ### UpdateKycRequest
@@ -166,7 +248,17 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| Info | [KycInfo](#kyc.management.v1.KycInfo) |  |  |
+| ID | [string](#string) |  |  |
+| UserID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
+| FirstName | [string](#string) |  |  |
+| LastName | [string](#string) |  |  |
+| Region | [string](#string) |  |  |
+| CardType | [string](#string) |  |  |
+| CardID | [string](#string) |  |  |
+| FrontCardImg | [string](#string) |  |  |
+| BackCardImg | [string](#string) |  |  |
+| UserHandlingCardImg | [string](#string) |  |  |
 
 
 
@@ -251,7 +343,9 @@ Service Name
 | ----------- | ------------ | ------------- | ------------|
 | Version | [.google.protobuf.Empty](#google.protobuf.Empty) | [VersionResponse](#kyc.management.v1.VersionResponse) | Method Version |
 | CreateKycRecord | [CreateKycRequest](#kyc.management.v1.CreateKycRequest) | [CreateKycResponse](#kyc.management.v1.CreateKycResponse) |  |
-| GetAllKycInfos | [GetAllKycInfosRequest](#kyc.management.v1.GetAllKycInfosRequest) | [GetAllKycInfosResponse](#kyc.management.v1.GetAllKycInfosResponse) |  |
+| GetKycByUserID | [GetKycByUserIDRequest](#kyc.management.v1.GetKycByUserIDRequest) | [GetKycByUserIDResponse](#kyc.management.v1.GetKycByUserIDResponse) |  |
+| GetKycByAppID | [GetKycByAppIDRequest](#kyc.management.v1.GetKycByAppIDRequest) | [GetKycByAppIDResponse](#kyc.management.v1.GetKycByAppIDResponse) |  |
+| GetAllKyc | [GetAllKycRequest](#kyc.management.v1.GetAllKycRequest) | [GetAllKycResponse](#kyc.management.v1.GetAllKycResponse) |  |
 | UpdateKyc | [UpdateKycRequest](#kyc.management.v1.UpdateKycRequest) | [UpdateKycResponse](#kyc.management.v1.UpdateKycResponse) |  |
 | UploadKycImg | [UploadKycImgRequest](#kyc.management.v1.UploadKycImgRequest) | [UploadKycImgResponse](#kyc.management.v1.UploadKycImgResponse) |  |
 | GetKycImg | [GetKycImgRequest](#kyc.management.v1.GetKycImgRequest) | [GetKycImgResponse](#kyc.management.v1.GetKycImgResponse) |  |
