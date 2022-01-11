@@ -17,7 +17,11 @@ spec:
     - host: api.npool.top
       http: &http_appid_userid_rules
         paths:
-          - path: /api/kyc-management/v1/create/kyc/record
+          - path: /api/kyc-management/v1/create/kyc
+            backend:
+              serviceName: kyc-management
+              servicePort: 50120
+          - path: /api/kyc-management/v1/update/kyc
             backend:
               serviceName: kyc-management
               servicePort: 50120

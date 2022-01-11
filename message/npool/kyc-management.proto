@@ -65,11 +65,6 @@ message VersionResponse {
     string Info = 100;
 }
 
-message PageInfo {
-    int32 PageIndex = 100;
-    int32 PageSize = 101;
-}
-
 message KycInfo {
     string ID = 1;
     string UserID = 2;
@@ -114,19 +109,23 @@ message GetKycByUserIDResponse {
 
 message GetKycByAppIDRequest {
     string AppID = 1;
-    PageInfo PageInfo = 2;
+    int32 Limit = 2;
+    int32 Offset = 3;
 }
 
 message GetKycByAppIDResponse {
     repeated KycInfo Infos = 1;
+    int32 Total = 2;
 }
 
 message GetAllKycRequest {
-    PageInfo PageInfo = 2;
+    int32 Limit = 1;
+    int32 Offset = 2;
 }
 
 message GetAllKycResponse {
     repeated KycInfo Infos = 1;
+    int32 Total = 2;
 }
 
 message UpdateKycRequest {

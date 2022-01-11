@@ -15,7 +15,6 @@
     - [GetKycImgRequest](#kyc.management.v1.GetKycImgRequest)
     - [GetKycImgResponse](#kyc.management.v1.GetKycImgResponse)
     - [KycInfo](#kyc.management.v1.KycInfo)
-    - [PageInfo](#kyc.management.v1.PageInfo)
     - [UpdateKycRequest](#kyc.management.v1.UpdateKycRequest)
     - [UpdateKycResponse](#kyc.management.v1.UpdateKycResponse)
     - [UploadKycImgRequest](#kyc.management.v1.UploadKycImgRequest)
@@ -82,7 +81,8 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| PageInfo | [PageInfo](#kyc.management.v1.PageInfo) |  |  |
+| Limit | [int32](#int32) |  |  |
+| Offset | [int32](#int32) |  |  |
 
 
 
@@ -98,6 +98,7 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | Infos | [KycInfo](#kyc.management.v1.KycInfo) | repeated |  |
+| Total | [int32](#int32) |  |  |
 
 
 
@@ -113,7 +114,8 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | AppID | [string](#string) |  |  |
-| PageInfo | [PageInfo](#kyc.management.v1.PageInfo) |  |  |
+| Limit | [int32](#int32) |  |  |
+| Offset | [int32](#int32) |  |  |
 
 
 
@@ -129,6 +131,7 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | Infos | [KycInfo](#kyc.management.v1.KycInfo) | repeated |  |
+| Total | [int32](#int32) |  |  |
 
 
 
@@ -218,22 +221,6 @@
 | UserHandlingCardImg | [string](#string) |  |  |
 | CreateAt | [uint32](#uint32) |  |  |
 | UpdateAt | [uint32](#uint32) |  |  |
-
-
-
-
-
-
-<a name="kyc.management.v1.PageInfo"></a>
-
-### PageInfo
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| PageIndex | [int32](#int32) |  |  |
-| PageSize | [int32](#int32) |  |  |
 
 
 

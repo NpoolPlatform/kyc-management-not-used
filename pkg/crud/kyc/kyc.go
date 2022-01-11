@@ -109,40 +109,33 @@ func GetKycByID(ctx context.Context, kycID uuid.UUID) (*npool.KycInfo, error) {
 	return dbRowToKyc(info), nil
 }
 
-func GetKycByAppID(ctx context.Context, appID uuid.UUID) ([]*npool.KycInfo, error) {
+func GetAll(ctx context.Context, appID uuid.UUID, limit, offset int32) ([]*npool.KycInfo, int, error) {
+	if limit == 0 {
+		limit = 10
+	}
+
 	cli, err := db.Client()
 	if err != nil {
-		return nil, xerrors.Errorf("fail get db client: %v", err)
+		return nil, 0, xerrors.Errorf("fail get db client: %v", err)
 	}
 
-	infos, err := cli.Kyc.Query().
-		Where(
-			kyc.And(
-				kyc.AppID(appID),
-			),
-		).All(ctx)
+	client := cli.Kyc.Query()
+
+	if appID != uuid.Nil {
+		client.Where(kyc.AppID(appID))
+	}
+
+	total, err := client.Count(ctx)
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
-	response := []*npool.KycInfo{}
-	for _, info := range infos {
-		response = append(response, dbRowToKyc(info))
-	}
-	return response, nil
-}
-
-func GetAll(ctx context.Context, in *npool.GetAllKycRequest) ([]*npool.KycInfo, error) {
-	cli, err := db.Client()
+	infos, err := client.
+		Order(ent.Desc(kyc.FieldCreateAt)).
+		Offset(int(offset)).
+		Limit(int(limit)).All(ctx)
 	if err != nil {
-		return nil, xerrors.Errorf("fail get db client: %v", err)
-	}
-
-	infos, err := cli.
-		Kyc.
-		Query().All(ctx)
-	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
 	response := []*npool.KycInfo{}
@@ -150,7 +143,7 @@ func GetAll(ctx context.Context, in *npool.GetAllKycRequest) ([]*npool.KycInfo, 
 		response = append(response, dbRowToKyc(info))
 	}
 
-	return response, nil
+	return response, total, nil
 }
 
 func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycResponse, error) {
@@ -178,15 +171,6 @@ func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycRe
 	return &npool.UpdateKycResponse{
 		Info: dbRowToKyc(info),
 	}, nil
-}
-
-func DeleteUserKycByKycID(ctx context.Context, kycID uuid.UUID) error {
-	cli, err := db.Client()
-	if err != nil {
-		return xerrors.Errorf("fail to get db client: %v", err)
-	}
-
-	return cli.Kyc.DeleteOneID(kycID).Exec(ctx)
 }
 
 func ExistCradTypeCardIDInApp(ctx context.Context, cardType, cardID string, appID uuid.UUID) (bool, error) {

@@ -7,6 +7,7 @@ import (
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	"github.com/NpoolPlatform/kyc-management/message/npool"
 	"github.com/NpoolPlatform/kyc-management/pkg/crud/kyc"
+	"github.com/NpoolPlatform/kyc-management/pkg/db/ent"
 	mygrpc "github.com/NpoolPlatform/kyc-management/pkg/grpc"
 	myconst "github.com/NpoolPlatform/kyc-management/pkg/message/const"
 	"github.com/google/uuid"
@@ -116,12 +117,6 @@ func (s *Server) CreateKyc(ctx context.Context, in *npool.CreateKycRequest) (*np
 	_, err = mygrpc.CreateKycReview(ctx, resp.GetInfo().GetID(), resp.GetInfo().GetAppID())
 	if err != nil {
 		logger.Sugar().Errorf("CreateKyc call CreateReview error: %v", err)
-
-		err := kyc.DeleteUserKycByKycID(ctx, uuid.MustParse(resp.GetInfo().GetID()))
-		if err != nil {
-			logger.Sugar().Errorf("CreateKyc call DeleteUserKycByKycID error: %v", err)
-			return nil, status.Errorf(codes.Internal, "internal server error")
-		}
 		return nil, status.Error(codes.Internal, "internal server error")
 	}
 
@@ -146,6 +141,10 @@ func (s *Server) GetKycByUserID(ctx context.Context, in *npool.GetKycByUserIDReq
 
 	resp, err := kyc.GetKycByUserIDAndAppID(ctx, appID, userID)
 	if err != nil {
+		if ent.IsNotFound(err) {
+			logger.Sugar().Errorf("GetKycByUserID error: user %v record is not exist", in.GetUserID())
+			return nil, status.Errorf(codes.NotFound, "user %v record is not exist", in.GetUserID())
+		}
 		logger.Sugar().Errorf("GetKycByUserIDAndAppID error: internal sever error: %v", appID, err)
 		return nil, status.Error(codes.Internal, "internal server error")
 	}
@@ -165,7 +164,7 @@ func (s *Server) GetKycByAppID(ctx context.Context, in *npool.GetKycByAppIDReque
 	ctx, cancel := context.WithTimeout(ctx, myconst.GrpcTimeout)
 	defer cancel()
 
-	resp, err := kyc.GetKycByAppID(ctx, appID)
+	resp, total, err := kyc.GetAll(ctx, appID, in.Limit, in.Offset)
 	if err != nil {
 		logger.Sugar().Errorf("GetKycByAppID <%v> error: internal sever error: %v", appID, err)
 		return nil, status.Error(codes.Internal, "internal server error")
@@ -173,6 +172,7 @@ func (s *Server) GetKycByAppID(ctx context.Context, in *npool.GetKycByAppIDReque
 
 	return &npool.GetKycByAppIDResponse{
 		Infos: resp,
+		Total: int32(total),
 	}, nil
 }
 
@@ -180,13 +180,14 @@ func (s *Server) GetAllKyc(ctx context.Context, in *npool.GetAllKycRequest) (*np
 	ctx, cancel := context.WithTimeout(ctx, myconst.GrpcTimeout)
 	defer cancel()
 
-	resp, err := kyc.GetAll(ctx, in)
+	resp, total, err := kyc.GetAll(ctx, uuid.Nil, in.Limit, in.Offset)
 	if err != nil {
 		logger.Sugar().Errorf("fail to get kyc record: %v", err)
 		return nil, status.Errorf(codes.Internal, "internal server error: %v", err)
 	}
 	return &npool.GetAllKycResponse{
 		Infos: resp,
+		Total: int32(total),
 	}, nil
 }
 
