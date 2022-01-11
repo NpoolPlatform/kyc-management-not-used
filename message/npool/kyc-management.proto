@@ -131,15 +131,15 @@ message GetAllKycResponse {
 message UpdateKycRequest {
     string ID = 1;
     string UserID = 2;
-    string AppID = 14;
-    string FirstName = 3;
-    string LastName = 4;
-    string Region = 5;
-    string CardType = 6;
-    string CardID = 7;
-    string FrontCardImg = 8;
-    string BackCardImg = 9;
-    string UserHandlingCardImg = 10;
+    string AppID = 3;
+    string FirstName = 4;
+    string LastName = 5;
+    string Region = 6;
+    string CardType = 7;
+    string CardID = 8;
+    string FrontCardImg = 9;
+    string BackCardImg = 10;
+    string UserHandlingCardImg = 11;
 }
 
 message UpdateKycResponse {
