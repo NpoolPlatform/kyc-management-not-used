@@ -6,6 +6,7 @@ import (
 	pbapplication "github.com/NpoolPlatform/application-management/message/npool"
 	applicationconst "github.com/NpoolPlatform/application-management/pkg/message/const"
 	mygrpc "github.com/NpoolPlatform/go-service-framework/pkg/grpc"
+	myconst "github.com/NpoolPlatform/kyc-management/pkg/message/const"
 	pbreview "github.com/NpoolPlatform/review-service/message/npool"
 	reviewconst "github.com/NpoolPlatform/review-service/pkg/message/const"
 )
@@ -43,7 +44,7 @@ func CreateKycReview(ctx context.Context, kycID, appID string) (*pbreview.Create
 			ObjectType: "kyc",
 			ObjectID:   kycID,
 			AppID:      appID,
-			Domain:     "kyc-management-npool-top",
+			Domain:     myconst.ServiceName,
 		},
 	})
 	if err != nil {

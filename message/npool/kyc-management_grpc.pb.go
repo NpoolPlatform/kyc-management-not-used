@@ -26,8 +26,8 @@ type KycManagementClient interface {
 	GetKycByAppID(ctx context.Context, in *GetKycByAppIDRequest, opts ...grpc.CallOption) (*GetKycByAppIDResponse, error)
 	GetAllKyc(ctx context.Context, in *GetAllKycRequest, opts ...grpc.CallOption) (*GetAllKycResponse, error)
 	UpdateKyc(ctx context.Context, in *UpdateKycRequest, opts ...grpc.CallOption) (*UpdateKycResponse, error)
-	UploadKycImg(ctx context.Context, in *UploadKycImgRequest, opts ...grpc.CallOption) (*UploadKycImgResponse, error)
-	GetKycImg(ctx context.Context, in *GetKycImgRequest, opts ...grpc.CallOption) (*GetKycImgResponse, error)
+	UploadKycImage(ctx context.Context, in *UploadKycImageRequest, opts ...grpc.CallOption) (*UploadKycImageResponse, error)
+	GetKycImage(ctx context.Context, in *GetKycImageRequest, opts ...grpc.CallOption) (*GetKycImageResponse, error)
 }
 
 type kycManagementClient struct {
@@ -92,18 +92,18 @@ func (c *kycManagementClient) UpdateKyc(ctx context.Context, in *UpdateKycReques
 	return out, nil
 }
 
-func (c *kycManagementClient) UploadKycImg(ctx context.Context, in *UploadKycImgRequest, opts ...grpc.CallOption) (*UploadKycImgResponse, error) {
-	out := new(UploadKycImgResponse)
-	err := c.cc.Invoke(ctx, "/kyc.management.v1.KycManagement/UploadKycImg", in, out, opts...)
+func (c *kycManagementClient) UploadKycImage(ctx context.Context, in *UploadKycImageRequest, opts ...grpc.CallOption) (*UploadKycImageResponse, error) {
+	out := new(UploadKycImageResponse)
+	err := c.cc.Invoke(ctx, "/kyc.management.v1.KycManagement/UploadKycImage", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *kycManagementClient) GetKycImg(ctx context.Context, in *GetKycImgRequest, opts ...grpc.CallOption) (*GetKycImgResponse, error) {
-	out := new(GetKycImgResponse)
-	err := c.cc.Invoke(ctx, "/kyc.management.v1.KycManagement/GetKycImg", in, out, opts...)
+func (c *kycManagementClient) GetKycImage(ctx context.Context, in *GetKycImageRequest, opts ...grpc.CallOption) (*GetKycImageResponse, error) {
+	out := new(GetKycImageResponse)
+	err := c.cc.Invoke(ctx, "/kyc.management.v1.KycManagement/GetKycImage", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -121,8 +121,8 @@ type KycManagementServer interface {
 	GetKycByAppID(context.Context, *GetKycByAppIDRequest) (*GetKycByAppIDResponse, error)
 	GetAllKyc(context.Context, *GetAllKycRequest) (*GetAllKycResponse, error)
 	UpdateKyc(context.Context, *UpdateKycRequest) (*UpdateKycResponse, error)
-	UploadKycImg(context.Context, *UploadKycImgRequest) (*UploadKycImgResponse, error)
-	GetKycImg(context.Context, *GetKycImgRequest) (*GetKycImgResponse, error)
+	UploadKycImage(context.Context, *UploadKycImageRequest) (*UploadKycImageResponse, error)
+	GetKycImage(context.Context, *GetKycImageRequest) (*GetKycImageResponse, error)
 	mustEmbedUnimplementedKycManagementServer()
 }
 
@@ -148,11 +148,11 @@ func (UnimplementedKycManagementServer) GetAllKyc(context.Context, *GetAllKycReq
 func (UnimplementedKycManagementServer) UpdateKyc(context.Context, *UpdateKycRequest) (*UpdateKycResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateKyc not implemented")
 }
-func (UnimplementedKycManagementServer) UploadKycImg(context.Context, *UploadKycImgRequest) (*UploadKycImgResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UploadKycImg not implemented")
+func (UnimplementedKycManagementServer) UploadKycImage(context.Context, *UploadKycImageRequest) (*UploadKycImageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UploadKycImage not implemented")
 }
-func (UnimplementedKycManagementServer) GetKycImg(context.Context, *GetKycImgRequest) (*GetKycImgResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetKycImg not implemented")
+func (UnimplementedKycManagementServer) GetKycImage(context.Context, *GetKycImageRequest) (*GetKycImageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetKycImage not implemented")
 }
 func (UnimplementedKycManagementServer) mustEmbedUnimplementedKycManagementServer() {}
 
@@ -275,38 +275,38 @@ func _KycManagement_UpdateKyc_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _KycManagement_UploadKycImg_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UploadKycImgRequest)
+func _KycManagement_UploadKycImage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UploadKycImageRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(KycManagementServer).UploadKycImg(ctx, in)
+		return srv.(KycManagementServer).UploadKycImage(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/kyc.management.v1.KycManagement/UploadKycImg",
+		FullMethod: "/kyc.management.v1.KycManagement/UploadKycImage",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KycManagementServer).UploadKycImg(ctx, req.(*UploadKycImgRequest))
+		return srv.(KycManagementServer).UploadKycImage(ctx, req.(*UploadKycImageRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _KycManagement_GetKycImg_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetKycImgRequest)
+func _KycManagement_GetKycImage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetKycImageRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(KycManagementServer).GetKycImg(ctx, in)
+		return srv.(KycManagementServer).GetKycImage(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/kyc.management.v1.KycManagement/GetKycImg",
+		FullMethod: "/kyc.management.v1.KycManagement/GetKycImage",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KycManagementServer).GetKycImg(ctx, req.(*GetKycImgRequest))
+		return srv.(KycManagementServer).GetKycImage(ctx, req.(*GetKycImageRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -343,12 +343,12 @@ var KycManagement_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _KycManagement_UpdateKyc_Handler,
 		},
 		{
-			MethodName: "UploadKycImg",
-			Handler:    _KycManagement_UploadKycImg_Handler,
+			MethodName: "UploadKycImage",
+			Handler:    _KycManagement_UploadKycImage_Handler,
 		},
 		{
-			MethodName: "GetKycImg",
-			Handler:    _KycManagement_GetKycImg_Handler,
+			MethodName: "GetKycImage",
+			Handler:    _KycManagement_GetKycImage_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

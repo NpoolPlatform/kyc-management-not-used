@@ -46,15 +46,15 @@ service KycManagement {
             body: "*"
         };
     };
-    rpc UploadKycImg (UploadKycImgRequest) returns (UploadKycImgResponse) {
+    rpc UploadKycImage (UploadKycImageRequest) returns (UploadKycImageResponse) {
         option (google.api.http) = {
-            post: "/v1/upload/kyc/img"
+            post: "/v1/upload/kyc/image"
             body: "*"
         };
     };
-    rpc GetKycImg (GetKycImgRequest) returns (GetKycImgResponse) {
+    rpc GetKycImage (GetKycImageRequest) returns (GetKycImageResponse) {
         option (google.api.http) = {
-            post: "/v1/get/kyc/img"
+            post: "/v1/get/kyc/image"
             body: "*"
         };
     };
@@ -131,39 +131,38 @@ message GetAllKycResponse {
 message UpdateKycRequest {
     string ID = 1;
     string UserID = 2;
-    string AppID = 14;
-    string FirstName = 3;
-    string LastName = 4;
-    string Region = 5;
-    string CardType = 6;
-    string CardID = 7;
-    string FrontCardImg = 8;
-    string BackCardImg = 9;
-    string UserHandlingCardImg = 10;
+    string AppID = 3;
+    string FirstName = 4;
+    string LastName = 5;
+    string Region = 6;
+    string CardType = 7;
+    string CardID = 8;
+    string FrontCardImg = 9;
+    string BackCardImg = 10;
+    string UserHandlingCardImg = 11;
 }
 
 message UpdateKycResponse {
     KycInfo Info = 1;
 }
 
-message UploadKycImgRequest {
+message UploadKycImageRequest {
     string UserID = 1;
-    string ImgType = 2;
-    string ImgBase64 = 3;
+    string ImageType = 2;
+    string ImageBase64 = 3;
     string AppID = 4;
 }
 
-message UploadKycImgResponse {
-    // return ImgID
+message UploadKycImageResponse {
     string Info = 1;
 }
 
-message GetKycImgRequest {
+message GetKycImageRequest {
     string AppID = 1;
-    string ImgID = 2;
+    string UserID = 2;
+    string ImageS3Key = 3;
 }
 
-message GetKycImgResponse {
-    // return ImgBase64
+message GetKycImageResponse {
     string Info = 1;
 }

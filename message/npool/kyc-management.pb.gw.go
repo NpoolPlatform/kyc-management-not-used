@@ -236,8 +236,8 @@ func local_request_KycManagement_UpdateKyc_0(ctx context.Context, marshaler runt
 
 }
 
-func request_KycManagement_UploadKycImg_0(ctx context.Context, marshaler runtime.Marshaler, client KycManagementClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq UploadKycImgRequest
+func request_KycManagement_UploadKycImage_0(ctx context.Context, marshaler runtime.Marshaler, client KycManagementClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq UploadKycImageRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -248,13 +248,13 @@ func request_KycManagement_UploadKycImg_0(ctx context.Context, marshaler runtime
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := client.UploadKycImg(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.UploadKycImage(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_KycManagement_UploadKycImg_0(ctx context.Context, marshaler runtime.Marshaler, server KycManagementServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq UploadKycImgRequest
+func local_request_KycManagement_UploadKycImage_0(ctx context.Context, marshaler runtime.Marshaler, server KycManagementServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq UploadKycImageRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -265,13 +265,13 @@ func local_request_KycManagement_UploadKycImg_0(ctx context.Context, marshaler r
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := server.UploadKycImg(ctx, &protoReq)
+	msg, err := server.UploadKycImage(ctx, &protoReq)
 	return msg, metadata, err
 
 }
 
-func request_KycManagement_GetKycImg_0(ctx context.Context, marshaler runtime.Marshaler, client KycManagementClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetKycImgRequest
+func request_KycManagement_GetKycImage_0(ctx context.Context, marshaler runtime.Marshaler, client KycManagementClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq GetKycImageRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -282,13 +282,13 @@ func request_KycManagement_GetKycImg_0(ctx context.Context, marshaler runtime.Ma
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := client.GetKycImg(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.GetKycImage(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_KycManagement_GetKycImg_0(ctx context.Context, marshaler runtime.Marshaler, server KycManagementServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetKycImgRequest
+func local_request_KycManagement_GetKycImage_0(ctx context.Context, marshaler runtime.Marshaler, server KycManagementServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq GetKycImageRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -299,7 +299,7 @@ func local_request_KycManagement_GetKycImg_0(ctx context.Context, marshaler runt
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := server.GetKycImg(ctx, &protoReq)
+	msg, err := server.GetKycImage(ctx, &protoReq)
 	return msg, metadata, err
 
 }
@@ -448,18 +448,18 @@ func RegisterKycManagementHandlerServer(ctx context.Context, mux *runtime.ServeM
 
 	})
 
-	mux.Handle("POST", pattern_KycManagement_UploadKycImg_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_KycManagement_UploadKycImage_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/kyc.management.v1.KycManagement/UploadKycImg", runtime.WithHTTPPathPattern("/v1/upload/kyc/img"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/kyc.management.v1.KycManagement/UploadKycImage", runtime.WithHTTPPathPattern("/v1/upload/kyc/image"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_KycManagement_UploadKycImg_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_KycManagement_UploadKycImage_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -467,22 +467,22 @@ func RegisterKycManagementHandlerServer(ctx context.Context, mux *runtime.ServeM
 			return
 		}
 
-		forward_KycManagement_UploadKycImg_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_KycManagement_UploadKycImage_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_KycManagement_GetKycImg_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_KycManagement_GetKycImage_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/kyc.management.v1.KycManagement/GetKycImg", runtime.WithHTTPPathPattern("/v1/get/kyc/img"))
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/kyc.management.v1.KycManagement/GetKycImage", runtime.WithHTTPPathPattern("/v1/get/kyc/image"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_KycManagement_GetKycImg_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_KycManagement_GetKycImage_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -490,7 +490,7 @@ func RegisterKycManagementHandlerServer(ctx context.Context, mux *runtime.ServeM
 			return
 		}
 
-		forward_KycManagement_GetKycImg_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_KycManagement_GetKycImage_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -655,43 +655,43 @@ func RegisterKycManagementHandlerClient(ctx context.Context, mux *runtime.ServeM
 
 	})
 
-	mux.Handle("POST", pattern_KycManagement_UploadKycImg_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_KycManagement_UploadKycImage_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/kyc.management.v1.KycManagement/UploadKycImg", runtime.WithHTTPPathPattern("/v1/upload/kyc/img"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/kyc.management.v1.KycManagement/UploadKycImage", runtime.WithHTTPPathPattern("/v1/upload/kyc/image"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_KycManagement_UploadKycImg_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_KycManagement_UploadKycImage_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_KycManagement_UploadKycImg_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_KycManagement_UploadKycImage_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_KycManagement_GetKycImg_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_KycManagement_GetKycImage_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/kyc.management.v1.KycManagement/GetKycImg", runtime.WithHTTPPathPattern("/v1/get/kyc/img"))
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/kyc.management.v1.KycManagement/GetKycImage", runtime.WithHTTPPathPattern("/v1/get/kyc/image"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_KycManagement_GetKycImg_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_KycManagement_GetKycImage_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_KycManagement_GetKycImg_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_KycManagement_GetKycImage_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -711,9 +711,9 @@ var (
 
 	pattern_KycManagement_UpdateKyc_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "update", "kyc"}, ""))
 
-	pattern_KycManagement_UploadKycImg_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v1", "upload", "kyc", "img"}, ""))
+	pattern_KycManagement_UploadKycImage_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v1", "upload", "kyc", "image"}, ""))
 
-	pattern_KycManagement_GetKycImg_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v1", "get", "kyc", "img"}, ""))
+	pattern_KycManagement_GetKycImage_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"v1", "get", "kyc", "image"}, ""))
 )
 
 var (
@@ -729,7 +729,7 @@ var (
 
 	forward_KycManagement_UpdateKyc_0 = runtime.ForwardResponseMessage
 
-	forward_KycManagement_UploadKycImg_0 = runtime.ForwardResponseMessage
+	forward_KycManagement_UploadKycImage_0 = runtime.ForwardResponseMessage
 
-	forward_KycManagement_GetKycImg_0 = runtime.ForwardResponseMessage
+	forward_KycManagement_GetKycImage_0 = runtime.ForwardResponseMessage
 )
