@@ -109,38 +109,41 @@ func GetKycByID(ctx context.Context, kycID uuid.UUID) (*npool.KycInfo, error) {
 	return dbRowToKyc(info), nil
 }
 
-func GetAll(ctx context.Context, in *npool.GetAllKycInfosRequest) (*npool.GetAllKycInfosResponse, error) {
+func GetAll(ctx context.Context, appID uuid.UUID, limit, offset int32) ([]*npool.KycInfo, int, error) {
+	if limit == 0 {
+		limit = 10
+	}
+
 	cli, err := db.Client()
 	if err != nil {
-		return nil, xerrors.Errorf("fail get db client: %v", err)
+		return nil, 0, xerrors.Errorf("fail get db client: %v", err)
 	}
 
-	kycIDs := []uuid.UUID{}
-	for _, id := range in.KycIDs {
-		id, err := uuid.Parse(id)
-		if err != nil {
-			return nil, xerrors.Errorf("%v user kyc id invalid: %v", id, err)
-		}
-		kycIDs = append(kycIDs, id)
+	client := cli.Kyc.Query()
+
+	if appID != uuid.Nil {
+		client.Where(kyc.AppID(appID))
 	}
+
+	total, err := client.Count(ctx)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	infos, err := client.
+		Order(ent.Desc(kyc.FieldCreateAt)).
+		Offset(int(offset)).
+		Limit(int(limit)).All(ctx)
+	if err != nil {
+		return nil, 0, err
+	}
+
 	response := []*npool.KycInfo{}
-	for _, kycid := range kycIDs {
-		info, err := cli.
-			Kyc.
-			Query().
-			Where(
-				kyc.ID(kycid),
-			).Only(ctx)
-		if err != nil {
-			return nil, xerrors.Errorf("fail to get %v kyc info: %v", kycid, err)
-		}
-
+	for _, info := range infos {
 		response = append(response, dbRowToKyc(info))
 	}
 
-	return &npool.GetAllKycInfosResponse{
-		Infos: response,
-	}, nil
+	return response, total, nil
 }
 
 func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycResponse, error) {
@@ -149,69 +152,25 @@ func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycRe
 		return nil, xerrors.Errorf("fail get db client: %v", err)
 	}
 
-	userID, err := uuid.Parse(in.Info.UserID)
-	if err != nil {
-		return nil, xerrors.Errorf("invalid user id: %v", err)
-	}
-
-	appID, err := uuid.Parse(in.Info.AppID)
-	if err != nil {
-		return nil, xerrors.Errorf("invalid app id: %v", err)
-	}
-	id := ""
-	if in.Info.ID == "" {
-		info, err := cli.
-			Kyc.
-			Query().
-			Where(
-				kyc.And(
-					kyc.UserID(userID),
-					kyc.AppID(appID),
-				),
-			).Only(ctx)
-		if err != nil {
-			return nil, xerrors.Errorf("fail to query user kyc info: %v", err)
-		}
-
-		id = info.ID.String()
-	} else {
-		id = in.Info.ID
-	}
-
-	kycID, err := uuid.Parse(id)
-	if err != nil {
-		return nil, xerrors.Errorf("invalid kyc record id: %v", err)
-	}
-
 	info, err := cli.
 		Kyc.
-		UpdateOneID(kycID).
-		SetUserID(userID).
-		SetFirstName(in.Info.FirstName).
-		SetLastName(in.Info.LastName).
-		SetRegion(in.Info.Region).
-		SetCardType(in.Info.CardType).
-		SetCardID(in.Info.CardID).
-		SetFrontCardImg(in.Info.FrontCardImg).
-		SetBackCardImg(in.Info.BackCardImg).
-		SetUserHandlingCardImg(in.Info.UserHandlingCardImg).
+		UpdateOneID(uuid.MustParse(in.GetID())).
+		SetFirstName(in.GetFirstName()).
+		SetLastName(in.GetLastName()).
+		SetRegion(in.GetRegion()).
+		SetCardType(in.GetCardType()).
+		SetCardID(in.GetCardID()).
+		SetFrontCardImg(in.GetFrontCardImg()).
+		SetBackCardImg(in.GetBackCardImg()).
+		SetUserHandlingCardImg(in.GetUserHandlingCardImg()).
 		Save(ctx)
 	if err != nil {
-		return nil, xerrors.Errorf("fail to update user kyc: %v", err)
+		return nil, err
 	}
 
 	return &npool.UpdateKycResponse{
 		Info: dbRowToKyc(info),
 	}, nil
-}
-
-func DeleteUserKycByKycID(ctx context.Context, kycID uuid.UUID) error {
-	cli, err := db.Client()
-	if err != nil {
-		return xerrors.Errorf("fail to get db client: %v", err)
-	}
-
-	return cli.Kyc.DeleteOneID(kycID).Exec(ctx)
 }
 
 func ExistCradTypeCardIDInApp(ctx context.Context, cardType, cardID string, appID uuid.UUID) (bool, error) {
