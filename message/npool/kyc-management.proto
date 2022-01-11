@@ -46,15 +46,15 @@ service KycManagement {
             body: "*"
         };
     };
-    rpc UploadKycImg (UploadKycImgRequest) returns (UploadKycImgResponse) {
+    rpc UploadKycImage (UploadKycImageRequest) returns (UploadKycImageResponse) {
         option (google.api.http) = {
-            post: "/v1/upload/kyc/img"
+            post: "/v1/upload/kyc/image"
             body: "*"
         };
     };
-    rpc GetKycImg (GetKycImgRequest) returns (GetKycImgResponse) {
+    rpc GetKycImage (GetKycImageRequest) returns (GetKycImageResponse) {
         option (google.api.http) = {
-            post: "/v1/get/kyc/img"
+            post: "/v1/get/kyc/image"
             body: "*"
         };
     };
@@ -146,24 +146,23 @@ message UpdateKycResponse {
     KycInfo Info = 1;
 }
 
-message UploadKycImgRequest {
+message UploadKycImageRequest {
     string UserID = 1;
-    string ImgType = 2;
-    string ImgBase64 = 3;
+    string ImageType = 2;
+    string ImageBase64 = 3;
     string AppID = 4;
 }
 
-message UploadKycImgResponse {
-    // return ImgID
+message UploadKycImageResponse {
     string Info = 1;
 }
 
-message GetKycImgRequest {
+message GetKycImageRequest {
     string AppID = 1;
-    string ImgID = 2;
+    string UserID = 2;
+    string ImageS3Key = 3;
 }
 
-message GetKycImgResponse {
-    // return ImgBase64
+message GetKycImageResponse {
     string Info = 1;
 }
