@@ -120,6 +120,12 @@ func (s *Server) CreateKyc(ctx context.Context, in *npool.CreateKycRequest) (*np
 		return nil, status.Error(codes.Internal, "internal server error")
 	}
 
+	err = mygrpc.UpdateUserKycStatus(ctx, in.GetUserID(), in.GetAppID(), true)
+	if err != nil {
+		logger.Sugar().Errorf("CreateKyc call UpdateUserKycStatus error: %v", err)
+		return nil, status.Error(codes.Internal, "internal server error")
+	}
+
 	return resp, nil
 }
 

@@ -2,7 +2,6 @@ package s3
 
 import (
 	"context"
-	"encoding/base64"
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/oss"
 	"github.com/NpoolPlatform/kyc-management/message/npool"
@@ -10,10 +9,9 @@ import (
 )
 
 func UploadKycImg(ctx context.Context, in *npool.UploadKycImgRequest) (*npool.UploadKycImgResponse, error) {
-	encodeImg := base64.StdEncoding.EncodeToString([]byte(in.GetImgBase64()))
 	s3Key := "kyc/" + in.GetAppID() + "/" + in.GetUserID() + "/" + in.GetImgType()
 
-	err := oss.PutObject(ctx, s3Key, []byte(encodeImg), true)
+	err := oss.PutObject(ctx, s3Key, []byte(in.GetImgBase64()), true)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to upload img to s3: %v", err)
 	}
@@ -33,12 +31,7 @@ func GetKycImg(ctx context.Context, in *npool.GetKycImgRequest) (*npool.GetKycIm
 		return nil, xerrors.Errorf("empty response")
 	}
 
-	decodeImg, err := base64.StdEncoding.DecodeString(string(resp))
-	if err != nil {
-		return nil, xerrors.Errorf("fail to decode img: %v", err)
-	}
-
 	return &npool.GetKycImgResponse{
-		Info: string(decodeImg),
+		Info: string(resp),
 	}, nil
 }
