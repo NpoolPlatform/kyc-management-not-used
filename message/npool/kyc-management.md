@@ -330,7 +330,7 @@ Service Name
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
 | Version | [.google.protobuf.Empty](#google.protobuf.Empty) | [VersionResponse](#kyc.management.v1.VersionResponse) | Method Version |
-| CreateKycRecord | [CreateKycRequest](#kyc.management.v1.CreateKycRequest) | [CreateKycResponse](#kyc.management.v1.CreateKycResponse) |  |
+| CreateKyc | [CreateKycRequest](#kyc.management.v1.CreateKycRequest) | [CreateKycResponse](#kyc.management.v1.CreateKycResponse) |  |
 | GetKycByUserID | [GetKycByUserIDRequest](#kyc.management.v1.GetKycByUserIDRequest) | [GetKycByUserIDResponse](#kyc.management.v1.GetKycByUserIDResponse) |  |
 | GetKycByAppID | [GetKycByAppIDRequest](#kyc.management.v1.GetKycByAppIDRequest) | [GetKycByAppIDResponse](#kyc.management.v1.GetKycByAppIDResponse) |  |
 | GetAllKyc | [GetAllKycRequest](#kyc.management.v1.GetAllKycRequest) | [GetAllKycResponse](#kyc.management.v1.GetAllKycResponse) |  |

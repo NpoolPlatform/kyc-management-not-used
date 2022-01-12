@@ -96,7 +96,7 @@ func (s *Server) CreateKyc(ctx context.Context, in *npool.CreateKycRequest) (*np
 		logger.Sugar().Errorf("CreateKyc error: internal server error: %v", err)
 		return nil, status.Error(codes.Internal, "internal server error")
 	} else if exist {
-		logger.Sugar().Error("CreateKyc error: user has already created a kyc record")
+		logger.Sugar().Errorf("CreateKyc error: user <%v> has already created a kyc record in app <%v>", in.GetUserID(), in.GetAppID())
 		return nil, status.Error(codes.AlreadyExists, "user has already created a kyc record")
 	}
 
@@ -138,8 +138,8 @@ func (s *Server) GetKycByUserID(ctx context.Context, in *npool.GetKycByUserIDReq
 
 	userID, err := uuid.Parse(in.GetUserID())
 	if err != nil {
-		logger.Sugar().Errorf("GetKycByUserID error: invalid userID<%v>: %v", in.GetAppID(), err)
-		return nil, status.Errorf(codes.InvalidArgument, "userID <%v> is not invalid", in.GetAppID())
+		logger.Sugar().Errorf("GetKycByUserID error: invalid userID<%v>: %v", in.GetUserID(), err)
+		return nil, status.Errorf(codes.InvalidArgument, "userID <%v> is not invalid", in.GetUserID())
 	}
 
 	ctx, cancel := context.WithTimeout(ctx, myconst.GrpcTimeout)
@@ -148,7 +148,7 @@ func (s *Server) GetKycByUserID(ctx context.Context, in *npool.GetKycByUserIDReq
 	resp, err := kyc.GetKycByUserIDAndAppID(ctx, appID, userID)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			logger.Sugar().Errorf("GetKycByUserID error: user %v record is not exist", in.GetUserID())
+			logger.Sugar().Errorf("GetKycByUserID error: user %v record is not exist in app <%v>", in.GetUserID(), in.GetAppID())
 			return nil, status.Errorf(codes.NotFound, "user %v record is not exist", in.GetUserID())
 		}
 		logger.Sugar().Errorf("GetKycByUserIDAndAppID error: internal sever error: %v", appID, err)
@@ -188,7 +188,7 @@ func (s *Server) GetAllKyc(ctx context.Context, in *npool.GetAllKycRequest) (*np
 
 	resp, total, err := kyc.GetAll(ctx, uuid.Nil, in.GetLimit(), in.GetOffset())
 	if err != nil {
-		logger.Sugar().Errorf("fail to get kyc record: %v", err)
+		logger.Sugar().Errorf("GetAllKyc error: %v", err)
 		return nil, status.Errorf(codes.Internal, "internal server error: %v", err)
 	}
 	return &npool.GetAllKycResponse{
@@ -250,7 +250,7 @@ func (s *Server) UpdateKyc(ctx context.Context, in *npool.UpdateKycRequest) (*np
 
 	resp, err := kyc.Update(ctx, in)
 	if err != nil {
-		logger.Sugar().Errorf("fail to update kyc record: %v", err)
+		logger.Sugar().Errorf("UpdateKyc error: %v", err)
 		return nil, status.Errorf(codes.Internal, "internal server error: %v", err)
 	}
 	return resp, nil
