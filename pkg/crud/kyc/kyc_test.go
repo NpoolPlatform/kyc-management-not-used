@@ -2,7 +2,6 @@ package kyc
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -153,5 +152,7 @@ func TestKycCrud(t *testing.T) { // nolint
 	}
 
 	exist, err := ExistCradTypeCardIDInAppExceptUserID(ctx, cardType, cardID, uuid.MustParse(appID), uuid.New())
-	fmt.Println(exist, err)
+	if assert.Nil(t, err) {
+		assert.Equal(t, true, exist)
+	}
 }

@@ -208,7 +208,7 @@ func (s *Server) UpdateKyc(ctx context.Context, in *npool.UpdateKycRequest) (*np
 		BackCardImg:         in.GetBackCardImg(),
 		UserHandlingCardImg: in.GetUserHandlingCardImg(),
 	}); err != nil {
-		logger.Sugar().Errorf("CreateKyc error: %v", err.Error())
+		logger.Sugar().Errorf("UpdateKyc error: %v", err.Error())
 		return nil, err
 	}
 

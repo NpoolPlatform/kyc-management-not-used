@@ -4,7 +4,6 @@ package api
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -190,8 +189,6 @@ func TestKycAPI(t *testing.T) { // nolint
 			UserHandlingCardImg: kycInfo.GetUserHandlingCardImg(),
 		}).Post("http://localhost:50120/v1/update/kyc")
 	if assert.Nil(t, err) {
-		fmt.Printf("new user id: %v, old user id is: %v", newUserID, kycInfo.GetUserID())
 		assert.NotEqual(t, 200, updateKycRespW.StatusCode())
-		fmt.Println("update wrong kyc resp is: ", updateKycRespW)
 	}
 }
