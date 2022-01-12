@@ -20,37 +20,40 @@ func TestS3API(t *testing.T) { // nolint
 	cli := resty.New()
 
 	userID := uuid.New().String()
+	appID := uuid.New().String()
 	imgType := "test"
 	imgBase64 := "iVBORw0KGgoAAAANSUhEUgAAAB4AAAAZCAYAAAAmNZ4aAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAySURBVEhL7c2hAQAgDMTAp/vv3CI6QxDkTGROX3mgtjjHGMcYxxjHGMcYxxjHmN/GyQBA0AQuiLmS2gAAAABJRU5ErkJggg=="
-	imgID := imgType + userID
 
+	resposne := npool.UploadKycImageResponse{}
 	resp, err := cli.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.UploadKycImageRequest{
 			UserID:      userID,
+			AppID:       appID,
 			ImageType:   imgType,
 			ImageBase64: imgBase64,
-		}).Post("http://localhost:50120/v1/upload/kyc/img")
+		}).Post("http://localhost:50120/v1/upload/kyc/image")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp.StatusCode())
-		resposne := npool.UploadKycImageResponse{}
 		err := json.Unmarshal(resp.Body(), &resposne)
 		if assert.Nil(t, err) {
-			assert.Equal(t, resposne.Info, "kyc/"+imgID)
+			assert.Equal(t, "kyc/"+appID+"/"+userID+"/"+imgType, resposne.Info)
 		}
 	}
 
 	resp1, err := cli.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.GetKycImageRequest{
-			ImageS3Key: "kyc/" + imgID,
-		}).Post("http://localhost:50120/v1/get/kyc/img")
+			AppID:      appID,
+			UserID:     userID,
+			ImageS3Key: resposne.Info,
+		}).Post("http://localhost:50120/v1/get/kyc/image")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp1.StatusCode())
-		response := npool.GetKycImageResponse{}
-		err := json.Unmarshal(resp1.Body(), &response)
+		response1 := npool.GetKycImageResponse{}
+		err := json.Unmarshal(resp1.Body(), &response1)
 		if assert.Nil(t, err) {
-			assert.Equal(t, response.Info, imgBase64)
+			assert.Equal(t, imgBase64, response1.Info)
 		}
 	}
 }

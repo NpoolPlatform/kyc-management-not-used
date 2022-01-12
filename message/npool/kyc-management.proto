@@ -16,7 +16,7 @@ service KycManagement {
             body: "*"
         };
     }
-    rpc CreateKycRecord (CreateKycRequest) returns (CreateKycResponse) {
+    rpc CreateKyc (CreateKycRequest) returns (CreateKycResponse) {
         option (google.api.http) = {
             post: "/v1/create/kyc"
             body: "*"

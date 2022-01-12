@@ -21,7 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 type KycManagementClient interface {
 	// Method Version
 	Version(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*VersionResponse, error)
-	CreateKycRecord(ctx context.Context, in *CreateKycRequest, opts ...grpc.CallOption) (*CreateKycResponse, error)
+	CreateKyc(ctx context.Context, in *CreateKycRequest, opts ...grpc.CallOption) (*CreateKycResponse, error)
 	GetKycByUserID(ctx context.Context, in *GetKycByUserIDRequest, opts ...grpc.CallOption) (*GetKycByUserIDResponse, error)
 	GetKycByAppID(ctx context.Context, in *GetKycByAppIDRequest, opts ...grpc.CallOption) (*GetKycByAppIDResponse, error)
 	GetAllKyc(ctx context.Context, in *GetAllKycRequest, opts ...grpc.CallOption) (*GetAllKycResponse, error)
@@ -47,9 +47,9 @@ func (c *kycManagementClient) Version(ctx context.Context, in *emptypb.Empty, op
 	return out, nil
 }
 
-func (c *kycManagementClient) CreateKycRecord(ctx context.Context, in *CreateKycRequest, opts ...grpc.CallOption) (*CreateKycResponse, error) {
+func (c *kycManagementClient) CreateKyc(ctx context.Context, in *CreateKycRequest, opts ...grpc.CallOption) (*CreateKycResponse, error) {
 	out := new(CreateKycResponse)
-	err := c.cc.Invoke(ctx, "/kyc.management.v1.KycManagement/CreateKycRecord", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/kyc.management.v1.KycManagement/CreateKyc", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -116,7 +116,7 @@ func (c *kycManagementClient) GetKycImage(ctx context.Context, in *GetKycImageRe
 type KycManagementServer interface {
 	// Method Version
 	Version(context.Context, *emptypb.Empty) (*VersionResponse, error)
-	CreateKycRecord(context.Context, *CreateKycRequest) (*CreateKycResponse, error)
+	CreateKyc(context.Context, *CreateKycRequest) (*CreateKycResponse, error)
 	GetKycByUserID(context.Context, *GetKycByUserIDRequest) (*GetKycByUserIDResponse, error)
 	GetKycByAppID(context.Context, *GetKycByAppIDRequest) (*GetKycByAppIDResponse, error)
 	GetAllKyc(context.Context, *GetAllKycRequest) (*GetAllKycResponse, error)
@@ -133,8 +133,8 @@ type UnimplementedKycManagementServer struct {
 func (UnimplementedKycManagementServer) Version(context.Context, *emptypb.Empty) (*VersionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Version not implemented")
 }
-func (UnimplementedKycManagementServer) CreateKycRecord(context.Context, *CreateKycRequest) (*CreateKycResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateKycRecord not implemented")
+func (UnimplementedKycManagementServer) CreateKyc(context.Context, *CreateKycRequest) (*CreateKycResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateKyc not implemented")
 }
 func (UnimplementedKycManagementServer) GetKycByUserID(context.Context, *GetKycByUserIDRequest) (*GetKycByUserIDResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetKycByUserID not implemented")
@@ -185,20 +185,20 @@ func _KycManagement_Version_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-func _KycManagement_CreateKycRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _KycManagement_CreateKyc_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateKycRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(KycManagementServer).CreateKycRecord(ctx, in)
+		return srv.(KycManagementServer).CreateKyc(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/kyc.management.v1.KycManagement/CreateKycRecord",
+		FullMethod: "/kyc.management.v1.KycManagement/CreateKyc",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KycManagementServer).CreateKycRecord(ctx, req.(*CreateKycRequest))
+		return srv.(KycManagementServer).CreateKyc(ctx, req.(*CreateKycRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -323,8 +323,8 @@ var KycManagement_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _KycManagement_Version_Handler,
 		},
 		{
-			MethodName: "CreateKycRecord",
-			Handler:    _KycManagement_CreateKycRecord_Handler,
+			MethodName: "CreateKyc",
+			Handler:    _KycManagement_CreateKyc_Handler,
 		},
 		{
 			MethodName: "GetKycByUserID",

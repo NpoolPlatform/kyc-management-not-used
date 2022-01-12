@@ -1,9 +1,0 @@
-{
-	"appId": "89089012783789789719823798127398",
-	"cluster": "development",
-	"namespaceName": "kyc-management-npool-top",
-	"releaseKey": "20211110010812-529896b0aa4bb8ba",
-	"configurations": {
-		"database_name": "kyc_management"
-	}
-}

@@ -15,6 +15,7 @@ func dbRowToKyc(row *ent.Kyc) *npool.KycInfo {
 	return &npool.KycInfo{
 		ID:                  row.ID.String(),
 		UserID:              row.UserID.String(),
+		AppID:               row.AppID.String(),
 		FirstName:           row.FirstName,
 		LastName:            row.LastName,
 		Region:              row.Region,
@@ -173,7 +174,7 @@ func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycRe
 	}, nil
 }
 
-func ExistCradTypeCardIDInApp(ctx context.Context, cardType, cardID string, appID uuid.UUID) (bool, error) {
+func ExistCradTypeCardIDInAppExceptUserID(ctx context.Context, cardType, cardID string, appID, userID uuid.UUID) (bool, error) {
 	cli, err := db.Client()
 	if err != nil {
 		return false, xerrors.Errorf("fail to get db client: %v", err)
@@ -185,6 +186,7 @@ func ExistCradTypeCardIDInApp(ctx context.Context, cardType, cardID string, appI
 				kyc.AppID(appID),
 				kyc.CardType(cardType),
 				kyc.CardID(cardID),
+				kyc.UserIDNotIn(userID),
 			),
 		).
 		Exist(ctx)

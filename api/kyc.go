@@ -21,7 +21,7 @@ func kycInfoCheck(in *npool.KycInfo) error {
 	}
 
 	if len(in.GetCardID()) > 30 {
-		return status.Error(codes.InvalidArgument, "user card id is not invalid")
+		return status.Error(codes.InvalidArgument, "user card id is invalid")
 	}
 
 	if in.GetCardType() == "" {
@@ -33,7 +33,7 @@ func kycInfoCheck(in *npool.KycInfo) error {
 	}
 
 	if utf8.RuneCountInString(in.GetFirstName()) > 50 {
-		return status.Error(codes.InvalidArgument, "user first name is not invalid")
+		return status.Error(codes.InvalidArgument, "user first name is invalid")
 	}
 
 	if in.GetLastName() == "" {
@@ -41,7 +41,7 @@ func kycInfoCheck(in *npool.KycInfo) error {
 	}
 
 	if utf8.RuneCountInString(in.GetLastName()) > 50 {
-		return status.Error(codes.InvalidArgument, "user last name is not invalid")
+		return status.Error(codes.InvalidArgument, "user last name is invalid")
 	}
 
 	if in.GetRegion() == "" {
@@ -96,16 +96,16 @@ func (s *Server) CreateKyc(ctx context.Context, in *npool.CreateKycRequest) (*np
 		logger.Sugar().Errorf("CreateKyc error: internal server error: %v", err)
 		return nil, status.Error(codes.Internal, "internal server error")
 	} else if exist {
-		logger.Sugar().Error("CreateKyc error: user has already created a kyc record")
+		logger.Sugar().Errorf("CreateKyc error: user <%v> has already created a kyc record in app <%v>", in.GetUserID(), in.GetAppID())
 		return nil, status.Error(codes.AlreadyExists, "user has already created a kyc record")
 	}
 
-	if exist, err := kyc.ExistCradTypeCardIDInApp(ctx, in.GetCardType(), in.GetCardID(), appID); err != nil {
+	if exist, err := kyc.ExistCradTypeCardIDInAppExceptUserID(ctx, in.GetCardType(), in.GetCardID(), appID, userID); err != nil {
 		logger.Sugar().Errorf("CreateKyc error: internal server error: %v", err)
 		return nil, status.Error(codes.Internal, "internal server error")
 	} else if exist {
-		logger.Sugar().Error("CreayeKyc error: this card type card id has been existed in this app")
-		return nil, status.Error(codes.AlreadyExists, "this card type card id has been existed in this app")
+		logger.Sugar().Errorf("CreateKyc error: card id <%v> of card type <%v> from app <%v> has already been used by others", in.GetCardID(), in.GetCardType(), in.GetAppID())
+		return nil, status.Errorf(codes.AlreadyExists, "card id <%v> of card type <%v> from app <%v> has already been used by others", in.GetCardID(), in.GetCardType(), in.GetAppID())
 	}
 
 	resp, err := kyc.Create(ctx, in)
@@ -138,8 +138,8 @@ func (s *Server) GetKycByUserID(ctx context.Context, in *npool.GetKycByUserIDReq
 
 	userID, err := uuid.Parse(in.GetUserID())
 	if err != nil {
-		logger.Sugar().Errorf("GetKycByUserID error: invalid userID<%v>: %v", in.GetAppID(), err)
-		return nil, status.Errorf(codes.InvalidArgument, "userID <%v> is not invalid", in.GetAppID())
+		logger.Sugar().Errorf("GetKycByUserID error: invalid userID<%v>: %v", in.GetUserID(), err)
+		return nil, status.Errorf(codes.InvalidArgument, "userID <%v> is not invalid", in.GetUserID())
 	}
 
 	ctx, cancel := context.WithTimeout(ctx, myconst.GrpcTimeout)
@@ -148,7 +148,7 @@ func (s *Server) GetKycByUserID(ctx context.Context, in *npool.GetKycByUserIDReq
 	resp, err := kyc.GetKycByUserIDAndAppID(ctx, appID, userID)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			logger.Sugar().Errorf("GetKycByUserID error: user %v record is not exist", in.GetUserID())
+			logger.Sugar().Errorf("GetKycByUserID error: user %v record is not exist in app <%v>", in.GetUserID(), in.GetAppID())
 			return nil, status.Errorf(codes.NotFound, "user %v record is not exist", in.GetUserID())
 		}
 		logger.Sugar().Errorf("GetKycByUserIDAndAppID error: internal sever error: %v", appID, err)
@@ -188,7 +188,7 @@ func (s *Server) GetAllKyc(ctx context.Context, in *npool.GetAllKycRequest) (*np
 
 	resp, total, err := kyc.GetAll(ctx, uuid.Nil, in.GetLimit(), in.GetOffset())
 	if err != nil {
-		logger.Sugar().Errorf("fail to get kyc record: %v", err)
+		logger.Sugar().Errorf("GetAllKyc error: %v", err)
 		return nil, status.Errorf(codes.Internal, "internal server error: %v", err)
 	}
 	return &npool.GetAllKycResponse{
@@ -198,21 +198,6 @@ func (s *Server) GetAllKyc(ctx context.Context, in *npool.GetAllKycRequest) (*np
 }
 
 func (s *Server) UpdateKyc(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycResponse, error) {
-	if _, err := uuid.Parse(in.GetUserID()); err != nil {
-		logger.Sugar().Errorf("UpdateKyc error: invalid appID <%v>: %v", in.GetAppID(), err)
-		return nil, status.Errorf(codes.InvalidArgument, "invalid appID <%v>", in.GetAppID())
-	}
-
-	if _, err := uuid.Parse(in.GetUserID()); err != nil {
-		logger.Sugar().Errorf("UpdateKyc error: invalid userID <%v>: %v", in.GetUserID(), err)
-		return nil, status.Errorf(codes.InvalidArgument, "invalid userID <%v>", in.GetUserID())
-	}
-
-	if _, err := uuid.Parse(in.GetID()); err != nil {
-		logger.Sugar().Errorf("UpdateKyc error: invalid kyc id <%v>: %v", in.GetID(), err)
-		return nil, status.Errorf(codes.InvalidArgument, "invalid kyc id <%v>", in.GetID())
-	}
-
 	if err := kycInfoCheck(&npool.KycInfo{
 		FirstName:           in.GetFirstName(),
 		LastName:            in.GetLastName(),
@@ -227,12 +212,45 @@ func (s *Server) UpdateKyc(ctx context.Context, in *npool.UpdateKycRequest) (*np
 		return nil, err
 	}
 
+	userID, err := uuid.Parse(in.GetUserID())
+	if err != nil {
+		logger.Sugar().Errorf("UpdateKyc error: invalid appID <%v>: %v", in.GetAppID(), err)
+		return nil, status.Errorf(codes.InvalidArgument, "invalid appID <%v>", in.GetAppID())
+	}
+
+	appID, err := uuid.Parse(in.GetAppID())
+	if err != nil {
+		logger.Sugar().Errorf("UpdateKyc error: invalid userID <%v>: %v", in.GetUserID(), err)
+		return nil, status.Errorf(codes.InvalidArgument, "invalid userID <%v>", in.GetUserID())
+	}
+
+	if _, err := uuid.Parse(in.GetID()); err != nil {
+		logger.Sugar().Errorf("UpdateKyc error: invalid kyc id <%v>: %v", in.GetID(), err)
+		return nil, status.Errorf(codes.InvalidArgument, "invalid kyc id <%v>", in.GetID())
+	}
+
 	ctx, cancel := context.WithTimeout(ctx, myconst.GrpcTimeout)
 	defer cancel()
 
+	if exist, err := kyc.ExistKycByUserIDAndAppID(ctx, appID, userID); err != nil {
+		logger.Sugar().Errorf("UpdateKyc error: internal server error: %v", err)
+		return nil, status.Error(codes.Internal, "internal server error")
+	} else if !exist {
+		logger.Sugar().Errorf("UpdateKyc error: user <%v> has never been done kyc in app <%v>", in.GetUserID(), in.GetAppID())
+		return nil, status.Errorf(codes.NotFound, "user <%v> has never been done kyc in app <%v>", in.GetUserID(), in.GetAppID())
+	}
+
+	if exist, err := kyc.ExistCradTypeCardIDInAppExceptUserID(ctx, in.GetCardType(), in.GetCardID(), appID, userID); err != nil {
+		logger.Sugar().Errorf("UpdateKyc error: internal server error: %v", err)
+		return nil, status.Error(codes.Internal, "internal server error")
+	} else if exist {
+		logger.Sugar().Errorf("UpdateKyc error: card id <%v> of card type <%v> from app <%v> has already been used by others", in.GetCardID(), in.GetCardType(), in.GetAppID())
+		return nil, status.Errorf(codes.AlreadyExists, "card id <%v> of card type <%v> from app <%v> has already been used by others", in.GetCardID(), in.GetCardType(), in.GetAppID())
+	}
+
 	resp, err := kyc.Update(ctx, in)
 	if err != nil {
-		logger.Sugar().Errorf("fail to update kyc record: %v", err)
+		logger.Sugar().Errorf("UpdateKyc error: %v", err)
 		return nil, status.Errorf(codes.Internal, "internal server error: %v", err)
 	}
 	return resp, nil
