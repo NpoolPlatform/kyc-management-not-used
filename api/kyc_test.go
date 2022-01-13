@@ -191,4 +191,14 @@ func TestKycAPI(t *testing.T) { // nolint
 	if assert.Nil(t, err) {
 		assert.NotEqual(t, 200, updateKycRespW.StatusCode())
 	}
+
+	kycIDs := []string{kycInfo.ID}
+	getKycByKycIDsResp, err := cli.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(&npool.GetKycByKycIDsRequest{
+			KycIDs: kycIDs,
+		}).Post("http://localhost:50120/v1/get/kyc/by/kyc/ids")
+	if assert.Nil(t, err) {
+		assert.Equal(t, 200, getKycByKycIDsResp.StatusCode())
+	}
 }

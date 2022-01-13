@@ -191,3 +191,23 @@ func ExistCradTypeCardIDInAppExceptUserID(ctx context.Context, cardType, cardID 
 		).
 		Exist(ctx)
 }
+
+func GetKycByKycIDs(ctx context.Context, kycIDs []uuid.UUID) ([]*npool.KycInfo, error) {
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail to get db client: %v", err)
+	}
+
+	infos, err := cli.Kyc.Query().
+		Where(
+			kyc.IDIn(kycIDs...),
+		).All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	response := []*npool.KycInfo{}
+	for _, info := range infos {
+		response = append(response, dbRowToKyc(info))
+	}
+	return response, nil
+}

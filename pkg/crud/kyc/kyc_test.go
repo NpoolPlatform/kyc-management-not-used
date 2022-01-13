@@ -155,4 +155,16 @@ func TestKycCrud(t *testing.T) { // nolint
 	if assert.Nil(t, err) {
 		assert.Equal(t, true, exist)
 	}
+
+	kycIDs := []uuid.UUID{uuid.MustParse(kycID)}
+	infos, err = GetKycByKycIDs(ctx, kycIDs)
+	if assert.Nil(t, err) {
+		assert.NotNil(t, infos)
+	}
+
+	kycIDs = []uuid.UUID{uuid.MustParse("00000000-0000-0000-0000-000000000000")}
+	infos, err = GetKycByKycIDs(ctx, kycIDs)
+	if assert.Nil(t, err) {
+		assert.Equal(t, 0, len(infos))
+	}
 }
