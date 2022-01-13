@@ -7,9 +7,9 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/NpoolPlatform/kyc-management/message/npool"
 	myconst "github.com/NpoolPlatform/kyc-management/pkg/message/const"
 	testinit "github.com/NpoolPlatform/kyc-management/pkg/test-init"
+	npool "github.com/NpoolPlatform/message/npool/kyc"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 )

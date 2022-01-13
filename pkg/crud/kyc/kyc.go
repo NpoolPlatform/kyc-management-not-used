@@ -3,10 +3,10 @@ package kyc
 import (
 	"context"
 
-	"github.com/NpoolPlatform/kyc-management/message/npool"
 	"github.com/NpoolPlatform/kyc-management/pkg/db"
 	"github.com/NpoolPlatform/kyc-management/pkg/db/ent"
 	"github.com/NpoolPlatform/kyc-management/pkg/db/ent/kyc"
+	npool "github.com/NpoolPlatform/message/npool/kyc"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 )

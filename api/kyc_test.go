@@ -9,10 +9,10 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/NpoolPlatform/kyc-management/message/npool"
 	"github.com/NpoolPlatform/kyc-management/pkg/crud/kyc"
 	myconst "github.com/NpoolPlatform/kyc-management/pkg/message/const"
 	testinit "github.com/NpoolPlatform/kyc-management/pkg/test-init"
+	npool "github.com/NpoolPlatform/message/npool/kyc"
 	"github.com/go-resty/resty/v2"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"

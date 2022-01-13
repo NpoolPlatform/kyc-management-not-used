@@ -5,11 +5,10 @@ import (
 	"unicode/utf8"
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
-	"github.com/NpoolPlatform/kyc-management/message/npool"
 	"github.com/NpoolPlatform/kyc-management/pkg/crud/kyc"
 	"github.com/NpoolPlatform/kyc-management/pkg/db/ent"
-	mygrpc "github.com/NpoolPlatform/kyc-management/pkg/grpc"
 	myconst "github.com/NpoolPlatform/kyc-management/pkg/message/const"
+	npool "github.com/NpoolPlatform/message/npool/kyc"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -111,18 +110,6 @@ func (s *Server) CreateKyc(ctx context.Context, in *npool.CreateKycRequest) (*np
 	resp, err := kyc.Create(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("CreateKyc error: internal server error: %v", err)
-		return nil, status.Error(codes.Internal, "internal server error")
-	}
-
-	_, err = mygrpc.CreateKycReview(ctx, resp.GetInfo().GetID(), resp.GetInfo().GetAppID())
-	if err != nil {
-		logger.Sugar().Errorf("CreateKyc call CreateReview error: %v", err)
-		return nil, status.Error(codes.Internal, "internal server error")
-	}
-
-	err = mygrpc.UpdateUserKycStatus(ctx, in.GetUserID(), in.GetAppID(), true)
-	if err != nil {
-		logger.Sugar().Errorf("CreateKyc call UpdateUserKycStatus error: %v", err)
 		return nil, status.Error(codes.Internal, "internal server error")
 	}
 
