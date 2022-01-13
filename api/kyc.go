@@ -275,17 +275,6 @@ func (s *Server) GetKycByKycIDs(ctx context.Context, in *npool.GetKycByKycIDsReq
 	ctx, cancel := context.WithTimeout(ctx, myconst.GrpcTimeout)
 	defer cancel()
 
-	if len(in.GetKycIDs()) == 1 {
-		resp, err := kyc.GetKycByID(ctx, uuid.MustParse(in.GetKycIDs()[0]))
-		if err != nil {
-			logger.Sugar().Errorf("GetKycByKycIDs error: internal server error: %v", err)
-			return nil, status.Error(codes.Internal, "internal server error")
-		}
-		return &npool.GetKycByKycIDsResponse{
-			Infos: []*npool.KycInfo{resp},
-		}, nil
-	}
-
 	resp, err := kyc.GetKycByKycIDs(ctx, kycIDs)
 	if err != nil {
 		logger.Sugar().Errorf("GetKycByKycIDs error: internal server error: %v", err)
