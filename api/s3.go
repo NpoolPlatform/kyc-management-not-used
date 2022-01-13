@@ -5,9 +5,9 @@ import (
 	"errors"
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
-	"github.com/NpoolPlatform/kyc-management/message/npool"
 	myconst "github.com/NpoolPlatform/kyc-management/pkg/message/const"
 	"github.com/NpoolPlatform/kyc-management/pkg/s3"
+	npool "github.com/NpoolPlatform/message/npool/kyc"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

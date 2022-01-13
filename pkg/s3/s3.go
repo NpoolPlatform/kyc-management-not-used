@@ -5,7 +5,7 @@ import (
 	"errors"
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/oss"
-	"github.com/NpoolPlatform/kyc-management/message/npool"
+	npool "github.com/NpoolPlatform/message/npool/kyc"
 )
 
 var ErrNoImage = errors.New("there is no image from this s3 key")
