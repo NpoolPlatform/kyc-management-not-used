@@ -255,3 +255,33 @@ func (s *Server) UpdateKyc(ctx context.Context, in *npool.UpdateKycRequest) (*np
 	}
 	return resp, nil
 }
+
+func (s *Server) GetKycByKycIDs(ctx context.Context, in *npool.GetKycByKycIDsRequest) (*npool.GetKycByKycIDsResponse, error) {
+	if in.GetKycIDs() == nil || len(in.GetKycIDs()) == 0 {
+		logger.Sugar().Error("GetKycByKycIDs error: kyc ids can not be empty")
+		return nil, status.Error(codes.InvalidArgument, "kyc ids can not be empty")
+	}
+
+	kycIDs := []uuid.UUID{}
+	for _, kycID := range in.GetKycIDs() {
+		id, err := uuid.Parse(kycID)
+		if err != nil {
+			logger.Sugar().Errorf("GetKycByKycIDs error: invalid kyc id <%v>, %v", kycID, err)
+			return nil, status.Errorf(codes.InvalidArgument, "invalid kyc id <%v>", kycID)
+		}
+		kycIDs = append(kycIDs, id)
+	}
+
+	ctx, cancel := context.WithTimeout(ctx, myconst.GrpcTimeout)
+	defer cancel()
+
+	resp, err := kyc.GetKycByKycIDs(ctx, kycIDs)
+	if err != nil {
+		logger.Sugar().Errorf("GetKycByKycIDs error: internal server error: %v", err)
+		return nil, status.Error(codes.Internal, "internal server error")
+	}
+
+	return &npool.GetKycByKycIDsResponse{
+		Infos: resp,
+	}, nil
+}

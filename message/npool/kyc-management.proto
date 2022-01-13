@@ -58,6 +58,12 @@ service KycManagement {
             body: "*"
         };
     };
+    rpc GetKycByKycIDs (GetKycByKycIDsRequest) returns (GetKycByKycIDsResponse) {
+        option (google.api.http) = {
+            post: "/v1/get/kyc/by/kyc/ids"
+            body: "*"
+        };
+    };
 }
 
 // request body and response
@@ -165,4 +171,12 @@ message GetKycImageRequest {
 
 message GetKycImageResponse {
     string Info = 1;
+}
+
+message GetKycByKycIDsRequest {
+    repeated string KycIDs = 1;
+}
+
+message GetKycByKycIDsResponse {
+    repeated KycInfo Infos = 1;
 }

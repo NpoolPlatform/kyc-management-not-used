@@ -10,6 +10,8 @@
     - [GetAllKycResponse](#kyc.management.v1.GetAllKycResponse)
     - [GetKycByAppIDRequest](#kyc.management.v1.GetKycByAppIDRequest)
     - [GetKycByAppIDResponse](#kyc.management.v1.GetKycByAppIDResponse)
+    - [GetKycByKycIDsRequest](#kyc.management.v1.GetKycByKycIDsRequest)
+    - [GetKycByKycIDsResponse](#kyc.management.v1.GetKycByKycIDsResponse)
     - [GetKycByUserIDRequest](#kyc.management.v1.GetKycByUserIDRequest)
     - [GetKycByUserIDResponse](#kyc.management.v1.GetKycByUserIDResponse)
     - [GetKycImageRequest](#kyc.management.v1.GetKycImageRequest)
@@ -132,6 +134,36 @@
 | ----- | ---- | ----- | ----------- |
 | Infos | [KycInfo](#kyc.management.v1.KycInfo) | repeated |  |
 | Total | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="kyc.management.v1.GetKycByKycIDsRequest"></a>
+
+### GetKycByKycIDsRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| KycIDs | [string](#string) | repeated |  |
+
+
+
+
+
+
+<a name="kyc.management.v1.GetKycByKycIDsResponse"></a>
+
+### GetKycByKycIDsResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Infos | [KycInfo](#kyc.management.v1.KycInfo) | repeated |  |
 
 
 
@@ -337,6 +369,7 @@ Service Name
 | UpdateKyc | [UpdateKycRequest](#kyc.management.v1.UpdateKycRequest) | [UpdateKycResponse](#kyc.management.v1.UpdateKycResponse) |  |
 | UploadKycImage | [UploadKycImageRequest](#kyc.management.v1.UploadKycImageRequest) | [UploadKycImageResponse](#kyc.management.v1.UploadKycImageResponse) |  |
 | GetKycImage | [GetKycImageRequest](#kyc.management.v1.GetKycImageRequest) | [GetKycImageResponse](#kyc.management.v1.GetKycImageResponse) |  |
+| GetKycByKycIDs | [GetKycByKycIDsRequest](#kyc.management.v1.GetKycByKycIDsRequest) | [GetKycByKycIDsResponse](#kyc.management.v1.GetKycByKycIDsResponse) |  |
 
  
 

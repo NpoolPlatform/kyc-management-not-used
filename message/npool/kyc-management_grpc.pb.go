@@ -28,6 +28,7 @@ type KycManagementClient interface {
 	UpdateKyc(ctx context.Context, in *UpdateKycRequest, opts ...grpc.CallOption) (*UpdateKycResponse, error)
 	UploadKycImage(ctx context.Context, in *UploadKycImageRequest, opts ...grpc.CallOption) (*UploadKycImageResponse, error)
 	GetKycImage(ctx context.Context, in *GetKycImageRequest, opts ...grpc.CallOption) (*GetKycImageResponse, error)
+	GetKycByKycIDs(ctx context.Context, in *GetKycByKycIDsRequest, opts ...grpc.CallOption) (*GetKycByKycIDsResponse, error)
 }
 
 type kycManagementClient struct {
@@ -110,6 +111,15 @@ func (c *kycManagementClient) GetKycImage(ctx context.Context, in *GetKycImageRe
 	return out, nil
 }
 
+func (c *kycManagementClient) GetKycByKycIDs(ctx context.Context, in *GetKycByKycIDsRequest, opts ...grpc.CallOption) (*GetKycByKycIDsResponse, error) {
+	out := new(GetKycByKycIDsResponse)
+	err := c.cc.Invoke(ctx, "/kyc.management.v1.KycManagement/GetKycByKycIDs", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // KycManagementServer is the server API for KycManagement service.
 // All implementations must embed UnimplementedKycManagementServer
 // for forward compatibility
@@ -123,6 +133,7 @@ type KycManagementServer interface {
 	UpdateKyc(context.Context, *UpdateKycRequest) (*UpdateKycResponse, error)
 	UploadKycImage(context.Context, *UploadKycImageRequest) (*UploadKycImageResponse, error)
 	GetKycImage(context.Context, *GetKycImageRequest) (*GetKycImageResponse, error)
+	GetKycByKycIDs(context.Context, *GetKycByKycIDsRequest) (*GetKycByKycIDsResponse, error)
 	mustEmbedUnimplementedKycManagementServer()
 }
 
@@ -153,6 +164,9 @@ func (UnimplementedKycManagementServer) UploadKycImage(context.Context, *UploadK
 }
 func (UnimplementedKycManagementServer) GetKycImage(context.Context, *GetKycImageRequest) (*GetKycImageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetKycImage not implemented")
+}
+func (UnimplementedKycManagementServer) GetKycByKycIDs(context.Context, *GetKycByKycIDsRequest) (*GetKycByKycIDsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetKycByKycIDs not implemented")
 }
 func (UnimplementedKycManagementServer) mustEmbedUnimplementedKycManagementServer() {}
 
@@ -311,6 +325,24 @@ func _KycManagement_GetKycImage_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _KycManagement_GetKycByKycIDs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetKycByKycIDsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(KycManagementServer).GetKycByKycIDs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/kyc.management.v1.KycManagement/GetKycByKycIDs",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(KycManagementServer).GetKycByKycIDs(ctx, req.(*GetKycByKycIDsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // KycManagement_ServiceDesc is the grpc.ServiceDesc for KycManagement service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -349,6 +381,10 @@ var KycManagement_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetKycImage",
 			Handler:    _KycManagement_GetKycImage_Handler,
+		},
+		{
+			MethodName: "GetKycByKycIDs",
+			Handler:    _KycManagement_GetKycByKycIDs_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
