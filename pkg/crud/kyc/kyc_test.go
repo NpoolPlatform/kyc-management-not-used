@@ -34,16 +34,18 @@ func TestKycCrud(t *testing.T) { // nolint
 	cardID := "test123131"
 	frontCardImage := "31231313112"
 	backCardImage := "312313213121"
-	userHandlingCardImage := "12312312321312"
+	userHandingCardImage := "12312312321312"
 
 	createKycRequest := &npool.CreateKycRequest{
-		UserID:              userID,
-		AppID:               appID,
-		CardType:            cardType,
-		CardID:              cardID,
-		FrontCardImg:        frontCardImage,
-		BackCardImg:         backCardImage,
-		UserHandlingCardImg: userHandlingCardImage,
+		Info: &npool.KycInfo{
+			UserID:             userID,
+			AppID:              appID,
+			CardType:           cardType,
+			CardID:             cardID,
+			FrontCardImg:       frontCardImage,
+			BackCardImg:        backCardImage,
+			UserHandingCardImg: userHandingCardImage,
+		},
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), myconst.GrpcTimeout)
@@ -61,7 +63,7 @@ func TestKycCrud(t *testing.T) { // nolint
 		assert.Equal(t, cardID, createResp.GetInfo().GetCardID())
 		assert.Equal(t, frontCardImage, createResp.GetInfo().GetFrontCardImg())
 		assert.Equal(t, backCardImage, createResp.GetInfo().GetBackCardImg())
-		assert.Equal(t, userHandlingCardImage, createResp.GetInfo().GetUserHandlingCardImg())
+		assert.Equal(t, userHandingCardImage, createResp.GetInfo().GetUserHandingCardImg())
 	}
 
 	getKycByUserIDAndAppIDResp, err := GetKycByUserIDAndAppID(ctx, uuid.MustParse(appID), uuid.MustParse(userID))
@@ -73,7 +75,7 @@ func TestKycCrud(t *testing.T) { // nolint
 		assert.Equal(t, cardID, getKycByUserIDAndAppIDResp.GetCardID())
 		assert.Equal(t, frontCardImage, getKycByUserIDAndAppIDResp.GetFrontCardImg())
 		assert.Equal(t, backCardImage, getKycByUserIDAndAppIDResp.GetBackCardImg())
-		assert.Equal(t, userHandlingCardImage, getKycByUserIDAndAppIDResp.GetUserHandlingCardImg())
+		assert.Equal(t, userHandingCardImage, getKycByUserIDAndAppIDResp.GetUserHandingCardImg())
 	}
 
 	existKycByUserIDAndAppIDResp, err := ExistKycByUserIDAndAppID(ctx, uuid.MustParse(appID), uuid.MustParse(userID))
@@ -90,7 +92,7 @@ func TestKycCrud(t *testing.T) { // nolint
 		assert.Equal(t, cardID, getKycByIDResp.GetCardID())
 		assert.Equal(t, frontCardImage, getKycByIDResp.GetFrontCardImg())
 		assert.Equal(t, backCardImage, getKycByIDResp.GetBackCardImg())
-		assert.Equal(t, userHandlingCardImage, getKycByIDResp.GetUserHandlingCardImg())
+		assert.Equal(t, userHandingCardImage, getKycByIDResp.GetUserHandingCardImg())
 	}
 
 	infos, total, err := GetAll(ctx, uuid.MustParse(appID), 5, 0)
@@ -108,14 +110,16 @@ func TestKycCrud(t *testing.T) { // nolint
 	}
 
 	updateKycRequest := &npool.UpdateKycRequest{
-		ID:                  kycID,
-		UserID:              userID,
-		AppID:               appID,
-		CardType:            cardType,
-		CardID:              cardID,
-		FrontCardImg:        frontCardImage,
-		BackCardImg:         backCardImage,
-		UserHandlingCardImg: userHandlingCardImage,
+		Info: &npool.KycInfo{
+			ID:                 kycID,
+			UserID:             userID,
+			AppID:              appID,
+			CardType:           cardType,
+			CardID:             cardID,
+			FrontCardImg:       frontCardImage,
+			BackCardImg:        backCardImage,
+			UserHandingCardImg: userHandingCardImage,
+		},
 	}
 
 	updateKycResp, err := Update(ctx, updateKycRequest)
@@ -127,7 +131,7 @@ func TestKycCrud(t *testing.T) { // nolint
 		assert.Equal(t, cardID, updateKycResp.GetInfo().GetCardID())
 		assert.Equal(t, frontCardImage, updateKycResp.GetInfo().GetFrontCardImg())
 		assert.Equal(t, backCardImage, updateKycResp.GetInfo().GetBackCardImg())
-		assert.Equal(t, userHandlingCardImage, updateKycResp.GetInfo().GetUserHandlingCardImg())
+		assert.Equal(t, userHandingCardImage, updateKycResp.GetInfo().GetUserHandingCardImg())
 	}
 
 	exist, err := ExistCradTypeCardIDInAppExceptUserID(ctx, cardType, cardID, uuid.MustParse(appID), uuid.New())

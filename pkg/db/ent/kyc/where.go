@@ -133,10 +133,10 @@ func BackCardImg(v string) predicate.Kyc {
 	})
 }
 
-// UserHandlingCardImg applies equality check predicate on the "user_handling_card_img" field. It's identical to UserHandlingCardImgEQ.
-func UserHandlingCardImg(v string) predicate.Kyc {
+// UserHandingCardImg applies equality check predicate on the "user_handing_card_img" field. It's identical to UserHandingCardImgEQ.
+func UserHandingCardImg(v string) predicate.Kyc {
 	return predicate.Kyc(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldUserHandlingCardImg), v))
+		s.Where(sql.EQ(s.C(FieldUserHandingCardImg), v))
 	})
 }
 
@@ -750,22 +750,22 @@ func BackCardImgContainsFold(v string) predicate.Kyc {
 	})
 }
 
-// UserHandlingCardImgEQ applies the EQ predicate on the "user_handling_card_img" field.
-func UserHandlingCardImgEQ(v string) predicate.Kyc {
+// UserHandingCardImgEQ applies the EQ predicate on the "user_handing_card_img" field.
+func UserHandingCardImgEQ(v string) predicate.Kyc {
 	return predicate.Kyc(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldUserHandlingCardImg), v))
+		s.Where(sql.EQ(s.C(FieldUserHandingCardImg), v))
 	})
 }
 
-// UserHandlingCardImgNEQ applies the NEQ predicate on the "user_handling_card_img" field.
-func UserHandlingCardImgNEQ(v string) predicate.Kyc {
+// UserHandingCardImgNEQ applies the NEQ predicate on the "user_handing_card_img" field.
+func UserHandingCardImgNEQ(v string) predicate.Kyc {
 	return predicate.Kyc(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldUserHandlingCardImg), v))
+		s.Where(sql.NEQ(s.C(FieldUserHandingCardImg), v))
 	})
 }
 
-// UserHandlingCardImgIn applies the In predicate on the "user_handling_card_img" field.
-func UserHandlingCardImgIn(vs ...string) predicate.Kyc {
+// UserHandingCardImgIn applies the In predicate on the "user_handing_card_img" field.
+func UserHandingCardImgIn(vs ...string) predicate.Kyc {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -777,12 +777,12 @@ func UserHandlingCardImgIn(vs ...string) predicate.Kyc {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.In(s.C(FieldUserHandlingCardImg), v...))
+		s.Where(sql.In(s.C(FieldUserHandingCardImg), v...))
 	})
 }
 
-// UserHandlingCardImgNotIn applies the NotIn predicate on the "user_handling_card_img" field.
-func UserHandlingCardImgNotIn(vs ...string) predicate.Kyc {
+// UserHandingCardImgNotIn applies the NotIn predicate on the "user_handing_card_img" field.
+func UserHandingCardImgNotIn(vs ...string) predicate.Kyc {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -794,70 +794,70 @@ func UserHandlingCardImgNotIn(vs ...string) predicate.Kyc {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.NotIn(s.C(FieldUserHandlingCardImg), v...))
+		s.Where(sql.NotIn(s.C(FieldUserHandingCardImg), v...))
 	})
 }
 
-// UserHandlingCardImgGT applies the GT predicate on the "user_handling_card_img" field.
-func UserHandlingCardImgGT(v string) predicate.Kyc {
+// UserHandingCardImgGT applies the GT predicate on the "user_handing_card_img" field.
+func UserHandingCardImgGT(v string) predicate.Kyc {
 	return predicate.Kyc(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldUserHandlingCardImg), v))
+		s.Where(sql.GT(s.C(FieldUserHandingCardImg), v))
 	})
 }
 
-// UserHandlingCardImgGTE applies the GTE predicate on the "user_handling_card_img" field.
-func UserHandlingCardImgGTE(v string) predicate.Kyc {
+// UserHandingCardImgGTE applies the GTE predicate on the "user_handing_card_img" field.
+func UserHandingCardImgGTE(v string) predicate.Kyc {
 	return predicate.Kyc(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldUserHandlingCardImg), v))
+		s.Where(sql.GTE(s.C(FieldUserHandingCardImg), v))
 	})
 }
 
-// UserHandlingCardImgLT applies the LT predicate on the "user_handling_card_img" field.
-func UserHandlingCardImgLT(v string) predicate.Kyc {
+// UserHandingCardImgLT applies the LT predicate on the "user_handing_card_img" field.
+func UserHandingCardImgLT(v string) predicate.Kyc {
 	return predicate.Kyc(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldUserHandlingCardImg), v))
+		s.Where(sql.LT(s.C(FieldUserHandingCardImg), v))
 	})
 }
 
-// UserHandlingCardImgLTE applies the LTE predicate on the "user_handling_card_img" field.
-func UserHandlingCardImgLTE(v string) predicate.Kyc {
+// UserHandingCardImgLTE applies the LTE predicate on the "user_handing_card_img" field.
+func UserHandingCardImgLTE(v string) predicate.Kyc {
 	return predicate.Kyc(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldUserHandlingCardImg), v))
+		s.Where(sql.LTE(s.C(FieldUserHandingCardImg), v))
 	})
 }
 
-// UserHandlingCardImgContains applies the Contains predicate on the "user_handling_card_img" field.
-func UserHandlingCardImgContains(v string) predicate.Kyc {
+// UserHandingCardImgContains applies the Contains predicate on the "user_handing_card_img" field.
+func UserHandingCardImgContains(v string) predicate.Kyc {
 	return predicate.Kyc(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldUserHandlingCardImg), v))
+		s.Where(sql.Contains(s.C(FieldUserHandingCardImg), v))
 	})
 }
 
-// UserHandlingCardImgHasPrefix applies the HasPrefix predicate on the "user_handling_card_img" field.
-func UserHandlingCardImgHasPrefix(v string) predicate.Kyc {
+// UserHandingCardImgHasPrefix applies the HasPrefix predicate on the "user_handing_card_img" field.
+func UserHandingCardImgHasPrefix(v string) predicate.Kyc {
 	return predicate.Kyc(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldUserHandlingCardImg), v))
+		s.Where(sql.HasPrefix(s.C(FieldUserHandingCardImg), v))
 	})
 }
 
-// UserHandlingCardImgHasSuffix applies the HasSuffix predicate on the "user_handling_card_img" field.
-func UserHandlingCardImgHasSuffix(v string) predicate.Kyc {
+// UserHandingCardImgHasSuffix applies the HasSuffix predicate on the "user_handing_card_img" field.
+func UserHandingCardImgHasSuffix(v string) predicate.Kyc {
 	return predicate.Kyc(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldUserHandlingCardImg), v))
+		s.Where(sql.HasSuffix(s.C(FieldUserHandingCardImg), v))
 	})
 }
 
-// UserHandlingCardImgEqualFold applies the EqualFold predicate on the "user_handling_card_img" field.
-func UserHandlingCardImgEqualFold(v string) predicate.Kyc {
+// UserHandingCardImgEqualFold applies the EqualFold predicate on the "user_handing_card_img" field.
+func UserHandingCardImgEqualFold(v string) predicate.Kyc {
 	return predicate.Kyc(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldUserHandlingCardImg), v))
+		s.Where(sql.EqualFold(s.C(FieldUserHandingCardImg), v))
 	})
 }
 
-// UserHandlingCardImgContainsFold applies the ContainsFold predicate on the "user_handling_card_img" field.
-func UserHandlingCardImgContainsFold(v string) predicate.Kyc {
+// UserHandingCardImgContainsFold applies the ContainsFold predicate on the "user_handing_card_img" field.
+func UserHandingCardImgContainsFold(v string) predicate.Kyc {
 	return predicate.Kyc(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldUserHandlingCardImg), v))
+		s.Where(sql.ContainsFold(s.C(FieldUserHandingCardImg), v))
 	})
 }
 

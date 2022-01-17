@@ -13,16 +13,16 @@ import (
 
 func dbRowToKyc(row *ent.Kyc) *npool.KycInfo {
 	return &npool.KycInfo{
-		ID:                  row.ID.String(),
-		UserID:              row.UserID.String(),
-		AppID:               row.AppID.String(),
-		CardType:            row.CardType,
-		CardID:              row.CardID,
-		FrontCardImg:        row.FrontCardImg,
-		BackCardImg:         row.BackCardImg,
-		UserHandlingCardImg: row.UserHandlingCardImg,
-		CreateAt:            row.CreateAt,
-		UpdateAt:            row.UpdateAt,
+		ID:                 row.ID.String(),
+		UserID:             row.UserID.String(),
+		AppID:              row.AppID.String(),
+		CardType:           row.CardType,
+		CardID:             row.CardID,
+		FrontCardImg:       row.FrontCardImg,
+		BackCardImg:        row.BackCardImg,
+		UserHandingCardImg: row.UserHandingCardImg,
+		CreateAt:           row.CreateAt,
+		UpdateAt:           row.UpdateAt,
 	}
 }
 
@@ -35,13 +35,13 @@ func Create(ctx context.Context, in *npool.CreateKycRequest) (*npool.CreateKycRe
 	info, err := cli.
 		Kyc.
 		Create().
-		SetUserID(uuid.MustParse(in.GetUserID())).
-		SetAppID(uuid.MustParse(in.GetAppID())).
-		SetCardType(in.GetCardType()).
-		SetCardID(in.GetCardID()).
-		SetFrontCardImg(in.GetFrontCardImg()).
-		SetBackCardImg(in.GetBackCardImg()).
-		SetUserHandlingCardImg(in.GetUserHandlingCardImg()).
+		SetUserID(uuid.MustParse(in.GetInfo().GetUserID())).
+		SetAppID(uuid.MustParse(in.GetInfo().GetAppID())).
+		SetCardType(in.GetInfo().GetCardType()).
+		SetCardID(in.GetInfo().GetCardID()).
+		SetFrontCardImg(in.GetInfo().GetFrontCardImg()).
+		SetBackCardImg(in.GetInfo().GetBackCardImg()).
+		SetUserHandingCardImg(in.GetInfo().GetUserHandingCardImg()).
 		Save(ctx)
 	if err != nil {
 		return nil, err
@@ -149,12 +149,12 @@ func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycRe
 
 	info, err := cli.
 		Kyc.
-		UpdateOneID(uuid.MustParse(in.GetID())).
-		SetCardType(in.GetCardType()).
-		SetCardID(in.GetCardID()).
-		SetFrontCardImg(in.GetFrontCardImg()).
-		SetBackCardImg(in.GetBackCardImg()).
-		SetUserHandlingCardImg(in.GetUserHandlingCardImg()).
+		UpdateOneID(uuid.MustParse(in.GetInfo().GetID())).
+		SetCardType(in.GetInfo().GetCardType()).
+		SetCardID(in.GetInfo().GetCardID()).
+		SetFrontCardImg(in.GetInfo().GetFrontCardImg()).
+		SetBackCardImg(in.GetInfo().GetBackCardImg()).
+		SetUserHandingCardImg(in.GetInfo().GetUserHandingCardImg()).
 		Save(ctx)
 	if err != nil {
 		return nil, err

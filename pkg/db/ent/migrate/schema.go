@@ -17,7 +17,7 @@ var (
 		{Name: "card_id", Type: field.TypeString},
 		{Name: "front_card_img", Type: field.TypeString},
 		{Name: "back_card_img", Type: field.TypeString},
-		{Name: "user_handling_card_img", Type: field.TypeString},
+		{Name: "user_handing_card_img", Type: field.TypeString},
 		{Name: "create_at", Type: field.TypeUint32},
 		{Name: "update_at", Type: field.TypeUint32},
 	}

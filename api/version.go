@@ -7,7 +7,7 @@ import (
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	"github.com/NpoolPlatform/kyc-management/pkg/version"
-	npool "github.com/NpoolPlatform/message/npool/kyc"
+	npool "github.com/NpoolPlatform/message/npool"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"

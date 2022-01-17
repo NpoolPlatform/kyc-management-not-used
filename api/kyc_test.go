@@ -12,6 +12,7 @@ import (
 	"github.com/NpoolPlatform/kyc-management/pkg/crud/kyc"
 	myconst "github.com/NpoolPlatform/kyc-management/pkg/message/const"
 	testinit "github.com/NpoolPlatform/kyc-management/pkg/test-init"
+	npoolcommon "github.com/NpoolPlatform/message/npool"
 	npool "github.com/NpoolPlatform/message/npool/kyc"
 	"github.com/go-resty/resty/v2"
 	"github.com/google/uuid"
@@ -33,23 +34,17 @@ func TestKycAPI(t *testing.T) { // nolint
 	}
 
 	kycInfo := &npool.KycInfo{
-		UserID:              uuid.New().String(),
-		AppID:               uuid.New().String(),
-		CardType:            uuid.New().String(),
-		CardID:              uuid.New().String()[:16],
-		FrontCardImg:        "frontCardImage",
-		BackCardImg:         "backCardImage",
-		UserHandlingCardImg: "userHandlingCardImage",
+		UserID:             uuid.New().String(),
+		AppID:              uuid.New().String(),
+		CardType:           uuid.New().String(),
+		CardID:             uuid.New().String()[:16],
+		FrontCardImg:       "frontCardImage",
+		BackCardImg:        "backCardImage",
+		UserHandingCardImg: "userHandingCardImage",
 	}
 
 	createKycRequest := &npool.CreateKycRequest{
-		UserID:              kycInfo.GetUserID(),
-		AppID:               kycInfo.GetAppID(),
-		CardType:            kycInfo.GetCardType(),
-		CardID:              kycInfo.GetCardID(),
-		FrontCardImg:        kycInfo.GetFrontCardImg(),
-		BackCardImg:         kycInfo.GetBackCardImg(),
-		UserHandlingCardImg: kycInfo.GetUserHandlingCardImg(),
+		Info: kycInfo,
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), myconst.GrpcTimeout)
@@ -59,13 +54,13 @@ func TestKycAPI(t *testing.T) { // nolint
 	if assert.Nil(t, err) {
 		assert.NotNil(t, createResp.GetInfo().GetID())
 		kycInfo.ID = createResp.GetInfo().GetID()
-		assert.Equal(t, createKycRequest.GetUserID(), createResp.GetInfo().GetUserID())
-		assert.Equal(t, createKycRequest.GetAppID(), createResp.GetInfo().GetAppID())
-		assert.Equal(t, createKycRequest.GetCardType(), createResp.GetInfo().GetCardType())
-		assert.Equal(t, createKycRequest.GetCardID(), createResp.GetInfo().GetCardID())
-		assert.Equal(t, createKycRequest.GetFrontCardImg(), createResp.GetInfo().GetFrontCardImg())
-		assert.Equal(t, createKycRequest.GetBackCardImg(), createResp.GetInfo().GetBackCardImg())
-		assert.Equal(t, createKycRequest.GetUserHandlingCardImg(), createResp.GetInfo().GetUserHandlingCardImg())
+		assert.Equal(t, kycInfo.GetUserID(), createResp.GetInfo().GetUserID())
+		assert.Equal(t, kycInfo.GetAppID(), createResp.GetInfo().GetAppID())
+		assert.Equal(t, kycInfo.GetCardType(), createResp.GetInfo().GetCardType())
+		assert.Equal(t, kycInfo.GetCardID(), createResp.GetInfo().GetCardID())
+		assert.Equal(t, kycInfo.GetFrontCardImg(), createResp.GetInfo().GetFrontCardImg())
+		assert.Equal(t, kycInfo.GetBackCardImg(), createResp.GetInfo().GetBackCardImg())
+		assert.Equal(t, kycInfo.GetUserHandingCardImg(), createResp.GetInfo().GetUserHandingCardImg())
 	}
 
 	cli := resty.New()
@@ -88,16 +83,18 @@ func TestKycAPI(t *testing.T) { // nolint
 			assert.Equal(t, kycInfo.GetCardID(), getKycByUserIDResponse.GetInfo().GetCardID())
 			assert.Equal(t, kycInfo.GetFrontCardImg(), getKycByUserIDResponse.GetInfo().GetFrontCardImg())
 			assert.Equal(t, kycInfo.GetBackCardImg(), getKycByUserIDResponse.GetInfo().GetBackCardImg())
-			assert.Equal(t, kycInfo.GetUserHandlingCardImg(), getKycByUserIDResponse.GetInfo().GetUserHandlingCardImg())
+			assert.Equal(t, kycInfo.GetUserHandingCardImg(), getKycByUserIDResponse.GetInfo().GetUserHandingCardImg())
 		}
 	}
 
 	getKycByAppIDResp, err := cli.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(&npool.GetKycByAppIDRequest{
-			AppID:  kycInfo.GetAppID(),
-			Limit:  5,
-			Offset: 0,
+			AppID: kycInfo.GetAppID(),
+			PageInfo: &npoolcommon.PageInfo{
+				Limit:  5,
+				Offset: 0,
+			},
 		}).Post("http://localhost:50120/v1/get/kyc/by/appid")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, getKycByAppIDResp.StatusCode())
@@ -112,8 +109,10 @@ func TestKycAPI(t *testing.T) { // nolint
 	getAllKycResp, err := cli.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(&npool.GetAllKycRequest{
-			Limit:  5,
-			Offset: 0,
+			PageInfo: &npoolcommon.PageInfo{
+				Limit:  5,
+				Offset: 0,
+			},
 		}).Post("http://localhost:50120/v1/get/all/kyc")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, getAllKycResp.StatusCode())
@@ -128,14 +127,16 @@ func TestKycAPI(t *testing.T) { // nolint
 	updateKycResp, err := cli.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(&npool.UpdateKycRequest{
-			ID:                  kycInfo.GetID(),
-			UserID:              kycInfo.GetUserID(),
-			AppID:               kycInfo.GetAppID(),
-			CardType:            kycInfo.GetCardType(),
-			CardID:              kycInfo.GetCardID(),
-			FrontCardImg:        kycInfo.GetFrontCardImg(),
-			BackCardImg:         kycInfo.GetBackCardImg(),
-			UserHandlingCardImg: kycInfo.GetUserHandlingCardImg(),
+			Info: &npool.KycInfo{
+				ID:                 kycInfo.GetID(),
+				UserID:             kycInfo.GetUserID(),
+				AppID:              kycInfo.GetAppID(),
+				CardType:           kycInfo.GetCardType(),
+				CardID:             kycInfo.GetCardID(),
+				FrontCardImg:       kycInfo.GetFrontCardImg(),
+				BackCardImg:        kycInfo.GetBackCardImg(),
+				UserHandingCardImg: kycInfo.GetUserHandingCardImg(),
+			},
 		}).Post("http://localhost:50120/v1/update/kyc")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, updateKycResp.StatusCode())
@@ -149,7 +150,7 @@ func TestKycAPI(t *testing.T) { // nolint
 			assert.Equal(t, kycInfo.GetCardID(), updateKycResponse.GetInfo().GetCardID())
 			assert.Equal(t, kycInfo.GetFrontCardImg(), updateKycResponse.GetInfo().GetFrontCardImg())
 			assert.Equal(t, kycInfo.GetBackCardImg(), updateKycResponse.GetInfo().GetBackCardImg())
-			assert.Equal(t, kycInfo.GetUserHandlingCardImg(), updateKycResponse.GetInfo().GetUserHandlingCardImg())
+			assert.Equal(t, kycInfo.GetUserHandingCardImg(), updateKycResponse.GetInfo().GetUserHandingCardImg())
 		}
 	}
 
@@ -158,14 +159,16 @@ func TestKycAPI(t *testing.T) { // nolint
 	updateKycRespW, err := cli.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(&npool.UpdateKycRequest{
-			ID:                  kycInfo.GetID(),
-			UserID:              newUserID,
-			AppID:               kycInfo.GetAppID(),
-			CardType:            kycInfo.GetCardType(),
-			CardID:              kycInfo.GetCardID(),
-			FrontCardImg:        kycInfo.GetFrontCardImg(),
-			BackCardImg:         kycInfo.GetBackCardImg(),
-			UserHandlingCardImg: kycInfo.GetUserHandlingCardImg(),
+			Info: &npool.KycInfo{
+				ID:                 kycInfo.GetID(),
+				UserID:             newUserID,
+				AppID:              kycInfo.GetAppID(),
+				CardType:           kycInfo.GetCardType(),
+				CardID:             kycInfo.GetCardID(),
+				FrontCardImg:       kycInfo.GetFrontCardImg(),
+				BackCardImg:        kycInfo.GetBackCardImg(),
+				UserHandingCardImg: kycInfo.GetUserHandingCardImg(),
+			},
 		}).Post("http://localhost:50120/v1/update/kyc")
 	if assert.Nil(t, err) {
 		assert.NotEqual(t, 200, updateKycRespW.StatusCode())

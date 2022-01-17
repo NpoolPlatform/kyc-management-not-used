@@ -28,8 +28,8 @@ type Kyc struct {
 	FrontCardImg string `json:"front_card_img,omitempty"`
 	// BackCardImg holds the value of the "back_card_img" field.
 	BackCardImg string `json:"back_card_img,omitempty"`
-	// UserHandlingCardImg holds the value of the "user_handling_card_img" field.
-	UserHandlingCardImg string `json:"user_handling_card_img,omitempty"`
+	// UserHandingCardImg holds the value of the "user_handing_card_img" field.
+	UserHandingCardImg string `json:"user_handing_card_img,omitempty"`
 	// CreateAt holds the value of the "create_at" field.
 	CreateAt uint32 `json:"create_at,omitempty"`
 	// UpdateAt holds the value of the "update_at" field.
@@ -43,7 +43,7 @@ func (*Kyc) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case kyc.FieldCreateAt, kyc.FieldUpdateAt:
 			values[i] = new(sql.NullInt64)
-		case kyc.FieldCardType, kyc.FieldCardID, kyc.FieldFrontCardImg, kyc.FieldBackCardImg, kyc.FieldUserHandlingCardImg:
+		case kyc.FieldCardType, kyc.FieldCardID, kyc.FieldFrontCardImg, kyc.FieldBackCardImg, kyc.FieldUserHandingCardImg:
 			values[i] = new(sql.NullString)
 		case kyc.FieldID, kyc.FieldUserID, kyc.FieldAppID:
 			values[i] = new(uuid.UUID)
@@ -104,11 +104,11 @@ func (k *Kyc) assignValues(columns []string, values []interface{}) error {
 			} else if value.Valid {
 				k.BackCardImg = value.String
 			}
-		case kyc.FieldUserHandlingCardImg:
+		case kyc.FieldUserHandingCardImg:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field user_handling_card_img", values[i])
+				return fmt.Errorf("unexpected type %T for field user_handing_card_img", values[i])
 			} else if value.Valid {
-				k.UserHandlingCardImg = value.String
+				k.UserHandingCardImg = value.String
 			}
 		case kyc.FieldCreateAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -162,8 +162,8 @@ func (k *Kyc) String() string {
 	builder.WriteString(k.FrontCardImg)
 	builder.WriteString(", back_card_img=")
 	builder.WriteString(k.BackCardImg)
-	builder.WriteString(", user_handling_card_img=")
-	builder.WriteString(k.UserHandlingCardImg)
+	builder.WriteString(", user_handing_card_img=")
+	builder.WriteString(k.UserHandingCardImg)
 	builder.WriteString(", create_at=")
 	builder.WriteString(fmt.Sprintf("%v", k.CreateAt))
 	builder.WriteString(", update_at=")

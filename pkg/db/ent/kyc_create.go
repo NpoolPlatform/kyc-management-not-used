@@ -59,9 +59,9 @@ func (kc *KycCreate) SetBackCardImg(s string) *KycCreate {
 	return kc
 }
 
-// SetUserHandlingCardImg sets the "user_handling_card_img" field.
-func (kc *KycCreate) SetUserHandlingCardImg(s string) *KycCreate {
-	kc.mutation.SetUserHandlingCardImg(s)
+// SetUserHandingCardImg sets the "user_handing_card_img" field.
+func (kc *KycCreate) SetUserHandingCardImg(s string) *KycCreate {
+	kc.mutation.SetUserHandingCardImg(s)
 	return kc
 }
 
@@ -204,8 +204,8 @@ func (kc *KycCreate) check() error {
 	if _, ok := kc.mutation.BackCardImg(); !ok {
 		return &ValidationError{Name: "back_card_img", err: errors.New(`ent: missing required field "back_card_img"`)}
 	}
-	if _, ok := kc.mutation.UserHandlingCardImg(); !ok {
-		return &ValidationError{Name: "user_handling_card_img", err: errors.New(`ent: missing required field "user_handling_card_img"`)}
+	if _, ok := kc.mutation.UserHandingCardImg(); !ok {
+		return &ValidationError{Name: "user_handing_card_img", err: errors.New(`ent: missing required field "user_handing_card_img"`)}
 	}
 	if _, ok := kc.mutation.CreateAt(); !ok {
 		return &ValidationError{Name: "create_at", err: errors.New(`ent: missing required field "create_at"`)}
@@ -294,13 +294,13 @@ func (kc *KycCreate) createSpec() (*Kyc, *sqlgraph.CreateSpec) {
 		})
 		_node.BackCardImg = value
 	}
-	if value, ok := kc.mutation.UserHandlingCardImg(); ok {
+	if value, ok := kc.mutation.UserHandingCardImg(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: kyc.FieldUserHandlingCardImg,
+			Column: kyc.FieldUserHandingCardImg,
 		})
-		_node.UserHandlingCardImg = value
+		_node.UserHandingCardImg = value
 	}
 	if value, ok := kc.mutation.CreateAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -444,15 +444,15 @@ func (u *KycUpsert) UpdateBackCardImg() *KycUpsert {
 	return u
 }
 
-// SetUserHandlingCardImg sets the "user_handling_card_img" field.
-func (u *KycUpsert) SetUserHandlingCardImg(v string) *KycUpsert {
-	u.Set(kyc.FieldUserHandlingCardImg, v)
+// SetUserHandingCardImg sets the "user_handing_card_img" field.
+func (u *KycUpsert) SetUserHandingCardImg(v string) *KycUpsert {
+	u.Set(kyc.FieldUserHandingCardImg, v)
 	return u
 }
 
-// UpdateUserHandlingCardImg sets the "user_handling_card_img" field to the value that was provided on create.
-func (u *KycUpsert) UpdateUserHandlingCardImg() *KycUpsert {
-	u.SetExcluded(kyc.FieldUserHandlingCardImg)
+// UpdateUserHandingCardImg sets the "user_handing_card_img" field to the value that was provided on create.
+func (u *KycUpsert) UpdateUserHandingCardImg() *KycUpsert {
+	u.SetExcluded(kyc.FieldUserHandingCardImg)
 	return u
 }
 
@@ -614,17 +614,17 @@ func (u *KycUpsertOne) UpdateBackCardImg() *KycUpsertOne {
 	})
 }
 
-// SetUserHandlingCardImg sets the "user_handling_card_img" field.
-func (u *KycUpsertOne) SetUserHandlingCardImg(v string) *KycUpsertOne {
+// SetUserHandingCardImg sets the "user_handing_card_img" field.
+func (u *KycUpsertOne) SetUserHandingCardImg(v string) *KycUpsertOne {
 	return u.Update(func(s *KycUpsert) {
-		s.SetUserHandlingCardImg(v)
+		s.SetUserHandingCardImg(v)
 	})
 }
 
-// UpdateUserHandlingCardImg sets the "user_handling_card_img" field to the value that was provided on create.
-func (u *KycUpsertOne) UpdateUserHandlingCardImg() *KycUpsertOne {
+// UpdateUserHandingCardImg sets the "user_handing_card_img" field to the value that was provided on create.
+func (u *KycUpsertOne) UpdateUserHandingCardImg() *KycUpsertOne {
 	return u.Update(func(s *KycUpsert) {
-		s.UpdateUserHandlingCardImg()
+		s.UpdateUserHandingCardImg()
 	})
 }
 
@@ -956,17 +956,17 @@ func (u *KycUpsertBulk) UpdateBackCardImg() *KycUpsertBulk {
 	})
 }
 
-// SetUserHandlingCardImg sets the "user_handling_card_img" field.
-func (u *KycUpsertBulk) SetUserHandlingCardImg(v string) *KycUpsertBulk {
+// SetUserHandingCardImg sets the "user_handing_card_img" field.
+func (u *KycUpsertBulk) SetUserHandingCardImg(v string) *KycUpsertBulk {
 	return u.Update(func(s *KycUpsert) {
-		s.SetUserHandlingCardImg(v)
+		s.SetUserHandingCardImg(v)
 	})
 }
 
-// UpdateUserHandlingCardImg sets the "user_handling_card_img" field to the value that was provided on create.
-func (u *KycUpsertBulk) UpdateUserHandlingCardImg() *KycUpsertBulk {
+// UpdateUserHandingCardImg sets the "user_handing_card_img" field to the value that was provided on create.
+func (u *KycUpsertBulk) UpdateUserHandingCardImg() *KycUpsertBulk {
 	return u.Update(func(s *KycUpsert) {
-		s.UpdateUserHandlingCardImg()
+		s.UpdateUserHandingCardImg()
 	})
 }
 

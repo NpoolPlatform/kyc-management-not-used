@@ -29,24 +29,24 @@ const (
 // KycMutation represents an operation that mutates the Kyc nodes in the graph.
 type KycMutation struct {
 	config
-	op                     Op
-	typ                    string
-	id                     *uuid.UUID
-	user_id                *uuid.UUID
-	app_id                 *uuid.UUID
-	card_type              *string
-	card_id                *string
-	front_card_img         *string
-	back_card_img          *string
-	user_handling_card_img *string
-	create_at              *uint32
-	addcreate_at           *uint32
-	update_at              *uint32
-	addupdate_at           *uint32
-	clearedFields          map[string]struct{}
-	done                   bool
-	oldValue               func(context.Context) (*Kyc, error)
-	predicates             []predicate.Kyc
+	op                    Op
+	typ                   string
+	id                    *uuid.UUID
+	user_id               *uuid.UUID
+	app_id                *uuid.UUID
+	card_type             *string
+	card_id               *string
+	front_card_img        *string
+	back_card_img         *string
+	user_handing_card_img *string
+	create_at             *uint32
+	addcreate_at          *uint32
+	update_at             *uint32
+	addupdate_at          *uint32
+	clearedFields         map[string]struct{}
+	done                  bool
+	oldValue              func(context.Context) (*Kyc, error)
+	predicates            []predicate.Kyc
 }
 
 var _ ent.Mutation = (*KycMutation)(nil)
@@ -350,40 +350,40 @@ func (m *KycMutation) ResetBackCardImg() {
 	m.back_card_img = nil
 }
 
-// SetUserHandlingCardImg sets the "user_handling_card_img" field.
-func (m *KycMutation) SetUserHandlingCardImg(s string) {
-	m.user_handling_card_img = &s
+// SetUserHandingCardImg sets the "user_handing_card_img" field.
+func (m *KycMutation) SetUserHandingCardImg(s string) {
+	m.user_handing_card_img = &s
 }
 
-// UserHandlingCardImg returns the value of the "user_handling_card_img" field in the mutation.
-func (m *KycMutation) UserHandlingCardImg() (r string, exists bool) {
-	v := m.user_handling_card_img
+// UserHandingCardImg returns the value of the "user_handing_card_img" field in the mutation.
+func (m *KycMutation) UserHandingCardImg() (r string, exists bool) {
+	v := m.user_handing_card_img
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldUserHandlingCardImg returns the old "user_handling_card_img" field's value of the Kyc entity.
+// OldUserHandingCardImg returns the old "user_handing_card_img" field's value of the Kyc entity.
 // If the Kyc object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *KycMutation) OldUserHandlingCardImg(ctx context.Context) (v string, err error) {
+func (m *KycMutation) OldUserHandingCardImg(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldUserHandlingCardImg is only allowed on UpdateOne operations")
+		return v, fmt.Errorf("OldUserHandingCardImg is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldUserHandlingCardImg requires an ID field in the mutation")
+		return v, fmt.Errorf("OldUserHandingCardImg requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldUserHandlingCardImg: %w", err)
+		return v, fmt.Errorf("querying old value for OldUserHandingCardImg: %w", err)
 	}
-	return oldValue.UserHandlingCardImg, nil
+	return oldValue.UserHandingCardImg, nil
 }
 
-// ResetUserHandlingCardImg resets all changes to the "user_handling_card_img" field.
-func (m *KycMutation) ResetUserHandlingCardImg() {
-	m.user_handling_card_img = nil
+// ResetUserHandingCardImg resets all changes to the "user_handing_card_img" field.
+func (m *KycMutation) ResetUserHandingCardImg() {
+	m.user_handing_card_img = nil
 }
 
 // SetCreateAt sets the "create_at" field.
@@ -536,8 +536,8 @@ func (m *KycMutation) Fields() []string {
 	if m.back_card_img != nil {
 		fields = append(fields, kyc.FieldBackCardImg)
 	}
-	if m.user_handling_card_img != nil {
-		fields = append(fields, kyc.FieldUserHandlingCardImg)
+	if m.user_handing_card_img != nil {
+		fields = append(fields, kyc.FieldUserHandingCardImg)
 	}
 	if m.create_at != nil {
 		fields = append(fields, kyc.FieldCreateAt)
@@ -565,8 +565,8 @@ func (m *KycMutation) Field(name string) (ent.Value, bool) {
 		return m.FrontCardImg()
 	case kyc.FieldBackCardImg:
 		return m.BackCardImg()
-	case kyc.FieldUserHandlingCardImg:
-		return m.UserHandlingCardImg()
+	case kyc.FieldUserHandingCardImg:
+		return m.UserHandingCardImg()
 	case kyc.FieldCreateAt:
 		return m.CreateAt()
 	case kyc.FieldUpdateAt:
@@ -592,8 +592,8 @@ func (m *KycMutation) OldField(ctx context.Context, name string) (ent.Value, err
 		return m.OldFrontCardImg(ctx)
 	case kyc.FieldBackCardImg:
 		return m.OldBackCardImg(ctx)
-	case kyc.FieldUserHandlingCardImg:
-		return m.OldUserHandlingCardImg(ctx)
+	case kyc.FieldUserHandingCardImg:
+		return m.OldUserHandingCardImg(ctx)
 	case kyc.FieldCreateAt:
 		return m.OldCreateAt(ctx)
 	case kyc.FieldUpdateAt:
@@ -649,12 +649,12 @@ func (m *KycMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetBackCardImg(v)
 		return nil
-	case kyc.FieldUserHandlingCardImg:
+	case kyc.FieldUserHandingCardImg:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetUserHandlingCardImg(v)
+		m.SetUserHandingCardImg(v)
 		return nil
 	case kyc.FieldCreateAt:
 		v, ok := value.(uint32)
@@ -764,8 +764,8 @@ func (m *KycMutation) ResetField(name string) error {
 	case kyc.FieldBackCardImg:
 		m.ResetBackCardImg()
 		return nil
-	case kyc.FieldUserHandlingCardImg:
-		m.ResetUserHandlingCardImg()
+	case kyc.FieldUserHandingCardImg:
+		m.ResetUserHandingCardImg()
 		return nil
 	case kyc.FieldCreateAt:
 		m.ResetCreateAt()

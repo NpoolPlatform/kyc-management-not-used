@@ -63,9 +63,9 @@ func (ku *KycUpdate) SetBackCardImg(s string) *KycUpdate {
 	return ku
 }
 
-// SetUserHandlingCardImg sets the "user_handling_card_img" field.
-func (ku *KycUpdate) SetUserHandlingCardImg(s string) *KycUpdate {
-	ku.mutation.SetUserHandlingCardImg(s)
+// SetUserHandingCardImg sets the "user_handing_card_img" field.
+func (ku *KycUpdate) SetUserHandingCardImg(s string) *KycUpdate {
+	ku.mutation.SetUserHandingCardImg(s)
 	return ku
 }
 
@@ -231,11 +231,11 @@ func (ku *KycUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: kyc.FieldBackCardImg,
 		})
 	}
-	if value, ok := ku.mutation.UserHandlingCardImg(); ok {
+	if value, ok := ku.mutation.UserHandingCardImg(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: kyc.FieldUserHandlingCardImg,
+			Column: kyc.FieldUserHandingCardImg,
 		})
 	}
 	if value, ok := ku.mutation.CreateAt(); ok {
@@ -321,9 +321,9 @@ func (kuo *KycUpdateOne) SetBackCardImg(s string) *KycUpdateOne {
 	return kuo
 }
 
-// SetUserHandlingCardImg sets the "user_handling_card_img" field.
-func (kuo *KycUpdateOne) SetUserHandlingCardImg(s string) *KycUpdateOne {
-	kuo.mutation.SetUserHandlingCardImg(s)
+// SetUserHandingCardImg sets the "user_handing_card_img" field.
+func (kuo *KycUpdateOne) SetUserHandingCardImg(s string) *KycUpdateOne {
+	kuo.mutation.SetUserHandingCardImg(s)
 	return kuo
 }
 
@@ -513,11 +513,11 @@ func (kuo *KycUpdateOne) sqlSave(ctx context.Context) (_node *Kyc, err error) {
 			Column: kyc.FieldBackCardImg,
 		})
 	}
-	if value, ok := kuo.mutation.UserHandlingCardImg(); ok {
+	if value, ok := kuo.mutation.UserHandingCardImg(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
-			Column: kyc.FieldUserHandlingCardImg,
+			Column: kyc.FieldUserHandingCardImg,
 		})
 	}
 	if value, ok := kuo.mutation.CreateAt(); ok {
