@@ -16,9 +16,6 @@ func dbRowToKyc(row *ent.Kyc) *npool.KycInfo {
 		ID:                  row.ID.String(),
 		UserID:              row.UserID.String(),
 		AppID:               row.AppID.String(),
-		FirstName:           row.FirstName,
-		LastName:            row.LastName,
-		Region:              row.Region,
 		CardType:            row.CardType,
 		CardID:              row.CardID,
 		FrontCardImg:        row.FrontCardImg,
@@ -40,9 +37,6 @@ func Create(ctx context.Context, in *npool.CreateKycRequest) (*npool.CreateKycRe
 		Create().
 		SetUserID(uuid.MustParse(in.GetUserID())).
 		SetAppID(uuid.MustParse(in.GetAppID())).
-		SetFirstName(in.GetFirstName()).
-		SetLastName(in.GetLastName()).
-		SetRegion(in.GetRegion()).
 		SetCardType(in.GetCardType()).
 		SetCardID(in.GetCardID()).
 		SetFrontCardImg(in.GetFrontCardImg()).
@@ -156,9 +150,6 @@ func Update(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycRe
 	info, err := cli.
 		Kyc.
 		UpdateOneID(uuid.MustParse(in.GetID())).
-		SetFirstName(in.GetFirstName()).
-		SetLastName(in.GetLastName()).
-		SetRegion(in.GetRegion()).
 		SetCardType(in.GetCardType()).
 		SetCardID(in.GetCardID()).
 		SetFrontCardImg(in.GetFrontCardImg()).

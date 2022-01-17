@@ -30,9 +30,6 @@ func TestKycCrud(t *testing.T) { // nolint
 
 	userID := uuid.New().String()
 	appID := uuid.New().String()
-	firstName := "test1"
-	lastName := "test2"
-	region := "cn"
 	cardType := "test3"
 	cardID := "test123131"
 	frontCardImage := "31231313112"
@@ -42,9 +39,6 @@ func TestKycCrud(t *testing.T) { // nolint
 	createKycRequest := &npool.CreateKycRequest{
 		UserID:              userID,
 		AppID:               appID,
-		FirstName:           firstName,
-		LastName:            lastName,
-		Region:              region,
 		CardType:            cardType,
 		CardID:              cardID,
 		FrontCardImg:        frontCardImage,
@@ -63,9 +57,6 @@ func TestKycCrud(t *testing.T) { // nolint
 		kycID = createResp.GetInfo().GetID()
 		assert.Equal(t, userID, createResp.GetInfo().GetUserID())
 		assert.Equal(t, appID, createResp.GetInfo().GetAppID())
-		assert.Equal(t, firstName, createResp.GetInfo().GetFirstName())
-		assert.Equal(t, lastName, createResp.GetInfo().GetLastName())
-		assert.Equal(t, region, createResp.GetInfo().GetRegion())
 		assert.Equal(t, cardType, createResp.GetInfo().GetCardType())
 		assert.Equal(t, cardID, createResp.GetInfo().GetCardID())
 		assert.Equal(t, frontCardImage, createResp.GetInfo().GetFrontCardImg())
@@ -78,9 +69,6 @@ func TestKycCrud(t *testing.T) { // nolint
 		assert.Equal(t, kycID, getKycByUserIDAndAppIDResp.GetID())
 		assert.Equal(t, userID, getKycByUserIDAndAppIDResp.GetUserID())
 		assert.Equal(t, appID, getKycByUserIDAndAppIDResp.GetAppID())
-		assert.Equal(t, firstName, getKycByUserIDAndAppIDResp.GetFirstName())
-		assert.Equal(t, lastName, getKycByUserIDAndAppIDResp.GetLastName())
-		assert.Equal(t, region, getKycByUserIDAndAppIDResp.GetRegion())
 		assert.Equal(t, cardType, getKycByUserIDAndAppIDResp.GetCardType())
 		assert.Equal(t, cardID, getKycByUserIDAndAppIDResp.GetCardID())
 		assert.Equal(t, frontCardImage, getKycByUserIDAndAppIDResp.GetFrontCardImg())
@@ -98,9 +86,6 @@ func TestKycCrud(t *testing.T) { // nolint
 		assert.Equal(t, kycID, getKycByIDResp.GetID())
 		assert.Equal(t, userID, getKycByIDResp.GetUserID())
 		assert.Equal(t, appID, getKycByIDResp.GetAppID())
-		assert.Equal(t, firstName, getKycByIDResp.GetFirstName())
-		assert.Equal(t, lastName, getKycByIDResp.GetLastName())
-		assert.Equal(t, region, getKycByIDResp.GetRegion())
 		assert.Equal(t, cardType, getKycByIDResp.GetCardType())
 		assert.Equal(t, cardID, getKycByIDResp.GetCardID())
 		assert.Equal(t, frontCardImage, getKycByIDResp.GetFrontCardImg())
@@ -126,9 +111,6 @@ func TestKycCrud(t *testing.T) { // nolint
 		ID:                  kycID,
 		UserID:              userID,
 		AppID:               appID,
-		FirstName:           firstName,
-		LastName:            lastName,
-		Region:              region,
 		CardType:            cardType,
 		CardID:              cardID,
 		FrontCardImg:        frontCardImage,
@@ -141,9 +123,6 @@ func TestKycCrud(t *testing.T) { // nolint
 		assert.Equal(t, kycID, updateKycResp.GetInfo().GetID())
 		assert.Equal(t, userID, updateKycResp.GetInfo().GetUserID())
 		assert.Equal(t, appID, updateKycResp.GetInfo().GetAppID())
-		assert.Equal(t, firstName, updateKycResp.GetInfo().GetFirstName())
-		assert.Equal(t, lastName, updateKycResp.GetInfo().GetLastName())
-		assert.Equal(t, region, updateKycResp.GetInfo().GetRegion())
 		assert.Equal(t, cardType, updateKycResp.GetInfo().GetCardType())
 		assert.Equal(t, cardID, updateKycResp.GetInfo().GetCardID())
 		assert.Equal(t, frontCardImage, updateKycResp.GetInfo().GetFrontCardImg())

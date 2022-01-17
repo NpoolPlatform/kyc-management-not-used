@@ -20,12 +20,6 @@ type Kyc struct {
 	UserID uuid.UUID `json:"user_id,omitempty"`
 	// AppID holds the value of the "app_id" field.
 	AppID uuid.UUID `json:"app_id,omitempty"`
-	// FirstName holds the value of the "first_name" field.
-	FirstName string `json:"first_name,omitempty"`
-	// LastName holds the value of the "last_name" field.
-	LastName string `json:"last_name,omitempty"`
-	// Region holds the value of the "region" field.
-	Region string `json:"region,omitempty"`
 	// CardType holds the value of the "card_type" field.
 	CardType string `json:"card_type,omitempty"`
 	// CardID holds the value of the "card_id" field.
@@ -49,7 +43,7 @@ func (*Kyc) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case kyc.FieldCreateAt, kyc.FieldUpdateAt:
 			values[i] = new(sql.NullInt64)
-		case kyc.FieldFirstName, kyc.FieldLastName, kyc.FieldRegion, kyc.FieldCardType, kyc.FieldCardID, kyc.FieldFrontCardImg, kyc.FieldBackCardImg, kyc.FieldUserHandlingCardImg:
+		case kyc.FieldCardType, kyc.FieldCardID, kyc.FieldFrontCardImg, kyc.FieldBackCardImg, kyc.FieldUserHandlingCardImg:
 			values[i] = new(sql.NullString)
 		case kyc.FieldID, kyc.FieldUserID, kyc.FieldAppID:
 			values[i] = new(uuid.UUID)
@@ -85,24 +79,6 @@ func (k *Kyc) assignValues(columns []string, values []interface{}) error {
 				return fmt.Errorf("unexpected type %T for field app_id", values[i])
 			} else if value != nil {
 				k.AppID = *value
-			}
-		case kyc.FieldFirstName:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field first_name", values[i])
-			} else if value.Valid {
-				k.FirstName = value.String
-			}
-		case kyc.FieldLastName:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field last_name", values[i])
-			} else if value.Valid {
-				k.LastName = value.String
-			}
-		case kyc.FieldRegion:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field region", values[i])
-			} else if value.Valid {
-				k.Region = value.String
 			}
 		case kyc.FieldCardType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -178,12 +154,6 @@ func (k *Kyc) String() string {
 	builder.WriteString(fmt.Sprintf("%v", k.UserID))
 	builder.WriteString(", app_id=")
 	builder.WriteString(fmt.Sprintf("%v", k.AppID))
-	builder.WriteString(", first_name=")
-	builder.WriteString(k.FirstName)
-	builder.WriteString(", last_name=")
-	builder.WriteString(k.LastName)
-	builder.WriteString(", region=")
-	builder.WriteString(k.Region)
 	builder.WriteString(", card_type=")
 	builder.WriteString(k.CardType)
 	builder.WriteString(", card_id=")

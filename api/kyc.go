@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"unicode/utf8"
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	"github.com/NpoolPlatform/kyc-management/pkg/crud/kyc"
@@ -19,32 +18,12 @@ func kycInfoCheck(in *npool.KycInfo) error {
 		return status.Error(codes.InvalidArgument, "user card id can not be empty")
 	}
 
-	if len(in.GetCardID()) > 30 {
+	if len(in.GetCardID()) > 128 {
 		return status.Error(codes.InvalidArgument, "user card id is invalid")
 	}
 
 	if in.GetCardType() == "" {
 		return status.Error(codes.InvalidArgument, "user card type can not be empty")
-	}
-
-	if in.GetFirstName() == "" {
-		return status.Error(codes.InvalidArgument, "user first name can not be empty")
-	}
-
-	if utf8.RuneCountInString(in.GetFirstName()) > 50 {
-		return status.Error(codes.InvalidArgument, "user first name is invalid")
-	}
-
-	if in.GetLastName() == "" {
-		return status.Error(codes.InvalidArgument, "user last name can not be empty")
-	}
-
-	if utf8.RuneCountInString(in.GetLastName()) > 50 {
-		return status.Error(codes.InvalidArgument, "user last name is invalid")
-	}
-
-	if in.GetRegion() == "" {
-		return status.Error(codes.InvalidArgument, "user region can not be empty")
 	}
 
 	if in.GetFrontCardImg() == "" {
@@ -75,9 +54,6 @@ func (s *Server) CreateKyc(ctx context.Context, in *npool.CreateKycRequest) (*np
 	}
 
 	if err := kycInfoCheck(&npool.KycInfo{
-		FirstName:           in.GetFirstName(),
-		LastName:            in.GetLastName(),
-		Region:              in.GetRegion(),
 		CardType:            in.GetCardType(),
 		CardID:              in.GetCardID(),
 		FrontCardImg:        in.GetFrontCardImg(),
@@ -186,9 +162,6 @@ func (s *Server) GetAllKyc(ctx context.Context, in *npool.GetAllKycRequest) (*np
 
 func (s *Server) UpdateKyc(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycResponse, error) {
 	if err := kycInfoCheck(&npool.KycInfo{
-		FirstName:           in.GetFirstName(),
-		LastName:            in.GetLastName(),
-		Region:              in.GetRegion(),
 		CardType:            in.GetCardType(),
 		CardID:              in.GetCardID(),
 		FrontCardImg:        in.GetFrontCardImg(),

@@ -35,9 +35,6 @@ func TestKycAPI(t *testing.T) { // nolint
 	kycInfo := &npool.KycInfo{
 		UserID:              uuid.New().String(),
 		AppID:               uuid.New().String(),
-		FirstName:           "firstName",
-		LastName:            "lastName",
-		Region:              "region",
 		CardType:            uuid.New().String(),
 		CardID:              uuid.New().String()[:16],
 		FrontCardImg:        "frontCardImage",
@@ -48,9 +45,6 @@ func TestKycAPI(t *testing.T) { // nolint
 	createKycRequest := &npool.CreateKycRequest{
 		UserID:              kycInfo.GetUserID(),
 		AppID:               kycInfo.GetAppID(),
-		FirstName:           kycInfo.GetFirstName(),
-		LastName:            kycInfo.GetLastName(),
-		Region:              kycInfo.GetRegion(),
 		CardType:            kycInfo.GetCardType(),
 		CardID:              kycInfo.GetCardID(),
 		FrontCardImg:        kycInfo.GetFrontCardImg(),
@@ -67,9 +61,6 @@ func TestKycAPI(t *testing.T) { // nolint
 		kycInfo.ID = createResp.GetInfo().GetID()
 		assert.Equal(t, createKycRequest.GetUserID(), createResp.GetInfo().GetUserID())
 		assert.Equal(t, createKycRequest.GetAppID(), createResp.GetInfo().GetAppID())
-		assert.Equal(t, createKycRequest.GetFirstName(), createResp.GetInfo().GetFirstName())
-		assert.Equal(t, createKycRequest.GetLastName(), createResp.GetInfo().GetLastName())
-		assert.Equal(t, createKycRequest.GetRegion(), createResp.GetInfo().GetRegion())
 		assert.Equal(t, createKycRequest.GetCardType(), createResp.GetInfo().GetCardType())
 		assert.Equal(t, createKycRequest.GetCardID(), createResp.GetInfo().GetCardID())
 		assert.Equal(t, createKycRequest.GetFrontCardImg(), createResp.GetInfo().GetFrontCardImg())
@@ -93,9 +84,6 @@ func TestKycAPI(t *testing.T) { // nolint
 			assert.Equal(t, kycInfo.GetID(), getKycByUserIDResponse.GetInfo().GetID())
 			assert.Equal(t, kycInfo.GetAppID(), getKycByUserIDResponse.GetInfo().GetAppID())
 			assert.Equal(t, kycInfo.GetUserID(), getKycByUserIDResponse.GetInfo().GetUserID())
-			assert.Equal(t, kycInfo.GetFirstName(), getKycByUserIDResponse.GetInfo().GetFirstName())
-			assert.Equal(t, kycInfo.GetLastName(), getKycByUserIDResponse.GetInfo().GetLastName())
-			assert.Equal(t, kycInfo.GetRegion(), getKycByUserIDResponse.GetInfo().GetRegion())
 			assert.Equal(t, kycInfo.GetCardType(), getKycByUserIDResponse.GetInfo().GetCardType())
 			assert.Equal(t, kycInfo.GetCardID(), getKycByUserIDResponse.GetInfo().GetCardID())
 			assert.Equal(t, kycInfo.GetFrontCardImg(), getKycByUserIDResponse.GetInfo().GetFrontCardImg())
@@ -143,9 +131,6 @@ func TestKycAPI(t *testing.T) { // nolint
 			ID:                  kycInfo.GetID(),
 			UserID:              kycInfo.GetUserID(),
 			AppID:               kycInfo.GetAppID(),
-			FirstName:           kycInfo.GetFirstName(),
-			LastName:            kycInfo.GetLastName(),
-			Region:              kycInfo.GetRegion(),
 			CardType:            kycInfo.GetCardType(),
 			CardID:              kycInfo.GetCardID(),
 			FrontCardImg:        kycInfo.GetFrontCardImg(),
@@ -160,9 +145,6 @@ func TestKycAPI(t *testing.T) { // nolint
 			assert.Equal(t, kycInfo.GetID(), updateKycResponse.GetInfo().GetID())
 			assert.Equal(t, kycInfo.GetAppID(), updateKycResponse.GetInfo().GetAppID())
 			assert.Equal(t, kycInfo.GetUserID(), updateKycResponse.GetInfo().GetUserID())
-			assert.Equal(t, kycInfo.GetFirstName(), updateKycResponse.GetInfo().GetFirstName())
-			assert.Equal(t, kycInfo.GetLastName(), updateKycResponse.GetInfo().GetLastName())
-			assert.Equal(t, kycInfo.GetRegion(), updateKycResponse.GetInfo().GetRegion())
 			assert.Equal(t, kycInfo.GetCardType(), updateKycResponse.GetInfo().GetCardType())
 			assert.Equal(t, kycInfo.GetCardID(), updateKycResponse.GetInfo().GetCardID())
 			assert.Equal(t, kycInfo.GetFrontCardImg(), updateKycResponse.GetInfo().GetFrontCardImg())
@@ -179,9 +161,6 @@ func TestKycAPI(t *testing.T) { // nolint
 			ID:                  kycInfo.GetID(),
 			UserID:              newUserID,
 			AppID:               kycInfo.GetAppID(),
-			FirstName:           kycInfo.GetFirstName(),
-			LastName:            kycInfo.GetLastName() + "test",
-			Region:              kycInfo.GetRegion(),
 			CardType:            kycInfo.GetCardType(),
 			CardID:              kycInfo.GetCardID(),
 			FrontCardImg:        kycInfo.GetFrontCardImg(),

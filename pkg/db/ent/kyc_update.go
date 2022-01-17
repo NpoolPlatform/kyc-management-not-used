@@ -39,24 +39,6 @@ func (ku *KycUpdate) SetAppID(u uuid.UUID) *KycUpdate {
 	return ku
 }
 
-// SetFirstName sets the "first_name" field.
-func (ku *KycUpdate) SetFirstName(s string) *KycUpdate {
-	ku.mutation.SetFirstName(s)
-	return ku
-}
-
-// SetLastName sets the "last_name" field.
-func (ku *KycUpdate) SetLastName(s string) *KycUpdate {
-	ku.mutation.SetLastName(s)
-	return ku
-}
-
-// SetRegion sets the "region" field.
-func (ku *KycUpdate) SetRegion(s string) *KycUpdate {
-	ku.mutation.SetRegion(s)
-	return ku
-}
-
 // SetCardType sets the "card_type" field.
 func (ku *KycUpdate) SetCardType(s string) *KycUpdate {
 	ku.mutation.SetCardType(s)
@@ -221,27 +203,6 @@ func (ku *KycUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: kyc.FieldAppID,
 		})
 	}
-	if value, ok := ku.mutation.FirstName(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: kyc.FieldFirstName,
-		})
-	}
-	if value, ok := ku.mutation.LastName(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: kyc.FieldLastName,
-		})
-	}
-	if value, ok := ku.mutation.Region(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: kyc.FieldRegion,
-		})
-	}
 	if value, ok := ku.mutation.CardType(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -333,24 +294,6 @@ func (kuo *KycUpdateOne) SetUserID(u uuid.UUID) *KycUpdateOne {
 // SetAppID sets the "app_id" field.
 func (kuo *KycUpdateOne) SetAppID(u uuid.UUID) *KycUpdateOne {
 	kuo.mutation.SetAppID(u)
-	return kuo
-}
-
-// SetFirstName sets the "first_name" field.
-func (kuo *KycUpdateOne) SetFirstName(s string) *KycUpdateOne {
-	kuo.mutation.SetFirstName(s)
-	return kuo
-}
-
-// SetLastName sets the "last_name" field.
-func (kuo *KycUpdateOne) SetLastName(s string) *KycUpdateOne {
-	kuo.mutation.SetLastName(s)
-	return kuo
-}
-
-// SetRegion sets the "region" field.
-func (kuo *KycUpdateOne) SetRegion(s string) *KycUpdateOne {
-	kuo.mutation.SetRegion(s)
 	return kuo
 }
 
@@ -540,27 +483,6 @@ func (kuo *KycUpdateOne) sqlSave(ctx context.Context) (_node *Kyc, err error) {
 			Type:   field.TypeUUID,
 			Value:  value,
 			Column: kyc.FieldAppID,
-		})
-	}
-	if value, ok := kuo.mutation.FirstName(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: kyc.FieldFirstName,
-		})
-	}
-	if value, ok := kuo.mutation.LastName(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: kyc.FieldLastName,
-		})
-	}
-	if value, ok := kuo.mutation.Region(); ok {
-		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
-			Value:  value,
-			Column: kyc.FieldRegion,
 		})
 	}
 	if value, ok := kuo.mutation.CardType(); ok {

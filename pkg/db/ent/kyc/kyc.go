@@ -15,12 +15,6 @@ const (
 	FieldUserID = "user_id"
 	// FieldAppID holds the string denoting the app_id field in the database.
 	FieldAppID = "app_id"
-	// FieldFirstName holds the string denoting the first_name field in the database.
-	FieldFirstName = "first_name"
-	// FieldLastName holds the string denoting the last_name field in the database.
-	FieldLastName = "last_name"
-	// FieldRegion holds the string denoting the region field in the database.
-	FieldRegion = "region"
 	// FieldCardType holds the string denoting the card_type field in the database.
 	FieldCardType = "card_type"
 	// FieldCardID holds the string denoting the card_id field in the database.
@@ -44,9 +38,6 @@ var Columns = []string{
 	FieldID,
 	FieldUserID,
 	FieldAppID,
-	FieldFirstName,
-	FieldLastName,
-	FieldRegion,
 	FieldCardType,
 	FieldCardID,
 	FieldFrontCardImg,

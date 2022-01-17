@@ -4,3 +4,4 @@ tmp
 /message/npool/*.json
 *.json
 *.log
+pkg/s3/*.json

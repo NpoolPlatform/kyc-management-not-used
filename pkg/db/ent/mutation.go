@@ -34,9 +34,6 @@ type KycMutation struct {
 	id                     *uuid.UUID
 	user_id                *uuid.UUID
 	app_id                 *uuid.UUID
-	first_name             *string
-	last_name              *string
-	region                 *string
 	card_type              *string
 	card_id                *string
 	front_card_img         *string
@@ -207,114 +204,6 @@ func (m *KycMutation) OldAppID(ctx context.Context) (v uuid.UUID, err error) {
 // ResetAppID resets all changes to the "app_id" field.
 func (m *KycMutation) ResetAppID() {
 	m.app_id = nil
-}
-
-// SetFirstName sets the "first_name" field.
-func (m *KycMutation) SetFirstName(s string) {
-	m.first_name = &s
-}
-
-// FirstName returns the value of the "first_name" field in the mutation.
-func (m *KycMutation) FirstName() (r string, exists bool) {
-	v := m.first_name
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldFirstName returns the old "first_name" field's value of the Kyc entity.
-// If the Kyc object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *KycMutation) OldFirstName(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldFirstName is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldFirstName requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldFirstName: %w", err)
-	}
-	return oldValue.FirstName, nil
-}
-
-// ResetFirstName resets all changes to the "first_name" field.
-func (m *KycMutation) ResetFirstName() {
-	m.first_name = nil
-}
-
-// SetLastName sets the "last_name" field.
-func (m *KycMutation) SetLastName(s string) {
-	m.last_name = &s
-}
-
-// LastName returns the value of the "last_name" field in the mutation.
-func (m *KycMutation) LastName() (r string, exists bool) {
-	v := m.last_name
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldLastName returns the old "last_name" field's value of the Kyc entity.
-// If the Kyc object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *KycMutation) OldLastName(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldLastName is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldLastName requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldLastName: %w", err)
-	}
-	return oldValue.LastName, nil
-}
-
-// ResetLastName resets all changes to the "last_name" field.
-func (m *KycMutation) ResetLastName() {
-	m.last_name = nil
-}
-
-// SetRegion sets the "region" field.
-func (m *KycMutation) SetRegion(s string) {
-	m.region = &s
-}
-
-// Region returns the value of the "region" field in the mutation.
-func (m *KycMutation) Region() (r string, exists bool) {
-	v := m.region
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldRegion returns the old "region" field's value of the Kyc entity.
-// If the Kyc object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *KycMutation) OldRegion(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldRegion is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldRegion requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldRegion: %w", err)
-	}
-	return oldValue.Region, nil
-}
-
-// ResetRegion resets all changes to the "region" field.
-func (m *KycMutation) ResetRegion() {
-	m.region = nil
 }
 
 // SetCardType sets the "card_type" field.
@@ -628,21 +517,12 @@ func (m *KycMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *KycMutation) Fields() []string {
-	fields := make([]string, 0, 12)
+	fields := make([]string, 0, 9)
 	if m.user_id != nil {
 		fields = append(fields, kyc.FieldUserID)
 	}
 	if m.app_id != nil {
 		fields = append(fields, kyc.FieldAppID)
-	}
-	if m.first_name != nil {
-		fields = append(fields, kyc.FieldFirstName)
-	}
-	if m.last_name != nil {
-		fields = append(fields, kyc.FieldLastName)
-	}
-	if m.region != nil {
-		fields = append(fields, kyc.FieldRegion)
 	}
 	if m.card_type != nil {
 		fields = append(fields, kyc.FieldCardType)
@@ -677,12 +557,6 @@ func (m *KycMutation) Field(name string) (ent.Value, bool) {
 		return m.UserID()
 	case kyc.FieldAppID:
 		return m.AppID()
-	case kyc.FieldFirstName:
-		return m.FirstName()
-	case kyc.FieldLastName:
-		return m.LastName()
-	case kyc.FieldRegion:
-		return m.Region()
 	case kyc.FieldCardType:
 		return m.CardType()
 	case kyc.FieldCardID:
@@ -710,12 +584,6 @@ func (m *KycMutation) OldField(ctx context.Context, name string) (ent.Value, err
 		return m.OldUserID(ctx)
 	case kyc.FieldAppID:
 		return m.OldAppID(ctx)
-	case kyc.FieldFirstName:
-		return m.OldFirstName(ctx)
-	case kyc.FieldLastName:
-		return m.OldLastName(ctx)
-	case kyc.FieldRegion:
-		return m.OldRegion(ctx)
 	case kyc.FieldCardType:
 		return m.OldCardType(ctx)
 	case kyc.FieldCardID:
@@ -752,27 +620,6 @@ func (m *KycMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetAppID(v)
-		return nil
-	case kyc.FieldFirstName:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetFirstName(v)
-		return nil
-	case kyc.FieldLastName:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetLastName(v)
-		return nil
-	case kyc.FieldRegion:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetRegion(v)
 		return nil
 	case kyc.FieldCardType:
 		v, ok := value.(string)
@@ -904,15 +751,6 @@ func (m *KycMutation) ResetField(name string) error {
 		return nil
 	case kyc.FieldAppID:
 		m.ResetAppID()
-		return nil
-	case kyc.FieldFirstName:
-		m.ResetFirstName()
-		return nil
-	case kyc.FieldLastName:
-		m.ResetLastName()
-		return nil
-	case kyc.FieldRegion:
-		m.ResetRegion()
 		return nil
 	case kyc.FieldCardType:
 		m.ResetCardType()

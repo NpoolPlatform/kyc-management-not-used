@@ -1,9 +1,0 @@
-{
-	"appId": "89089012783789789719823798127398",
-	"cluster": "development",
-	"namespaceName": "s3-npool-top",
-	"releaseKey": "20211121183023-20f0ee35885530cc",
-	"configurations": {
-		"secret-store.s3": "{\n   \"region\": \"cn-east-1\",\n   \"endpoint\": \"http://192.168.49.2:32000\",\n   \"access_key\": \"root\",\n   \"secret_key\": \"12345679\"\n}"
-	}
-}

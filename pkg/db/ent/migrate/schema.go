@@ -13,9 +13,6 @@ var (
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "user_id", Type: field.TypeUUID},
 		{Name: "app_id", Type: field.TypeUUID},
-		{Name: "first_name", Type: field.TypeString},
-		{Name: "last_name", Type: field.TypeString},
-		{Name: "region", Type: field.TypeString},
 		{Name: "card_type", Type: field.TypeString},
 		{Name: "card_id", Type: field.TypeString},
 		{Name: "front_card_img", Type: field.TypeString},
@@ -38,7 +35,7 @@ var (
 			{
 				Name:    "kyc_card_id_card_type_app_id",
 				Unique:  false,
-				Columns: []*schema.Column{KycsColumns[7], KycsColumns[6], KycsColumns[2]},
+				Columns: []*schema.Column{KycsColumns[4], KycsColumns[3], KycsColumns[2]},
 			},
 		},
 	}
