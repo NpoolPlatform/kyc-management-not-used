@@ -25,6 +25,10 @@ spec:
             backend:
               serviceName: kyc-management
               servicePort: 50120
+          - path: /api/kyc-management/v1/get/kyc/by/userid
+            backend:
+              serviceName: kyc-management
+              servicePort: 50120
     - host: api.xpool.top
       http: *http_appid_userid_rules
     - host: www.npool.top
