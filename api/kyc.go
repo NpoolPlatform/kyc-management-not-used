@@ -31,7 +31,7 @@ func kycInfoCheck(in *npool.KycInfo) error {
 	}
 
 	if in.GetUserHandingCardImg() == "" {
-		return status.Error(codes.InvalidArgument, "user front card image can not be empty")
+		return status.Error(codes.InvalidArgument, "user handing card image can not be empty")
 	}
 
 	if in.GetBackCardImg() == "" {
@@ -53,13 +53,7 @@ func (s *Server) CreateKyc(ctx context.Context, in *npool.CreateKycRequest) (*np
 		return nil, status.Error(codes.InvalidArgument, "user id is invalid")
 	}
 
-	if err := kycInfoCheck(&npool.KycInfo{
-		CardType:           in.GetInfo().GetCardType(),
-		CardID:             in.GetInfo().GetCardID(),
-		FrontCardImg:       in.GetInfo().GetFrontCardImg(),
-		BackCardImg:        in.GetInfo().GetBackCardImg(),
-		UserHandingCardImg: in.GetInfo().GetUserHandingCardImg(),
-	}); err != nil {
+	if err := kycInfoCheck(in.GetInfo()); err != nil {
 		logger.Sugar().Errorf("CreateKyc error: %v", err.Error())
 		return nil, err
 	}
@@ -161,13 +155,7 @@ func (s *Server) GetAllKyc(ctx context.Context, in *npool.GetAllKycRequest) (*np
 }
 
 func (s *Server) UpdateKyc(ctx context.Context, in *npool.UpdateKycRequest) (*npool.UpdateKycResponse, error) {
-	if err := kycInfoCheck(&npool.KycInfo{
-		CardType:           in.GetInfo().GetCardType(),
-		CardID:             in.GetInfo().GetCardID(),
-		FrontCardImg:       in.GetInfo().GetFrontCardImg(),
-		BackCardImg:        in.GetInfo().GetBackCardImg(),
-		UserHandingCardImg: in.GetInfo().GetUserHandingCardImg(),
-	}); err != nil {
+	if err := kycInfoCheck(in.GetInfo()); err != nil {
 		logger.Sugar().Errorf("UpdateKyc error: %v", err.Error())
 		return nil, err
 	}
