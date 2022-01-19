@@ -39,6 +39,8 @@ spec:
       http: *http_appid_userid_rules
     - host: procyon.vip
       http: *http_appid_userid_rules
+    - host: dashboard.xpool.top
+      http: *http_appid_userid_rules
 
 ---
 
@@ -72,6 +74,8 @@ spec:
     - host: www.procyon.vip
       http: *http_rules
     - host: procyon.vip
+      http: *http_rules
+    - host: dashboard.xpool.top
       http: *http_rules
 
 ---
