@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"sync"
 
@@ -40,9 +41,9 @@ type KycMutation struct {
 	back_card_img         *string
 	user_handing_card_img *string
 	create_at             *uint32
-	addcreate_at          *uint32
+	addcreate_at          *int32
 	update_at             *uint32
-	addupdate_at          *uint32
+	addupdate_at          *int32
 	clearedFields         map[string]struct{}
 	done                  bool
 	oldValue              func(context.Context) (*Kyc, error)
@@ -79,7 +80,7 @@ func withKycID(id uuid.UUID) kycOption {
 		m.oldValue = func(ctx context.Context) (*Kyc, error) {
 			once.Do(func() {
 				if m.done {
-					err = fmt.Errorf("querying old values post mutation is not allowed")
+					err = errors.New("querying old values post mutation is not allowed")
 				} else {
 					value, err = m.Client().Kyc.Get(ctx, id)
 				}
@@ -112,7 +113,7 @@ func (m KycMutation) Client() *Client {
 // it returns an error otherwise.
 func (m KycMutation) Tx() (*Tx, error) {
 	if _, ok := m.driver.(*txDriver); !ok {
-		return nil, fmt.Errorf("ent: mutation is not running in a transaction")
+		return nil, errors.New("ent: mutation is not running in a transaction")
 	}
 	tx := &Tx{config: m.config}
 	tx.init()
@@ -134,6 +135,25 @@ func (m *KycMutation) ID() (id uuid.UUID, exists bool) {
 	return *m.id, true
 }
 
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *KycMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []uuid.UUID{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Kyc.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
 // SetUserID sets the "user_id" field.
 func (m *KycMutation) SetUserID(u uuid.UUID) {
 	m.user_id = &u
@@ -153,10 +173,10 @@ func (m *KycMutation) UserID() (r uuid.UUID, exists bool) {
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *KycMutation) OldUserID(ctx context.Context) (v uuid.UUID, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldUserID is only allowed on UpdateOne operations")
+		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldUserID requires an ID field in the mutation")
+		return v, errors.New("OldUserID requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
@@ -189,10 +209,10 @@ func (m *KycMutation) AppID() (r uuid.UUID, exists bool) {
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *KycMutation) OldAppID(ctx context.Context) (v uuid.UUID, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldAppID is only allowed on UpdateOne operations")
+		return v, errors.New("OldAppID is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldAppID requires an ID field in the mutation")
+		return v, errors.New("OldAppID requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
@@ -225,10 +245,10 @@ func (m *KycMutation) CardType() (r string, exists bool) {
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *KycMutation) OldCardType(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldCardType is only allowed on UpdateOne operations")
+		return v, errors.New("OldCardType is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldCardType requires an ID field in the mutation")
+		return v, errors.New("OldCardType requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
@@ -261,10 +281,10 @@ func (m *KycMutation) CardID() (r string, exists bool) {
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *KycMutation) OldCardID(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldCardID is only allowed on UpdateOne operations")
+		return v, errors.New("OldCardID is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldCardID requires an ID field in the mutation")
+		return v, errors.New("OldCardID requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
@@ -297,10 +317,10 @@ func (m *KycMutation) FrontCardImg() (r string, exists bool) {
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *KycMutation) OldFrontCardImg(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldFrontCardImg is only allowed on UpdateOne operations")
+		return v, errors.New("OldFrontCardImg is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldFrontCardImg requires an ID field in the mutation")
+		return v, errors.New("OldFrontCardImg requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
@@ -333,10 +353,10 @@ func (m *KycMutation) BackCardImg() (r string, exists bool) {
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *KycMutation) OldBackCardImg(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldBackCardImg is only allowed on UpdateOne operations")
+		return v, errors.New("OldBackCardImg is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldBackCardImg requires an ID field in the mutation")
+		return v, errors.New("OldBackCardImg requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
@@ -369,10 +389,10 @@ func (m *KycMutation) UserHandingCardImg() (r string, exists bool) {
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *KycMutation) OldUserHandingCardImg(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldUserHandingCardImg is only allowed on UpdateOne operations")
+		return v, errors.New("OldUserHandingCardImg is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldUserHandingCardImg requires an ID field in the mutation")
+		return v, errors.New("OldUserHandingCardImg requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
@@ -406,10 +426,10 @@ func (m *KycMutation) CreateAt() (r uint32, exists bool) {
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *KycMutation) OldCreateAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldCreateAt is only allowed on UpdateOne operations")
+		return v, errors.New("OldCreateAt is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldCreateAt requires an ID field in the mutation")
+		return v, errors.New("OldCreateAt requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
@@ -419,7 +439,7 @@ func (m *KycMutation) OldCreateAt(ctx context.Context) (v uint32, err error) {
 }
 
 // AddCreateAt adds u to the "create_at" field.
-func (m *KycMutation) AddCreateAt(u uint32) {
+func (m *KycMutation) AddCreateAt(u int32) {
 	if m.addcreate_at != nil {
 		*m.addcreate_at += u
 	} else {
@@ -428,7 +448,7 @@ func (m *KycMutation) AddCreateAt(u uint32) {
 }
 
 // AddedCreateAt returns the value that was added to the "create_at" field in this mutation.
-func (m *KycMutation) AddedCreateAt() (r uint32, exists bool) {
+func (m *KycMutation) AddedCreateAt() (r int32, exists bool) {
 	v := m.addcreate_at
 	if v == nil {
 		return
@@ -462,10 +482,10 @@ func (m *KycMutation) UpdateAt() (r uint32, exists bool) {
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
 func (m *KycMutation) OldUpdateAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldUpdateAt is only allowed on UpdateOne operations")
+		return v, errors.New("OldUpdateAt is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldUpdateAt requires an ID field in the mutation")
+		return v, errors.New("OldUpdateAt requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
@@ -475,7 +495,7 @@ func (m *KycMutation) OldUpdateAt(ctx context.Context) (v uint32, err error) {
 }
 
 // AddUpdateAt adds u to the "update_at" field.
-func (m *KycMutation) AddUpdateAt(u uint32) {
+func (m *KycMutation) AddUpdateAt(u int32) {
 	if m.addupdate_at != nil {
 		*m.addupdate_at += u
 	} else {
@@ -484,7 +504,7 @@ func (m *KycMutation) AddUpdateAt(u uint32) {
 }
 
 // AddedUpdateAt returns the value that was added to the "update_at" field in this mutation.
-func (m *KycMutation) AddedUpdateAt() (r uint32, exists bool) {
+func (m *KycMutation) AddedUpdateAt() (r int32, exists bool) {
 	v := m.addupdate_at
 	if v == nil {
 		return
@@ -706,14 +726,14 @@ func (m *KycMutation) AddedField(name string) (ent.Value, bool) {
 func (m *KycMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case kyc.FieldCreateAt:
-		v, ok := value.(uint32)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddCreateAt(v)
 		return nil
 	case kyc.FieldUpdateAt:
-		v, ok := value.(uint32)
+		v, ok := value.(int32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

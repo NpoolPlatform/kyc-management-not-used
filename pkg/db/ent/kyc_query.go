@@ -337,6 +337,10 @@ func (kq *KycQuery) sqlAll(ctx context.Context) ([]*Kyc, error) {
 
 func (kq *KycQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := kq.querySpec()
+	_spec.Node.Columns = kq.fields
+	if len(kq.fields) > 0 {
+		_spec.Unique = kq.unique != nil && *kq.unique
+	}
 	return sqlgraph.CountNodes(ctx, kq.driver, _spec)
 }
 
@@ -407,6 +411,9 @@ func (kq *KycQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if kq.sql != nil {
 		selector = kq.sql
 		selector.Select(selector.Columns(columns...)...)
+	}
+	if kq.unique != nil && *kq.unique {
+		selector.Distinct()
 	}
 	for _, p := range kq.predicates {
 		p(selector)
@@ -686,9 +693,7 @@ func (kgb *KycGroupBy) sqlQuery() *sql.Selector {
 		for _, f := range kgb.fields {
 			columns = append(columns, selector.C(f))
 		}
-		for _, c := range aggregation {
-			columns = append(columns, c)
-		}
+		columns = append(columns, aggregation...)
 		selector.Select(columns...)
 	}
 	return selector.GroupBy(selector.Columns(kgb.fields...)...)

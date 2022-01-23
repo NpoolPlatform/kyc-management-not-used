@@ -99,6 +99,14 @@ func (kc *KycCreate) SetID(u uuid.UUID) *KycCreate {
 	return kc
 }
 
+// SetNillableID sets the "id" field if the given value is not nil.
+func (kc *KycCreate) SetNillableID(u *uuid.UUID) *KycCreate {
+	if u != nil {
+		kc.SetID(*u)
+	}
+	return kc
+}
+
 // Mutation returns the KycMutation object of the builder.
 func (kc *KycCreate) Mutation() *KycMutation {
 	return kc.mutation
@@ -187,31 +195,31 @@ func (kc *KycCreate) defaults() {
 // check runs all checks and user-defined validators on the builder.
 func (kc *KycCreate) check() error {
 	if _, ok := kc.mutation.UserID(); !ok {
-		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "user_id"`)}
+		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "Kyc.user_id"`)}
 	}
 	if _, ok := kc.mutation.AppID(); !ok {
-		return &ValidationError{Name: "app_id", err: errors.New(`ent: missing required field "app_id"`)}
+		return &ValidationError{Name: "app_id", err: errors.New(`ent: missing required field "Kyc.app_id"`)}
 	}
 	if _, ok := kc.mutation.CardType(); !ok {
-		return &ValidationError{Name: "card_type", err: errors.New(`ent: missing required field "card_type"`)}
+		return &ValidationError{Name: "card_type", err: errors.New(`ent: missing required field "Kyc.card_type"`)}
 	}
 	if _, ok := kc.mutation.CardID(); !ok {
-		return &ValidationError{Name: "card_id", err: errors.New(`ent: missing required field "card_id"`)}
+		return &ValidationError{Name: "card_id", err: errors.New(`ent: missing required field "Kyc.card_id"`)}
 	}
 	if _, ok := kc.mutation.FrontCardImg(); !ok {
-		return &ValidationError{Name: "front_card_img", err: errors.New(`ent: missing required field "front_card_img"`)}
+		return &ValidationError{Name: "front_card_img", err: errors.New(`ent: missing required field "Kyc.front_card_img"`)}
 	}
 	if _, ok := kc.mutation.BackCardImg(); !ok {
-		return &ValidationError{Name: "back_card_img", err: errors.New(`ent: missing required field "back_card_img"`)}
+		return &ValidationError{Name: "back_card_img", err: errors.New(`ent: missing required field "Kyc.back_card_img"`)}
 	}
 	if _, ok := kc.mutation.UserHandingCardImg(); !ok {
-		return &ValidationError{Name: "user_handing_card_img", err: errors.New(`ent: missing required field "user_handing_card_img"`)}
+		return &ValidationError{Name: "user_handing_card_img", err: errors.New(`ent: missing required field "Kyc.user_handing_card_img"`)}
 	}
 	if _, ok := kc.mutation.CreateAt(); !ok {
-		return &ValidationError{Name: "create_at", err: errors.New(`ent: missing required field "create_at"`)}
+		return &ValidationError{Name: "create_at", err: errors.New(`ent: missing required field "Kyc.create_at"`)}
 	}
 	if _, ok := kc.mutation.UpdateAt(); !ok {
-		return &ValidationError{Name: "update_at", err: errors.New(`ent: missing required field "update_at"`)}
+		return &ValidationError{Name: "update_at", err: errors.New(`ent: missing required field "Kyc.update_at"`)}
 	}
 	return nil
 }
@@ -225,7 +233,11 @@ func (kc *KycCreate) sqlSave(ctx context.Context) (*Kyc, error) {
 		return nil, err
 	}
 	if _spec.ID.Value != nil {
-		_node.ID = _spec.ID.Value.(uuid.UUID)
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
 	}
 	return _node, nil
 }
@@ -244,7 +256,7 @@ func (kc *KycCreate) createSpec() (*Kyc, *sqlgraph.CreateSpec) {
 	_spec.OnConflict = kc.conflict
 	if id, ok := kc.mutation.ID(); ok {
 		_node.ID = id
-		_spec.ID.Value = id
+		_spec.ID.Value = &id
 	}
 	if value, ok := kc.mutation.UserID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
@@ -468,6 +480,12 @@ func (u *KycUpsert) UpdateCreateAt() *KycUpsert {
 	return u
 }
 
+// AddCreateAt adds v to the "create_at" field.
+func (u *KycUpsert) AddCreateAt(v uint32) *KycUpsert {
+	u.Add(kyc.FieldCreateAt, v)
+	return u
+}
+
 // SetUpdateAt sets the "update_at" field.
 func (u *KycUpsert) SetUpdateAt(v uint32) *KycUpsert {
 	u.Set(kyc.FieldUpdateAt, v)
@@ -480,7 +498,13 @@ func (u *KycUpsert) UpdateUpdateAt() *KycUpsert {
 	return u
 }
 
-// UpdateNewValues updates the fields using the new values that were set on create except the ID field.
+// AddUpdateAt adds v to the "update_at" field.
+func (u *KycUpsert) AddUpdateAt(v uint32) *KycUpsert {
+	u.Add(kyc.FieldUpdateAt, v)
+	return u
+}
+
+// UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
 //	client.Kyc.Create().
@@ -635,6 +659,13 @@ func (u *KycUpsertOne) SetCreateAt(v uint32) *KycUpsertOne {
 	})
 }
 
+// AddCreateAt adds v to the "create_at" field.
+func (u *KycUpsertOne) AddCreateAt(v uint32) *KycUpsertOne {
+	return u.Update(func(s *KycUpsert) {
+		s.AddCreateAt(v)
+	})
+}
+
 // UpdateCreateAt sets the "create_at" field to the value that was provided on create.
 func (u *KycUpsertOne) UpdateCreateAt() *KycUpsertOne {
 	return u.Update(func(s *KycUpsert) {
@@ -646,6 +677,13 @@ func (u *KycUpsertOne) UpdateCreateAt() *KycUpsertOne {
 func (u *KycUpsertOne) SetUpdateAt(v uint32) *KycUpsertOne {
 	return u.Update(func(s *KycUpsert) {
 		s.SetUpdateAt(v)
+	})
+}
+
+// AddUpdateAt adds v to the "update_at" field.
+func (u *KycUpsertOne) AddUpdateAt(v uint32) *KycUpsertOne {
+	return u.Update(func(s *KycUpsert) {
+		s.AddUpdateAt(v)
 	})
 }
 
@@ -819,7 +857,7 @@ type KycUpsertBulk struct {
 	create *KycCreateBulk
 }
 
-// UpdateNewValues updates the fields using the new values that
+// UpdateNewValues updates the mutable fields using the new values that
 // were set on create. Using this option is equivalent to using:
 //
 //	client.Kyc.Create().
@@ -977,6 +1015,13 @@ func (u *KycUpsertBulk) SetCreateAt(v uint32) *KycUpsertBulk {
 	})
 }
 
+// AddCreateAt adds v to the "create_at" field.
+func (u *KycUpsertBulk) AddCreateAt(v uint32) *KycUpsertBulk {
+	return u.Update(func(s *KycUpsert) {
+		s.AddCreateAt(v)
+	})
+}
+
 // UpdateCreateAt sets the "create_at" field to the value that was provided on create.
 func (u *KycUpsertBulk) UpdateCreateAt() *KycUpsertBulk {
 	return u.Update(func(s *KycUpsert) {
@@ -988,6 +1033,13 @@ func (u *KycUpsertBulk) UpdateCreateAt() *KycUpsertBulk {
 func (u *KycUpsertBulk) SetUpdateAt(v uint32) *KycUpsertBulk {
 	return u.Update(func(s *KycUpsert) {
 		s.SetUpdateAt(v)
+	})
+}
+
+// AddUpdateAt adds v to the "update_at" field.
+func (u *KycUpsertBulk) AddUpdateAt(v uint32) *KycUpsertBulk {
+	return u.Update(func(s *KycUpsert) {
+		s.AddUpdateAt(v)
 	})
 }
 

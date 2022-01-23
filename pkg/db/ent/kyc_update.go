@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"entgo.io/ent/dialect/sql"
@@ -85,7 +86,7 @@ func (ku *KycUpdate) SetNillableCreateAt(u *uint32) *KycUpdate {
 }
 
 // AddCreateAt adds u to the "create_at" field.
-func (ku *KycUpdate) AddCreateAt(u uint32) *KycUpdate {
+func (ku *KycUpdate) AddCreateAt(u int32) *KycUpdate {
 	ku.mutation.AddCreateAt(u)
 	return ku
 }
@@ -98,7 +99,7 @@ func (ku *KycUpdate) SetUpdateAt(u uint32) *KycUpdate {
 }
 
 // AddUpdateAt adds u to the "update_at" field.
-func (ku *KycUpdate) AddUpdateAt(u uint32) *KycUpdate {
+func (ku *KycUpdate) AddUpdateAt(u int32) *KycUpdate {
 	ku.mutation.AddUpdateAt(u)
 	return ku
 }
@@ -343,7 +344,7 @@ func (kuo *KycUpdateOne) SetNillableCreateAt(u *uint32) *KycUpdateOne {
 }
 
 // AddCreateAt adds u to the "create_at" field.
-func (kuo *KycUpdateOne) AddCreateAt(u uint32) *KycUpdateOne {
+func (kuo *KycUpdateOne) AddCreateAt(u int32) *KycUpdateOne {
 	kuo.mutation.AddCreateAt(u)
 	return kuo
 }
@@ -356,7 +357,7 @@ func (kuo *KycUpdateOne) SetUpdateAt(u uint32) *KycUpdateOne {
 }
 
 // AddUpdateAt adds u to the "update_at" field.
-func (kuo *KycUpdateOne) AddUpdateAt(u uint32) *KycUpdateOne {
+func (kuo *KycUpdateOne) AddUpdateAt(u int32) *KycUpdateOne {
 	kuo.mutation.AddUpdateAt(u)
 	return kuo
 }
@@ -449,7 +450,7 @@ func (kuo *KycUpdateOne) sqlSave(ctx context.Context) (_node *Kyc, err error) {
 	}
 	id, ok := kuo.mutation.ID()
 	if !ok {
-		return nil, &ValidationError{Name: "ID", err: fmt.Errorf("missing Kyc.ID for update")}
+		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Kyc.id" for update`)}
 	}
 	_spec.Node.ID.Value = id
 	if fields := kuo.fields; len(fields) > 0 {
