@@ -64,7 +64,6 @@ func rpcRegister(server grpc.ServiceRegistrar) error {
 }
 
 func rpcGatewayRegister(mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) error {
-	opts = append(opts, grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(16*1024*1024)))
 	return api.RegisterGateway(mux, endpoint, opts)
 }
 
