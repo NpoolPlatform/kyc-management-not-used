@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
+	constant "github.com/NpoolPlatform/kyc-management/pkg/const"
 	"github.com/NpoolPlatform/kyc-management/pkg/crud/kyc"
 	"github.com/NpoolPlatform/kyc-management/pkg/db/ent"
 	myconst "github.com/NpoolPlatform/kyc-management/pkg/message/const"
@@ -34,7 +35,7 @@ func kycInfoCheck(in *npool.KycInfo) error {
 		return status.Error(codes.InvalidArgument, "user handing card image can not be empty")
 	}
 
-	if in.GetBackCardImg() == "" {
+	if in.GetCardType() == constant.KYCTypeIDCard && in.GetBackCardImg() == "" {
 		return status.Error(codes.InvalidArgument, "user back card image can not be empty")
 	}
 	return nil
