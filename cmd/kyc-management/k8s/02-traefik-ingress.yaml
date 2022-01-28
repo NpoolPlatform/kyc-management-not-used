@@ -8,7 +8,7 @@ metadata:
     k8s.kuboard.cn/workload: kyc-management-appid-userid
     kubernetes.io/ingress.class: "traefik-internet"
     traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
-    traefik.ingress.kubernetes.io/router.middlewares: kube-system-strip-kyc-management-prefix@kubernetescrd,kube-system-cookies-appid-to-body@kubernetescrd,kube-system-cookies-userid-to-body@kubernetescrd,kube-system-common-headers@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: kube-system-strip-kyc-management-prefix@kubernetescrd,kube-system-headers-appid-to-body@kubernetescrd,kube-system-headers-userid-to-body@kubernetescrd,kube-system-common-headers@kubernetescrd
 
 spec:
   tls:
