@@ -1,7 +1,8 @@
 commonLabels:
-# app: application-management
+# app: kyc-management
 
 resources:
-  - 01-kyc-management.yaml
-  - 02-traefik-ingress.yaml
-  - 03-nginx-ingress.yaml
+- 01-kyc-management.yaml
+- 02-strip-prefix.yaml
+- 03-traefik-ingress.yaml
+- 04-traefik-vpn-ingress.yaml

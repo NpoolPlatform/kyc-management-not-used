@@ -1,24 +1,24 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: kyc-management-appid-userid-ingress
+  name: kyc-management-traefik-app-user-ingress
   namespace: kube-system
   annotations:
-    k8s.kuboard.cn/displayName: kyc-management-appid-userid
-    k8s.kuboard.cn/workload: kyc-management-appid-userid
+    k8s.kuboard.cn/displayName: kyc-management-traefik-app-user
+    k8s.kuboard.cn/workload: kyc-management-traefik-app-user
     kubernetes.io/ingress.class: "traefik-internet"
     traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
     traefik.ingress.kubernetes.io/router.middlewares: kube-system-strip-kyc-management-prefix@kubernetescrd,
+                                                      kube-system-common-headers@kubernetescrd,
                                                       kube-system-headers-appid-to-body@kubernetescrd,
                                                       kube-system-headers-userid-to-body@kubernetescrd,
-                                                      kube-system-common-headers@kubernetescrd
+                                                      kube-system-headers-app-login-token-to-body@kubernetescrd,
+                                                      kube-system-app-user-role-rbac-auth@kubernetescrd
 
 spec:
-  tls:
-    - secretName: procyon-vip-tls
   rules:
     - host: api.npool.top
-      http: &http_appid_userid_rules
+      http: &http_rules
         paths:
           - path: /api/kyc-management/v1/upload/kyc/image
             backend:
@@ -32,34 +32,29 @@ spec:
             backend:
               serviceName: kyc-management
               servicePort: 50120
+    - host: api.procyon.vip
+      http: *http_rules
     - host: api.xpool.top
-      http: *http_appid_userid_rules
-    - host: www.npool.top
-      http: *http_appid_userid_rules
-    - host: www.xpool.top
-      http: *http_appid_userid_rules
-    - host: www.procyon.vip
-      http: *http_appid_userid_rules
-    - host: procyon.vip
-      http: *http_appid_userid_rules
-    - host: dashboard.xpool.top
-      http: *http_appid_userid_rules
+      http: *http_rules
 
 ---
 
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: kyc-management-traefik-ingress
+  name: kyc-management-traefik-app-ingress
   namespace: kube-system
   annotations:
-    k8s.kuboard.cn/displayName: kyc-management-traefik
-    k8s.kuboard.cn/workload: kyc-management-traefik
+    k8s.kuboard.cn/displayName: kyc-management-traefik-app
+    k8s.kuboard.cn/workload: kyc-management-traefik-app
     kubernetes.io/ingress.class: "traefik-internet"
     traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
     traefik.ingress.kubernetes.io/router.middlewares: kube-system-strip-kyc-management-prefix@kubernetescrd,
+                                                      kube-system-common-headers@kubernetescrd,
                                                       kube-system-headers-appid-to-body@kubernetescrd,
-                                                      kube-system-common-headers@kubernetescrd
+                                                      kube-system-headers-userid-to-body@kubernetescrd,
+                                                      kube-system-headers-app-login-token-to-body@kubernetescrd,
+                                                      kube-system-app-rbac-auth@kubernetescrd
 
 spec:
   rules:
@@ -70,27 +65,7 @@ spec:
             backend:
               serviceName: kyc-management
               servicePort: 50120
+    - host: api.procyon.vip
+      http: *http_rules
     - host: api.xpool.top
       http: *http_rules
-    - host: www.npool.top
-      http: *http_rules
-    - host: www.xpool.top
-      http: *http_rules
-    - host: www.procyon.vip
-      http: *http_rules
-    - host: procyon.vip
-      http: *http_rules
-    - host: dashboard.xpool.top
-      http: *http_rules
-
----
-
-apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
-metadata:
-  name: strip-kyc-management-prefix
-  namespace: kube-system
-spec:
-  stripPrefix:
-    prefixes:
-      - /api/kyc-management
