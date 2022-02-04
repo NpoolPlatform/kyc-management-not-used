@@ -5,7 +5,6 @@ import (
 	"path"
 	"runtime"
 
-	applicationconst "github.com/NpoolPlatform/application-management/pkg/message/const"
 	"github.com/NpoolPlatform/go-service-framework/pkg/app"
 	"github.com/NpoolPlatform/go-service-framework/pkg/config"
 	mysqlconst "github.com/NpoolPlatform/go-service-framework/pkg/mysql/const"
@@ -31,7 +30,6 @@ func Init() error {
 		config.ServiceNameToNamespace(mysqlconst.MysqlServiceName),
 		config.ServiceNameToNamespace(redisconst.RedisServiceName),
 		config.ServiceNameToNamespace(rabbitmqconst.RabbitMQServiceName),
-		config.ServiceNameToNamespace(applicationconst.ServiceName),
 		config.ServiceNameToNamespace(ossconst.S3NameSpace),
 	)
 	if err != nil {

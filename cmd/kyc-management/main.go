@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	applicationconst "github.com/NpoolPlatform/application-management/pkg/message/const"
 	"github.com/NpoolPlatform/go-service-framework/pkg/app"
 	"github.com/NpoolPlatform/go-service-framework/pkg/config"
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
@@ -28,7 +27,6 @@ func main() {
 		config.ServiceNameToNamespace(mysqlconst.MysqlServiceName),
 		config.ServiceNameToNamespace(redisconst.RedisServiceName),
 		config.ServiceNameToNamespace(rabbitmqconst.RabbitMQServiceName),
-		config.ServiceNameToNamespace(applicationconst.ServiceName),
 		config.ServiceNameToNamespace(ossconst.S3NameSpace),
 	)
 	if err != nil {
