@@ -119,10 +119,10 @@ func (s *Server) GetKycByUserID(ctx context.Context, in *npool.GetKycByUserIDReq
 }
 
 func (s *Server) GetKycByAppID(ctx context.Context, in *npool.GetKycByAppIDRequest) (*npool.GetKycByAppIDResponse, error) {
-	appID, err := uuid.Parse(in.GetAppID())
+	appID, err := uuid.Parse(in.GetTargetAppID())
 	if err != nil {
-		logger.Sugar().Errorf("GetKycByAppID error: invalid appID<%v>: %v", in.GetAppID(), err)
-		return nil, status.Errorf(codes.InvalidArgument, "appID <%v> is not invalid", in.GetAppID())
+		logger.Sugar().Errorf("GetKycByAppID error: invalid appID<%v>: %v", in.GetTargetAppID(), err)
+		return nil, status.Errorf(codes.InvalidArgument, "appID <%v> is not invalid", in.GetTargetAppID())
 	}
 
 	ctx, cancel := context.WithTimeout(ctx, myconst.GrpcTimeout)
