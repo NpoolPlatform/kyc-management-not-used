@@ -90,7 +90,7 @@ func TestKycAPI(t *testing.T) { // nolint
 	getKycByAppIDResp, err := cli.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(&npool.GetKycByAppIDRequest{
-			AppID: kycInfo.GetTargetAppID(),
+			TargetAppID: kycInfo.GetAppID(),
 			PageInfo: &npoolcommon.PageInfo{
 				Limit:  5,
 				Offset: 0,
