@@ -32,6 +32,10 @@ spec:
             backend:
               serviceName: kyc-management
               servicePort: 50120
+          - path: /api/kyc-management/v1/get/all/kyc
+            backend:
+              serviceName: kyc-management
+              servicePort: 50120
     - host: api.procyon.vip
       http: *http_rules
     - host: api.xpool.top
