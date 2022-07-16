@@ -100,7 +100,7 @@ pipeline {
       }
       steps {
         sh (returnStdout: false, script: '''
-          devboxpod=`kubectl get pods -A | grep development-box | awk '{print $2}'`
+          devboxpod=`kubectl get pods -A | grep development-box | awk '{print $2}' | head -n1`
           servicename="kyc-management"
 
           kubectl exec --namespace kube-system $devboxpod -- make -C /tmp/$servicename after-test || true
